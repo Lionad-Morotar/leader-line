@@ -14,7 +14,7 @@ Feat added:
 
 * `options.svgContainer`, specify where to append-to the svg elements, default is `body`
 
-**<a href="https://github.com/Lionad-Morotar/leader-line">Document and Examples https://github.com/Lionad-Morotar/leader-line</a>**
+**<a href="https://anseki.github.io/leader-line/">Document and Examples https://anseki.github.io/leader-line/</a>**
 
 ```html
 <div id="start">start</div>
