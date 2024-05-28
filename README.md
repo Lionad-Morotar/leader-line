@@ -12,7 +12,12 @@ Issues fixed:
 
 Feat added:
 
+* add default exports
 * `options.svgContainer`, specify where to append-to the svg elements, default is `body`
+
+Need types? check it out: [https://github.com/II-alex-II/leader-line-new](https://github.com/II-alex-II/leader-line-new)
+
+---
 
 **<a href="https://anseki.github.io/leader-line/">Document and Examples https://anseki.github.io/leader-line/</a>**
 
