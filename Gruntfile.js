@@ -44,7 +44,11 @@ module.exports = grunt => {
   }
 
   function minJs(content) {
-    return uglify.minify(content).code;
+    if (process.env.NODE_ENV === 'development') {
+      return content;
+    } else {
+      return uglify.minify(content).code;
+    }
   }
 
   grunt.initConfig({

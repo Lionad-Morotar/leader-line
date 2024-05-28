@@ -1,6 +1,6 @@
 /*
  * LeaderLine
- * https://anseki.github.io/leader-line/
+ * https://github.com/Lionad-Morotar/leader-line
  *
  * Copyright (c) 2021 anseki
  * Licensed under the MIT license.
@@ -116,7 +116,8 @@
       lineOutlineColor: 'indianred',
       lineOutlineSize: 0.25,
       plugOutlineEnabledSE: [false, false],
-      plugOutlineSizeSE: [1, 1]
+      plugOutlineSizeSE: [1, 1],
+      svgContainer: null
     },
 
     isObject = (function() {
@@ -903,11 +904,14 @@
     return bodyOffset;
   }
 
-  function setupWindow(window) {
+  function setupWindow(props, window) {
     var baseDocument = window.document, defsSvg;
     if (!baseDocument.getElementById(DEFS_ID)) { // Add svg defs
       defsSvg = (new window.DOMParser()).parseFromString(DEFS_HTML, 'image/svg+xml');
-      baseDocument.body.appendChild(defsSvg.documentElement);
+
+      const defsSvgContainer = props.svgContainer || baseDocument.body
+      // console.log('[debug] setupWindow props', props)
+      defsSvgContainer.appendChild(defsSvg.documentElement);
       pathDataPolyfill(window);
     }
   }
@@ -951,6 +955,9 @@
       return element;
     }
 
+    // console.log('[debug] bindWindow props', props)
+    props.svgContainer = props.svgContainer || props.options.svgContainer || baseDocument.body;
+
     props.pathList = {};
     // Init stats
     initStats(aplStats, STATS);
@@ -964,10 +971,12 @@
     });
 
     if (props.baseWindow && props.svg) {
-      props.baseWindow.document.body.removeChild(props.svg);
+      const svgContainer = props.svgContainer || props.baseWindow.document.body
+      svgContainer.removeChild(props.svg);
     }
+    // props.svgContainer = 
     props.baseWindow = newWindow;
-    setupWindow(newWindow);
+    setupWindow(props, newWindow);
     props.bodyOffset = getBodyOffset(newWindow); // Get `bodyOffset`
 
     // Main SVG
@@ -1111,7 +1120,9 @@
       svg.style.visibility = 'hidden';
     }
 
-    baseDocument.body.appendChild(svg);
+    const svgContainer = props.svgContainer || baseDocument.body
+    // console.log('[info] props - main svg', props)
+    svgContainer.appendChild(svg);
 
     // label (after appendChild(svg), bBox is used)
     [0, 1, 2].forEach(function(i) {
@@ -2330,6 +2341,8 @@
    * @returns {void}
    */
   function update(props, needs) {
+    // console.log('[debug] update options', props, needs)
+
     var updated = {};
     if (needs.line) {
       updated.line = updateLine(props);
@@ -2354,6 +2367,7 @@
     }
     updated.viewBox = updateViewBox(props);
     updated.mask = updateMask(props);
+    // updated.svgContainer = updated.svgContainer;
     if (needs.effect) {
       setEffect(props);
     }
@@ -2484,6 +2498,7 @@
    * @returns {void}
    */
   function setOptions(props, newOptions) {
+    // console.log('[debug] setOptions', props, newOptions)
     /*
       Names of `options`      Keys of API (properties of `newOptions`)
       ----------------------------------------
@@ -2502,6 +2517,7 @@
       plugOutlineColorSE      startPlugOutlineColor, endPlugOutlineColor
       plugOutlineSizeSE       startPlugOutlineSize, endPlugOutlineSize
       labelSEM                startLabel, endLabel, middleLabel
+      svgContainer               svgContainer
     */
     var options = props.options,
       newWindow, needsWindow, needs = {};
@@ -2592,6 +2608,17 @@
       throw new Error('`start` and `end` are required.');
     }
 
+    // svgContainer
+    ['svgContainer'].forEach(function(optionName, i) {
+      var newOption = newOptions[optionName];
+      if (newOption &&
+          (isElement(newOption)) &&
+          newOption !== options[optionName]) {
+        options[optionName] = newOption;
+        needs[optionName] = true;
+      }
+    });
+
     // Check window.
     if (needsWindow &&
         (newWindow = getCommonWindow(
@@ -2600,6 +2627,7 @@
           props.optionIsAttach.anchorSE[1] !== false ?
             insAttachProps[options.anchorSE[1]._id].element : options.anchorSE[1]
         )) !== props.baseWindow) {
+      // console.log('[info] bind window props', props)
       bindWindow(props, newWindow);
       needs.line = needs.plug = needs.lineOutline = needs.plugOutline = needs.faces = needs.effect = true;
     }
@@ -3498,6 +3526,7 @@
   })();
 
   LeaderLine.prototype.setOptions = function(newOptions) {
+    // console.log('[debug] setOptions', newOptions);
     setOptions(insProps[this._id], newOptions);
     return this;
   };
@@ -3518,7 +3547,8 @@
     props.attachments.slice().forEach(function(attachProps) { unbindAttachment(props, attachProps); });
 
     if (props.baseWindow && props.svg) {
-      props.baseWindow.document.body.removeChild(props.svg);
+      const svgContainer = props.svgContainer || props.baseWindow.document.body
+      svgContainer.removeChild(props.svg);
     }
     delete insProps[this._id];
   };
@@ -3774,8 +3804,12 @@
         attachProps.path.style.fill = attachProps.fill || 'none';
         attachProps.isShown = false;
         svg.style.visibility = 'hidden';
-        baseDocument.body.appendChild(svg);
-        setupWindow((window = baseDocument.defaultView));
+
+        svgContainer = attachOptions.svgContainer || baseDocument.body;
+        // console.log('[debug] anchor props', props)
+        svgContainer.appendChild(svg);
+
+        setupWindow(props, (window = baseDocument.defaultView));
         attachProps.bodyOffset = getBodyOffset(window); // Get `bodyOffset`
 
         // event handler for this instance
@@ -5195,4 +5229,4 @@
   return LeaderLine;
 })();
 
-// export default LeaderLine;
+export default LeaderLine;

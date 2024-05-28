@@ -1,6 +1,6 @@
 {
   "name": "leader-line",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "title": "LeaderLine",
   "description": "Draw a leader line in your web page.",
   "keywords": [
@@ -23,6 +23,7 @@
     "anim-event": "^1.0.16",
     "cheerio": "^1.0.0-rc.9",
     "clean-css": "^5.1.2",
+    "cross-env": "^7.0.3",
     "grunt": "^1.4.1",
     "grunt-task-helper": "^0.3.10",
     "htmlclean": "^3.0.8",
@@ -35,17 +36,18 @@
     "uglify-js": "^3.13.7"
   },
   "scripts": {
-    "build": "rm -f leader-line.min.js && grunt"
+    "dev": "pnpm clean && cross-env NODE_ENV=development grunt",
+    "build": "pnpm clean && cross-env NODE_ENV=production grunt",
+    "clean": "rm -f leader-line.min.js"
   },
-  "homepage": "https://anseki.github.io/leader-line/",
+  "homepage": "https://github.com/Lionad-Morotar/leader-line",
   "repository": {
     "type": "git",
-    "url": "git://github.com/anseki/leader-line.git"
+    "url": "git@github.com:Lionad-Morotar/leader-line.git"
   },
-  "bugs": "https://github.com/anseki/leader-line/issues",
   "license": "MIT",
   "author": {
-    "name": "anseki",
-    "url": "https://github.com/anseki"
+    "name": "Lionad-Morotar",
+    "url": "https://github.com/Lionad-Morotar"
   }
 }

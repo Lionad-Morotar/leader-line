@@ -14,10 +14,10 @@
     "svg"
   ],
   "main": "leader-line.min.js",
-  "homepage": "https://anseki.github.io/leader-line/",
+  "homepage": "https://github.com/Lionad-Morotar/leader-line",
   "repository": {
     "type": "git",
-    "url": "git://github.com/anseki/leader-line.git"
+    "url": "git@github.com:Lionad-Morotar/leader-line.git"
   },
   "moduleType": [],
   "ignore": [
@@ -29,6 +29,7 @@
   ],
   "license": "MIT",
   "authors": [
-    "anseki <AnSeki.aff@gmail.com>"
+    "anseki <AnSeki.aff@gmail.com>",
+    "Lionad-Morotar <1806234223@qq.com>"
   ]
 }

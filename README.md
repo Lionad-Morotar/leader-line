@@ -1,6 +1,6 @@
 # LeaderLine
 
-[![npm](https://img.shields.io/npm/v/leader-line.svg)](https://www.npmjs.com/package/leader-line) [![GitHub issues](https://img.shields.io/github/issues/anseki/leader-line.svg)](https://github.com/anseki/leader-line/issues) [![dependencies](https://img.shields.io/badge/dependencies-No%20dependency-brightgreen.svg)](package.json) [![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![npm](https://img.shields.io/npm/v/leader-line.svg)](https://www.npmjs.com/package/leader-line) [![GitHub issues](https://img.shields.io/github/issues/Lionad-Morotar/leader-line.svg)](https://github.com/Lionad-Morotar/leader-line/issues) [![dependencies](https://img.shields.io/badge/dependencies-No%20dependency-brightgreen.svg)](package.json) [![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 Draw a leader line in your web page.
 
@@ -10,7 +10,11 @@ Issues fixed:
 
 * `aplStats.position_plugOverheadSE` is not defined
 
-**<a href="https://anseki.github.io/leader-line/">Document and Examples https://anseki.github.io/leader-line/</a>**
+Feat added:
+
+* `options.svgContainer`, specify where to append-to the svg elements, default is `body`
+
+**<a href="https://github.com/Lionad-Morotar/leader-line">Document and Examples https://github.com/Lionad-Morotar/leader-line</a>**
 
 ```html
 <div id="start">start</div>
@@ -25,26 +29,26 @@ new LeaderLine(
 );
 ```
 
-[![ex-010](img/ex-010.png)](https://anseki.github.io/leader-line/)
+[![ex-010](img/ex-010.png)](https://github.com/Lionad-Morotar/leader-line)
 
 It supports options to customize.
 
-[![ex-020](img/ex-020.gif)](https://anseki.github.io/leader-line/)
+[![ex-020](img/ex-020.gif)](https://github.com/Lionad-Morotar/leader-line)
 
 Basically, it can indicate HTML/SVG element such as `<div>`, `<button>`, `<ul>`, `<td>`, `<circle>`, `<text>`, etc.
 
-[![ex-021](img/ex-021.png)](https://anseki.github.io/leader-line/)
+[![ex-021](img/ex-021.png)](https://github.com/Lionad-Morotar/leader-line)
 
 It can indicate a part of an element also instead of the element.
 
-[![ex-030](img/ex-030.png)](https://anseki.github.io/leader-line/)
+[![ex-030](img/ex-030.png)](https://github.com/Lionad-Morotar/leader-line)
 
-[![ex-031](img/ex-031.png)](https://anseki.github.io/leader-line/)
+[![ex-031](img/ex-031.png)](https://github.com/Lionad-Morotar/leader-line)
 
 Also, it can indicate an element of another library.  
 For example, the following uses LeaderLine with [D3.js](https://d3js.org/). Move the mouse on the list.
 
-[![ex-040](img/ex-040.gif)](https://anseki.github.io/leader-line/)
+[![ex-040](img/ex-040.gif)](https://github.com/Lionad-Morotar/leader-line)
 
 ## Usage
 
@@ -63,7 +67,7 @@ new LeaderLine(
 );
 ```
 
-[![ex-050](img/ex-050.png)](https://anseki.github.io/leader-line/)
+[![ex-050](img/ex-050.png)](https://github.com/Lionad-Morotar/leader-line)
 
 Any element that has bounding-box is accepted. For example, `<div>`, `<button>`, `<ul>`, `<td>`, `<circle>`, `<text>`, and also, elements in another window (i.e. `<iframe>`). (See [`start` and `end`](#start-end) option.)
 
@@ -77,7 +81,7 @@ var startElement = document.getElementById('element-1'),
 new LeaderLine(startElement, endElement, {color: 'red', size: 8});
 ```
 
-[![ex-060](img/ex-060.png)](https://anseki.github.io/leader-line/)
+[![ex-060](img/ex-060.png)](https://github.com/Lionad-Morotar/leader-line)
 
 Also, the options can be accessed via properties of the instance (readable and writable).
 
@@ -99,7 +103,7 @@ new LeaderLine(startElement, endElement, {
 });
 ```
 
-[![ex-070](img/ex-070.png)](https://anseki.github.io/leader-line/)
+[![ex-070](img/ex-070.png)](https://github.com/Lionad-Morotar/leader-line)
 
 You can add effects to the leader line via some options.
 
@@ -114,7 +118,7 @@ new LeaderLine(element4, element5, {dropShadow: true});
 new LeaderLine(element5, element6, {dash: true});
 ```
 
-[![ex-080](img/ex-080.gif)](https://anseki.github.io/leader-line/)
+[![ex-080](img/ex-080.gif)](https://github.com/Lionad-Morotar/leader-line)
 
 You can change symbols that are shown at the end of the leader line via [`startPlug` and `endPlug`](#startplug-endplug) options.
 
@@ -125,7 +129,7 @@ new LeaderLine(startElement, endElement, {
 });
 ```
 
-[![ex-090](img/ex-090.png)](https://anseki.github.io/leader-line/)
+[![ex-090](img/ex-090.png)](https://github.com/Lionad-Morotar/leader-line)
 
 You can indicate a point or area of an element instead of the element via [`pointAnchor`](#pointanchor) or [`areaAnchor`](#areaanchor) attachment. You can indicate a point or area of the document also.
 
@@ -153,7 +157,7 @@ new LeaderLine(
 );
 ```
 
-[![ex-100](img/ex-100.png)](https://anseki.github.io/leader-line/)
+[![ex-100](img/ex-100.png)](https://github.com/Lionad-Morotar/leader-line)
 
 You can show and hide the leader line with effects by [`show` and `hide`](#show-hide) methods.  
 [`mouseHoverAnchor`](#mousehoveranchor) attachment allows it to implement showing and hiding with mouse moving, easily.
@@ -162,7 +166,7 @@ You can show and hide the leader line with effects by [`show` and `hide`](#show-
 new LeaderLine(LeaderLine.mouseHoverAnchor(startElement), endElement);
 ```
 
-[![ex-110](img/ex-110.gif)](https://anseki.github.io/leader-line/)
+[![ex-110](img/ex-110.gif)](https://github.com/Lionad-Morotar/leader-line)
 
 For more details, refer to the following.
 
@@ -369,7 +373,7 @@ One of the following keywords to indicate how to draw the line:
 - `magnet`
 - `grid`
 
-[![ex-180](img/ex-180.png)](https://anseki.github.io/leader-line/)
+[![ex-180](img/ex-180.png)](https://github.com/Lionad-Morotar/leader-line)
 
 ### `startSocket`, `endSocket`
 
@@ -437,7 +441,7 @@ One of the following keywords to indicate type of plug (symbol that is shown at 
 [`startPlugOutline`/`endPlugOutline`](#startplugoutline-endplugoutline) option is ignored  
 [`startPlugColor`/`endPlugColor`](#startplugcolor-endplugcolor) option is ignored
 
-[![ex-220](img/ex-220.png)](https://anseki.github.io/leader-line/)
+[![ex-220](img/ex-220.png)](https://github.com/Lionad-Morotar/leader-line)
 
 ### `startPlugColor`, `endPlugColor`
 
@@ -948,7 +952,7 @@ One of the following keywords to indicate the shape of the area:
 - `circle`
 - `polygon`
 
-[![ex-450](img/ex-450.png)](https://anseki.github.io/leader-line/)
+[![ex-450](img/ex-450.png)](https://github.com/Lionad-Morotar/leader-line)
 
 #### <a name="attachments-areaanchor-x-y"></a>`x`, `y`
 
