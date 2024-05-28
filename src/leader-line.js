@@ -463,6 +463,7 @@
    * @returns {Window} A common ancestor window.
    */
   function getCommonWindow(elm1, elm2) {
+    // console.log('getCommonWindow', elm1, elm2)
     var frames1, frames2, commonWindow;
     if (!(frames1 = getFrames(elm1)) || !(frames2 = getFrames(elm2))) {
       throw new Error('Cannot get frames.');
@@ -1519,6 +1520,8 @@
     curStats.position_path = options.path;
     curStats.position_lineStrokeWidth = curStats.line_strokeWidth;
     curStats.position_socketGravitySE = curSocketGravitySE = copyTree(options.socketGravitySE);
+    aplStats.position_socketXYSE = copyTree(curSocketXYSE);
+    aplStats.position_plugOverheadSE = copyTree(curStats.position_plugOverheadSE);
 
     anchorBBoxSE = [0, 1].map(function(i) {
       var anchor = options.anchorSE[i], isAttach = props.optionIsAttach.anchorSE[i],
@@ -1980,8 +1983,6 @@
       })();
 
       // apply
-      aplStats.position_socketXYSE = copyTree(curSocketXYSE);
-      aplStats.position_plugOverheadSE = copyTree(curStats.position_plugOverheadSE);
       aplStats.position_path = curStats.position_path;
       aplStats.position_lineStrokeWidth = curStats.position_lineStrokeWidth;
       aplStats.position_socketGravitySE = copyTree(curSocketGravitySE);
@@ -5193,3 +5194,5 @@
 
   return LeaderLine;
 })();
+
+export default LeaderLine;

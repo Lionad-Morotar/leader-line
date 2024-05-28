@@ -4,6 +4,12 @@
 
 Draw a leader line in your web page.
 
+Source Project: <a href="https://anseki.github.io/leader-line/">https://anseki.github.io/leader-line/</a>
+
+Issues fixed: 
+
+* `aplStats.position_plugOverheadSE` is not defined
+
 **<a href="https://anseki.github.io/leader-line/">Document and Examples https://anseki.github.io/leader-line/</a>**
 
 ```html
