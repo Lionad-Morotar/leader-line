@@ -9,6 +9,7 @@ Source Project: <a href="https://anseki.github.io/leader-line/">https://anseki.g
 Issues fixed: 
 
 * `aplStats.position_plugOverheadSE` is not defined
+* `getFrame error` in `@micro-zoe/micro-app`
 
 Feat added:
 

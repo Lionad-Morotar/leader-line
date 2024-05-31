@@ -406,6 +406,10 @@
    * @returns {(Element[]|null)} An array of `<iframe>` elements or null when `baseWindow` was not found in the path.
    */
   function getFrames(element, baseWindow) {
+    // 兼容 micro-zoe/micro-app
+    if (window.__MICRO_APP_NAME__) {
+      return []
+    }
     var frames = [], curElement = element, doc, win;
     baseWindow = baseWindow || window;
     while (true) {
