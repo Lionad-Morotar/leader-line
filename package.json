@@ -14,17 +14,28 @@
     "bubble",
     "svg"
   ],
-  "main": "leader-line.min.js",
+  "main": "leader-line.esm.js",
+  "exports": {
+    ".": {
+      "import": "./leader-line.esm.js",
+      "require": "./leader-line.min.js"
+    }
+  },
   "files": [
     "leader-line.min.js",
     "bower.json"
   ],
   "devDependencies": {
+    "@esbuild-kit/cjs-loader": "^2.4.4",
+    "@rollup/plugin-commonjs": "^26.0.1",
+    "@rollup/plugin-node-resolve": "^15.2.3",
     "anim-event": "^1.0.16",
     "cheerio": "^1.0.0-rc.9",
     "clean-css": "^5.1.2",
     "cross-env": "^7.0.3",
+    "fast-glob": "^3.3.2",
     "grunt": "^1.4.1",
+    "grunt-rollup": "^12.0.0",
     "grunt-task-helper": "^0.3.10",
     "htmlclean": "^3.0.8",
     "jasmine-core": "^3.7.1",
@@ -32,13 +43,18 @@
     "node-static-alias": "^1.1.2",
     "plain-draggable": "^2.5.12",
     "pre-proc": "^1.0.2",
+    "rollup": "^4.9.6",
+    "rollup-plugin-esbuild": "^6.1.1",
     "test-page-loader": "^1.0.8",
-    "uglify-js": "^3.13.7"
+    "uglify-js": "^3.13.7",
+    "gulp": "^4.0.2"
   },
   "scripts": {
     "dev": "pnpm clean && cross-env NODE_ENV=development grunt",
-    "build": "pnpm clean && cross-env NODE_ENV=production grunt",
-    "clean": "rm -f leader-line.min.js"
+    "build": "pnpm clean && pnpm build:esm && pnpm build:iife",
+    "build:iife": "cross-env NODE_ENV=production grunt",
+    "build:esm": "cross-env NODE_ENV=production gulp --require @esbuild-kit/cjs-loader -f gulpfile.ts",
+    "clean": "rm -f leader-line.min.js leader-line.esm.css"
   },
   "homepage": "https://github.com/Lionad-Morotar/leader-line",
   "repository": {
