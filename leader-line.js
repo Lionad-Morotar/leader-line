@@ -1,3 +1,4 @@
+/*! LeaderLine v1.0.9 (c) Lionad-Morotar https://github.com/Lionad-Morotar/leader-line */
 /*
  * LeaderLine
  * https://github.com/Lionad-Morotar/leader-line
@@ -69,20 +70,11 @@
 
     PLUG_BEHIND = 'behind',
     DEFS_ID = APP_ID + '-defs',
-    /* [DEBUG/]
-    DEFS_HTML = @INCLUDE[code:DEFS_HTML]@,
-    SYMBOLS = @INCLUDE[code:SYMBOLS]@,
-    PLUG_KEY_2_ID = @INCLUDE[code:PLUG_KEY_2_ID]@,
-    PLUG_2_SYMBOL = @INCLUDE[code:PLUG_2_SYMBOL]@,
-    DEFAULT_END_PLUG = @INCLUDE[code:DEFAULT_END_PLUG]@,
-    [DEBUG/] */
-    // [DEBUG]
-    DEFS_HTML = window.DEFS_HTML,
-    SYMBOLS = window.SYMBOLS,
-    PLUG_KEY_2_ID = window.PLUG_KEY_2_ID,
-    PLUG_2_SYMBOL = window.PLUG_2_SYMBOL,
-    DEFAULT_END_PLUG = window.DEFAULT_END_PLUG,
-    // [/DEBUG]
+    DEFS_HTML = '<svg xmlns="http://www.w3.org/2000/svg" version="1.1" id="leader-line-defs"><style><![CDATA[.leader-line{position:absolute;overflow:visible!important;pointer-events:none!important;font-size:16px}#leader-line-defs{width:0;height:0;position:absolute;left:0;top:0}.leader-line-line-path{fill:none}.leader-line-mask-bg-rect{fill:white}.leader-line-caps-mask-anchor,.leader-line-caps-mask-marker-shape{fill:black}.leader-line-caps-mask-anchor{stroke:black}.leader-line-caps-mask-line,.leader-line-plugs-face{stroke:rgba(0,0,0,0)}.leader-line-line-mask-shape{stroke:white}.leader-line-line-outline-mask-shape{stroke:black}.leader-line-plug-mask-shape{fill:white;stroke:black}.leader-line-plug-outline-mask-shape{fill:black;stroke:white}.leader-line-areaAnchor{position:absolute;overflow:visible!important}]]></style><defs><circle id="leader-line-disc" cx="0" cy="0" r="5"/><rect id="leader-line-square" x="-5" y="-5" width="10" height="10"/><polygon id="leader-line-arrow1" points="-8,-8 8,0 -8,8 -5,0"/><polygon id="leader-line-arrow2" points="-4,-8 4,0 -4,8 -7,5 -2,0 -7,-5"/><polygon id="leader-line-arrow3" points="-4,-5 8,0 -4,5"/><g id="leader-line-hand"><path style="fill: #fcfcfc" d="M9.19 11.14h4.75c1.38 0 2.49-1.11 2.49-2.49 0-.51-.15-.98-.41-1.37h1.3c1.38 0 2.49-1.11 2.49-2.49s-1.11-2.53-2.49-2.53h1.02c1.38 0 2.49-1.11 2.49-2.49s-1.11-2.49-2.49-2.49h14.96c1.37 0 2.49-1.11 2.49-2.49s-1.11-2.49-2.49-2.49H16.58C16-9.86 14.28-11.14 9.7-11.14c-4.79 0-6.55 3.42-7.87 4.73H-2.14v13.23h3.68C3.29 9.97 5.47 11.14 9.19 11.14L9.19 11.14Z"/><path style="fill: black" d="M13.95 12c1.85 0 3.35-1.5 3.35-3.35 0-.17-.02-.34-.04-.51h.07c1.85 0 3.35-1.5 3.35-3.35 0-.79-.27-1.51-.72-2.08 1.03-.57 1.74-1.67 1.74-2.93 0-.59-.16-1.15-.43-1.63h12.04c1.85 0 3.35-1.5 3.35-3.35 0-1.85-1.5-3.35-3.35-3.35H17.2C16.26-10.93 13.91-12 9.7-12 5.36-12 3.22-9.4 1.94-7.84c0 0-.29.33-.5.57-.63 0-3.58 0-3.58 0C-2.61-7.27-3-6.88-3-6.41v13.23c0 .47.39.86.86.86 0 0 2.48 0 3.2 0C2.9 10.73 5.29 12 9.19 12L13.95 12ZM9.19 10.28c-3.46 0-5.33-1.05-6.9-3.87-.15-.27-.44-.44-.75-.44 0 0-1.81 0-2.82 0V-5.55c1.06 0 3.11 0 3.11 0 .25 0 .44-.06.61-.25l.83-.95c1.23-1.49 2.91-3.53 6.43-3.53 3.45 0 4.9.74 5.57 1.72h-4.3c-.48 0-.86.38-.86.86s.39.86.86.86h22.34c.9 0 1.63.73 1.63 1.63 0 .9-.73 1.63-1.63 1.63H15.83c-.48 0-.86.38-.86.86 0 .47.39.86.86.86h2.52c.9 0 1.63.73 1.63 1.63s-.73 1.63-1.63 1.63h-3.12c-.48 0-.86.38-.86.86 0 .47.39.86.86.86h2.11c.88 0 1.63.76 1.63 1.67 0 .9-.73 1.63-1.63 1.63h-3.2c-.48 0-.86.39-.86.86 0 .47.39.86.86.86h1.36c.05.16.09.34.09.51 0 .9-.73 1.63-1.63 1.63C13.95 10.28 9.19 10.28 9.19 10.28Z"/></g><g id="leader-line-crosshair"><path d="M0-78.97c-43.54 0-78.97 35.43-78.97 78.97 0 43.54 35.43 78.97 78.97 78.97s78.97-35.43 78.97-78.97C78.97-43.54 43.55-78.97 0-78.97ZM76.51-1.21h-9.91v-9.11h-2.43v9.11h-11.45c-.64-28.12-23.38-50.86-51.5-51.5V-64.17h9.11V-66.6h-9.11v-9.91C42.46-75.86 75.86-42.45 76.51-1.21ZM-1.21-30.76h-9.11v2.43h9.11V-4.2c-1.44.42-2.57 1.54-2.98 2.98H-28.33v-9.11h-2.43v9.11H-50.29C-49.65-28-27.99-49.65-1.21-50.29V-30.76ZM-30.76 1.21v9.11h2.43v-9.11H-4.2c.42 1.44 1.54 2.57 2.98 2.98v24.13h-9.11v2.43h9.11v19.53C-27.99 49.65-49.65 28-50.29 1.21H-30.76ZM1.22 30.75h9.11v-2.43h-9.11V4.2c1.44-.42 2.56-1.54 2.98-2.98h24.13v9.11h2.43v-9.11h19.53C49.65 28 28 49.65 1.22 50.29V30.75ZM30.76-1.21v-9.11h-2.43v9.11H4.2c-.42-1.44-1.54-2.56-2.98-2.98V-28.33h9.11v-2.43h-9.11V-50.29C28-49.65 49.65-28 50.29-1.21H30.76ZM-1.21-76.51v9.91h-9.11v2.43h9.11v11.45c-28.12.64-50.86 23.38-51.5 51.5H-64.17v-9.11H-66.6v9.11h-9.91C-75.86-42.45-42.45-75.86-1.21-76.51ZM-76.51 1.21h9.91v9.11h2.43v-9.11h11.45c.64 28.12 23.38 50.86 51.5 51.5v11.45h-9.11v2.43h9.11v9.91C-42.45 75.86-75.86 42.45-76.51 1.21ZM1.22 76.51v-9.91h9.11v-2.43h-9.11v-11.45c28.12-.64 50.86-23.38 51.5-51.5h11.45v9.11h2.43v-9.11h9.91C75.86 42.45 42.45 75.86 1.22 76.51Z"/><path d="M0 83.58-7.1 96 7.1 96Z"/><path d="M0-83.58 7.1-96-7.1-96"/><path d="M83.58 0 96 7.1 96-7.1Z"/><path d="M-83.58 0-96-7.1-96 7.1Z"/></g></defs></svg>',
+    SYMBOLS = {disc:{elmId:'leader-line-disc',noRotate:true,bBox:{left:-5,top:-5,width:10,height:10,right:5,bottom:5},widthR:2.5,heightR:2.5,bCircle:5,sideLen:5,backLen:5,overhead:0,outlineBase:1,outlineMax:4},square:{elmId:'leader-line-square',noRotate:true,bBox:{left:-5,top:-5,width:10,height:10,right:5,bottom:5},widthR:2.5,heightR:2.5,bCircle:5,sideLen:5,backLen:5,overhead:0,outlineBase:1,outlineMax:4},arrow1:{elmId:'leader-line-arrow1',bBox:{left:-8,top:-8,width:16,height:16,right:8,bottom:8},widthR:4,heightR:4,bCircle:8,sideLen:8,backLen:8,overhead:8,outlineBase:2,outlineMax:1.5},arrow2:{elmId:'leader-line-arrow2',bBox:{left:-7,top:-8,width:11,height:16,right:4,bottom:8},widthR:2.75,heightR:4,bCircle:8,sideLen:8,backLen:7,overhead:4,outlineBase:1,outlineMax:1.75},arrow3:{elmId:'leader-line-arrow3',bBox:{left:-4,top:-5,width:12,height:10,right:8,bottom:5},widthR:3,heightR:2.5,bCircle:8,sideLen:5,backLen:4,overhead:8,outlineBase:1,outlineMax:2.5},hand:{elmId:'leader-line-hand',bBox:{left:-3,top:-12,width:40,height:24,right:37,bottom:12},widthR:10,heightR:6,bCircle:37,sideLen:12,backLen:3,overhead:37},crosshair:{elmId:'leader-line-crosshair',noRotate:true,bBox:{left:-96,top:-96,width:192,height:192,right:96,bottom:96},widthR:48,heightR:48,bCircle:96,sideLen:96,backLen:96,overhead:0}},
+    PLUG_KEY_2_ID = {behind:PLUG_BEHIND,disc:'disc',square:'square',arrow1:'arrow1',arrow2:'arrow2',arrow3:'arrow3',hand:'hand',crosshair:'crosshair'},
+    PLUG_2_SYMBOL = {disc:'disc',square:'square',arrow1:'arrow1',arrow2:'arrow2',arrow3:'arrow3',hand:'hand',crosshair:'crosshair'},
+    DEFAULT_END_PLUG = 'arrow1',
 
     SOCKET_IDS = [SOCKET_TOP, SOCKET_RIGHT, SOCKET_BOTTOM, SOCKET_LEFT],
     KEYWORD_AUTO = 'auto',
@@ -135,18 +127,1414 @@
     })(),
     isFinite = Number.isFinite || function(value) { return typeof value === 'number' && window.isFinite(value); },
 
-    /* [DEBUG/]
-    anim = @INCLUDE[code:anim]@,
-    [DEBUG/] */
-    anim = window.anim, // [DEBUG/]
-    /* [DEBUG/]
-    pathDataPolyfill = @INCLUDE[code:pathDataPolyfill]@,
-    [DEBUG/] */
-    pathDataPolyfill = window.pathDataPolyfill, // [DEBUG/]
-    /* [DEBUG/]
-    AnimEvent = @INCLUDE[code:AnimEvent]@,
-    [DEBUG/] */
-    AnimEvent = window.AnimEvent, // [DEBUG/]
+    anim = (function() {
+  'use strict';
+
+  var
+    FUNC_KEYS = {
+      'ease': [0.25, 0.1, 0.25, 1],
+      'linear': [0, 0, 1, 1],
+      'ease-in': [0.42, 0, 1, 1],
+      'ease-out': [0, 0, 0.58, 1],
+      'ease-in-out': [0.42, 0, 0.58, 1]
+    },
+    MSPF = 1000 / 60 / 2, // precision ms/frame (FPS: 60)
+
+    requestAnim = window.requestAnimationFrame ||
+      window.mozRequestAnimationFrame ||
+      window.webkitRequestAnimationFrame ||
+      window.msRequestAnimationFrame ||
+      function(callback) { setTimeout(callback, MSPF); },
+
+    cancelAnim = window.cancelAnimationFrame ||
+      window.mozCancelAnimationFrame ||
+      window.webkitCancelAnimationFrame ||
+      window.msCancelAnimationFrame ||
+      function(requestID) { clearTimeout(requestID); },
+
+    isFinite = Number.isFinite || function(value) { return typeof value === 'number' && window.isFinite(value); },
+
+    /**
+     * @callback frameCallback
+     * @param {} value - A value that was made by `valueCallback`.
+     * @param {boolean} finish
+     * @param {number} timeRatio - Progress [0, 1].
+     * @param {number} outputRatio - Progress [0, 1].
+     * @returns {} `false` to stop.
+     */
+
+    /**
+     * @typedef {Object} task
+     * @property {number} animId
+     * @property {frameCallback} frameCallback - Callback that is called each frame.
+     * @property {number} duration
+     * @property {number} count - `0` as infinite.
+     * @property {{value, timeRatio: number, outputRatio: number}[]} frames
+     * @property {(number|null)} framesStart - The time when first frame ran, or `null` if it is not playing.
+     * @property {number} loopsLeft - A counter for loop.
+     * @property {number} lastFrame - index of last frame that ran.
+     * @property {boolean} reverse - Play backwards.
+     */
+
+    /** @type {task[]} */
+    tasks = [],
+    newAnimId = 0,
+    requestID;
+
+
+
+  function step() {
+    var now = Date.now(), next = false;
+    if (requestID) {
+      cancelAnim.call(window, requestID);
+      requestID = null;
+    }
+
+    tasks.forEach(function(task) {
+      var timeLen, loops, frame;
+
+      if (!task.framesStart) { return; }
+      timeLen = now - task.framesStart;
+
+      if (timeLen >= task.duration && task.count && task.loopsLeft <= 1) {
+        frame = task.frames[(task.lastFrame = task.reverse ? 0 : task.frames.length - 1)];
+        task.frameCallback(frame.value, true, frame.timeRatio, frame.outputRatio);
+        task.framesStart = null;
+        return;
+      }
+      if (timeLen > task.duration) {
+        loops = Math.floor(timeLen / task.duration);
+        if (task.count) {
+          if (loops >= task.loopsLeft) { // Here `task.loopsLeft > 1`
+            frame = task.frames[(task.lastFrame = task.reverse ? 0 : task.frames.length - 1)];
+            task.frameCallback(frame.value, true, frame.timeRatio, frame.outputRatio);
+            task.framesStart = null;
+            return;
+          }
+          task.loopsLeft -= loops;
+        }
+        task.framesStart += task.duration * loops;
+        timeLen = now - task.framesStart;
+      }
+
+      if (task.reverse) { timeLen = task.duration - timeLen; }
+      frame = task.frames[(task.lastFrame = Math.round(timeLen / MSPF))];
+      if (task.frameCallback(frame.value, false, frame.timeRatio, frame.outputRatio) !== false) {
+        next = true;
+      } else {
+        task.framesStart = null;
+      }
+    });
+
+    if (next) { requestID = requestAnim.call(window, step); }
+  }
+
+
+  function startTask(task, timeRatio) {
+    task.framesStart = Date.now();
+    if (timeRatio != null) {
+      task.framesStart -= task.duration * (task.reverse ? 1 - timeRatio : timeRatio);
+    }
+    task.loopsLeft = task.count;
+    task.lastFrame = null;
+    step();
+  }
+
+  return {
+    /**
+     * Callback that makes value that is required by each frame.
+     * @callback valueCallback
+     * @param {number} outputRatio - Progress [0, 1].
+     * @returns {}
+     */
+
+    /**
+     * @param {(valueCallback|null)} valueCallback - valueCallback
+     * @param {frameCallback} frameCallback - task property
+     * @param {number} duration - task property
+     * @param {number} count - task property
+     * @param {(string|number[])} timing - FUNC_KEYS or [x1, y1, x2, y2]
+     * @param {(boolean|null)} reverse - playing property
+     * @param {number|boolean} [timeRatio] - Play from the midst. [0, 1], or `false` that prevents it starting.
+     * @returns {number} animId to control the task.
+     */
+    add: function(valueCallback, frameCallback, duration, count, timing, reverse, timeRatio) {
+      var animId = ++newAnimId, task, frames,
+        stepX, stepT, nextX, t, point;
+
+      function getPoint(t) {
+        var t2 = t * t, t3 = t2 * t, t1 = 1 - t, t12 = t1 * t1,
+          p1f = 3 * t12 * t, p2f = 3 * t1 * t2;
+        return {
+          x: p1f * timing[0] + p2f * timing[2] + t3,
+          y: p1f * timing[1] + p2f * timing[3] + t3
+        };
+      }
+
+      function newFrame(timeRatio, outputRatio) {
+        return {value: valueCallback(outputRatio),
+          timeRatio: timeRatio, outputRatio: outputRatio};
+      }
+
+      if (typeof timing === 'string') { timing = FUNC_KEYS[timing]; }
+      valueCallback = valueCallback || function() {};
+
+      // Generate `frames` list
+      if (duration < MSPF) {
+        frames = [newFrame(0, 0), newFrame(1, 1)];
+      } else {
+        stepX = MSPF / duration;
+        frames = [newFrame(0, 0)];
+
+        if (timing[0] === 0 && timing[1] === 0 && timing[2] === 1 && timing[3] === 1) { // linear
+          for (nextX = stepX; nextX <= 1; nextX += stepX) {
+            frames.push(newFrame(nextX, nextX)); // x === y
+          }
+
+        } else {
+          stepT = stepX / 10; // precision for `t`
+          nextX = stepX;
+          for (t = stepT; t <= 1; t += stepT) {
+            point = getPoint(t);
+            if (point.x >= nextX) {
+              frames.push(newFrame(point.x, point.y));
+              nextX += stepX;
+            }
+          }
+        }
+
+        frames.push(newFrame(1, 1)); // for tolerance
+      }
+
+      task = {
+        animId: animId,
+        frameCallback: frameCallback, duration: duration, count: count, // task properties
+        frames: frames,
+        reverse: !!reverse
+      };
+      tasks.push(task);
+      if (timeRatio !== false) { startTask(task, timeRatio); }
+
+      return animId;
+    },
+
+    remove: function(animId) {
+      var iRemove;
+      if (tasks.some(function(task, i) {
+        if (task.animId === animId) {
+          iRemove = i;
+          task.framesStart = null; // for `tasks.forEach` that is playing now.
+          return true;
+        }
+        return false;
+      })) {
+        tasks.splice(iRemove, 1);
+      }
+    },
+
+    /**
+     * @param {number} animId - Target task.
+     * @param {boolean} reverse - Play backwards.
+     * @param {number} [timeRatio] - Play from the midst. [0, 1]
+     * @returns {void}
+     */
+    start: function(animId, reverse, timeRatio) {
+      tasks.some(function(task) {
+        if (task.animId === animId) {
+          task.reverse = !!reverse;
+          startTask(task, timeRatio);
+          return true;
+        }
+        return false;
+      });
+    },
+
+    /**
+     * @param {number} animId - Target task.
+     * @param {boolean} [getTimeRatioByFrame] - Return timeRatio of last frame that ran. [0, 1]
+     * @returns {(number|undefined)} timeRatio [0, 1]
+     */
+    stop: function(animId, getTimeRatioByFrame) {
+      var timeRatio;
+      tasks.some(function(task) {
+        if (task.animId === animId) {
+          if (!getTimeRatioByFrame) {
+            timeRatio = (Date.now() - task.framesStart) / task.duration;
+            if (task.reverse) { timeRatio = 1 - timeRatio; }
+            if (timeRatio < 0) {
+              timeRatio = 0;
+            } else if (timeRatio > 1) {
+              timeRatio = 1;
+            }
+          } else if (task.lastFrame != null) {
+            timeRatio = task.frames[task.lastFrame].timeRatio;
+          }
+          task.framesStart = null;
+          return true;
+        }
+        return false;
+      });
+      return timeRatio;
+    },
+
+    validTiming: function(timing) {
+      return typeof timing === 'string' ? FUNC_KEYS[timing] :
+        Array.isArray(timing) && [0, 1, 2, 3].every(function(i) {
+          return isFinite(timing[i]) && timing[i] >= 0 && timing[i] <= 1;
+        }) ? [timing[0], timing[1], timing[2], timing[3]] :
+        null;
+    }
+  };
+})(),
+    pathDataPolyfill = /*
+  Customized path-data-polyfill.js
+    https://github.com/jarek-foksa/path-data-polyfill.js 2016.06.22
+
+  - Wrap code with function
+  - With specified window
+*/
+
+/* exported pathDataPolyfill */
+
+function pathDataPolyfill(window) {
+  'use strict';
+
+// @info
+//   Polyfill for SVG getPathData() and setPathData() methods. Based on:
+//   - SVGPathSeg polyfill by Philip Rogers (MIT License)
+//     https://github.com/progers/pathseg
+//   - SVGPathNormalizer by Tadahisa Motooka (MIT License)
+//     https://github.com/motooka/SVGPathNormalizer/tree/master/src
+//   - arcToCubicCurves() by Dmitry Baranovskiy (MIT License)
+//     https://github.com/DmitryBaranovskiy/raphael/blob/v2.1.1/raphael.core.js#L1837
+// @author
+//   Jarosław Foksa
+// @license
+//   MIT License
+if (!window.SVGPathElement.prototype.getPathData || !window.SVGPathElement.prototype.setPathData) {
+  (function() {
+    var commandsMap = {
+      "Z":"Z", "M":"M", "L":"L", "C":"C", "Q":"Q", "A":"A", "H":"H", "V":"V", "S":"S", "T":"T",
+      "z":"Z", "m":"m", "l":"l", "c":"c", "q":"q", "a":"a", "h":"h", "v":"v", "s":"s", "t":"t"
+    };
+
+    var Source = function(string) {
+      this._string = string;
+      this._currentIndex = 0;
+      this._endIndex = this._string.length;
+      this._prevCommand = null;
+      this._skipOptionalSpaces();
+    };
+
+    var isIE = window.navigator.userAgent.indexOf("MSIE ") !== -1;
+
+    Source.prototype = {
+      parseSegment: function() {
+        var char = this._string[this._currentIndex];
+        var command = commandsMap[char] ? commandsMap[char] : null;
+
+        if (command === null) {
+          // Possibly an implicit command. Not allowed if this is the first command.
+          if (this._prevCommand === null) {
+            return null;
+          }
+
+          // Check for remaining coordinates in the current command.
+          if (
+            (char === "+" || char === "-" || char === "." || (char >= "0" && char <= "9")) && this._prevCommand !== "Z"
+          ) {
+            if (this._prevCommand === "M") {
+              command = "L";
+            }
+            else if (this._prevCommand === "m") {
+              command = "l";
+            }
+            else {
+              command = this._prevCommand;
+            }
+          }
+          else {
+            command = null;
+          }
+
+          if (command === null) {
+            return null;
+          }
+        }
+        else {
+          this._currentIndex += 1;
+        }
+
+        this._prevCommand = command;
+
+        var values = null;
+        var cmd = command.toUpperCase();
+
+        if (cmd === "H" || cmd === "V") {
+          values = [this._parseNumber()];
+        }
+        else if (cmd === "M" || cmd === "L" || cmd === "T") {
+          values = [this._parseNumber(), this._parseNumber()];
+        }
+        else if (cmd === "S" || cmd === "Q") {
+          values = [this._parseNumber(), this._parseNumber(), this._parseNumber(), this._parseNumber()];
+        }
+        else if (cmd === "C") {
+          values = [
+            this._parseNumber(),
+            this._parseNumber(),
+            this._parseNumber(),
+            this._parseNumber(),
+            this._parseNumber(),
+            this._parseNumber()
+          ];
+        }
+        else if (cmd === "A") {
+          values = [
+            this._parseNumber(),
+            this._parseNumber(),
+            this._parseNumber(),
+            this._parseArcFlag(),
+            this._parseArcFlag(),
+            this._parseNumber(),
+            this._parseNumber()
+          ];
+        }
+        else if (cmd === "Z") {
+          this._skipOptionalSpaces();
+          values = [];
+        }
+
+        if (values === null || values.indexOf(null) >= 0) {
+          // Unknown command or known command with invalid values
+          return null;
+        }
+        else {
+          return {type: command, values: values};
+        }
+      },
+
+      hasMoreData: function() {
+        return this._currentIndex < this._endIndex;
+      },
+
+      peekSegmentType: function() {
+        var char = this._string[this._currentIndex];
+        return commandsMap[char] ? commandsMap[char] : null;
+      },
+
+      initialCommandIsMoveTo: function() {
+        // If the path is empty it is still valid, so return true.
+        if (!this.hasMoreData()) {
+          return true;
+        }
+
+        var command = this.peekSegmentType();
+        // Path must start with moveTo.
+        return command === "M" || command === "m";
+      },
+
+      _isCurrentSpace: function() {
+        var char = this._string[this._currentIndex];
+        return char <= " " && (char === " " || char === "\n" || char === "\t" || char === "\r" || char === "\f");
+      },
+
+      _skipOptionalSpaces: function() {
+        while (this._currentIndex < this._endIndex && this._isCurrentSpace()) {
+          this._currentIndex += 1;
+        }
+
+        return this._currentIndex < this._endIndex;
+      },
+
+      _skipOptionalSpacesOrDelimiter: function() {
+        if (
+          this._currentIndex < this._endIndex &&
+          !this._isCurrentSpace() &&
+          this._string[this._currentIndex] !== ","
+        ) {
+          return false;
+        }
+
+        if (this._skipOptionalSpaces()) {
+          if (this._currentIndex < this._endIndex && this._string[this._currentIndex] === ",") {
+            this._currentIndex += 1;
+            this._skipOptionalSpaces();
+          }
+        }
+        return this._currentIndex < this._endIndex;
+      },
+
+      // Parse a number from an SVG path. This very closely follows genericParseNumber(...) from
+      // Source/core/svg/SVGParserUtilities.cpp.
+      // Spec: http://www.w3.org/TR/SVG11/single-page.html#paths-PathDataBNF
+      _parseNumber: function() {
+        var exponent = 0;
+        var integer = 0;
+        var frac = 1;
+        var decimal = 0;
+        var sign = 1;
+        var expsign = 1;
+        var startIndex = this._currentIndex;
+
+        this._skipOptionalSpaces();
+
+        // Read the sign.
+        if (this._currentIndex < this._endIndex && this._string[this._currentIndex] === "+") {
+          this._currentIndex += 1;
+        }
+        else if (this._currentIndex < this._endIndex && this._string[this._currentIndex] === "-") {
+          this._currentIndex += 1;
+          sign = -1;
+        }
+
+        if (
+          this._currentIndex === this._endIndex ||
+          (
+            (this._string[this._currentIndex] < "0" || this._string[this._currentIndex] > "9") &&
+            this._string[this._currentIndex] !== "."
+          )
+        ) {
+          // The first character of a number must be one of [0-9+-.].
+          return null;
+        }
+
+        // Read the integer part, build right-to-left.
+        var startIntPartIndex = this._currentIndex;
+
+        while (
+          this._currentIndex < this._endIndex &&
+          this._string[this._currentIndex] >= "0" &&
+          this._string[this._currentIndex] <= "9"
+        ) {
+          this._currentIndex += 1; // Advance to first non-digit.
+        }
+
+        if (this._currentIndex !== startIntPartIndex) {
+          var scanIntPartIndex = this._currentIndex - 1;
+          var multiplier = 1;
+
+          while (scanIntPartIndex >= startIntPartIndex) {
+            integer += multiplier * (this._string[scanIntPartIndex] - "0");
+            scanIntPartIndex -= 1;
+            multiplier *= 10;
+          }
+        }
+
+        // Read the decimals.
+        if (this._currentIndex < this._endIndex && this._string[this._currentIndex] === ".") {
+          this._currentIndex += 1;
+
+          // There must be a least one digit following the .
+          if (
+            this._currentIndex >= this._endIndex ||
+            this._string[this._currentIndex] < "0" ||
+            this._string[this._currentIndex] > "9"
+          ) {
+            return null;
+          }
+
+          while (
+            this._currentIndex < this._endIndex &&
+            this._string[this._currentIndex] >= "0" &&
+            this._string[this._currentIndex] <= "9"
+          ) {
+            frac *= 10;
+            decimal += (this._string.charAt(this._currentIndex) - "0") / frac;
+            this._currentIndex += 1;
+          }
+        }
+
+        // Read the exponent part.
+        if (
+          this._currentIndex !== startIndex &&
+          this._currentIndex + 1 < this._endIndex &&
+          (this._string[this._currentIndex] === "e" || this._string[this._currentIndex] === "E") &&
+          (this._string[this._currentIndex + 1] !== "x" && this._string[this._currentIndex + 1] !== "m")
+        ) {
+          this._currentIndex += 1;
+
+          // Read the sign of the exponent.
+          if (this._string[this._currentIndex] === "+") {
+            this._currentIndex += 1;
+          }
+          else if (this._string[this._currentIndex] === "-") {
+            this._currentIndex += 1;
+            expsign = -1;
+          }
+
+          // There must be an exponent.
+          if (
+            this._currentIndex >= this._endIndex ||
+            this._string[this._currentIndex] < "0" ||
+            this._string[this._currentIndex] > "9"
+          ) {
+            return null;
+          }
+
+          while (
+            this._currentIndex < this._endIndex &&
+            this._string[this._currentIndex] >= "0" &&
+            this._string[this._currentIndex] <= "9"
+          ) {
+            exponent *= 10;
+            exponent += (this._string[this._currentIndex] - "0");
+            this._currentIndex += 1;
+          }
+        }
+
+        var number = integer + decimal;
+        number *= sign;
+
+        if (exponent) {
+          number *= Math.pow(10, expsign * exponent);
+        }
+
+        if (startIndex === this._currentIndex) {
+          return null;
+        }
+
+        this._skipOptionalSpacesOrDelimiter();
+
+        return number;
+      },
+
+      _parseArcFlag: function() {
+        if (this._currentIndex >= this._endIndex) {
+          return null;
+        }
+
+        var flag = null;
+        var flagChar = this._string[this._currentIndex];
+
+        this._currentIndex += 1;
+
+        if (flagChar === "0") {
+          flag = 0;
+        }
+        else if (flagChar === "1") {
+          flag = 1;
+        }
+        else {
+          return null;
+        }
+
+        this._skipOptionalSpacesOrDelimiter();
+        return flag;
+      }
+    };
+
+    var parsePathDataString = function(string) {
+      if (!string || string.length === 0) return [];
+
+      var source = new Source(string);
+      var pathData = [];
+
+      if (source.initialCommandIsMoveTo()) {
+        while (source.hasMoreData()) {
+          var pathSeg = source.parseSegment();
+
+          if (pathSeg === null) {
+            break;
+          }
+          else {
+            pathData.push(pathSeg);
+          }
+        }
+      }
+
+      return pathData;
+    };
+
+    var setAttribute = window.SVGPathElement.prototype.setAttribute;
+    var removeAttribute = window.SVGPathElement.prototype.removeAttribute;
+
+    var $cachedPathData = window.Symbol ? window.Symbol() : "__cachedPathData";
+    var $cachedNormalizedPathData = window.Symbol ? window.Symbol() : "__cachedNormalizedPathData";
+
+    // @info
+    //   Get an array of corresponding cubic bezier curve parameters for given arc curve paramters.
+    var arcToCubicCurves = function(x1, y1, x2, y2, r1, r2, angle, largeArcFlag, sweepFlag, _recursive) {
+      var degToRad = function(degrees) {
+        return (Math.PI * degrees) / 180;
+      };
+
+      var rotate = function(x, y, angleRad) {
+        var X = x * Math.cos(angleRad) - y * Math.sin(angleRad);
+        var Y = x * Math.sin(angleRad) + y * Math.cos(angleRad);
+        return {x: X, y: Y};
+      };
+
+      var angleRad = degToRad(angle);
+      var params = [];
+      var f1, f2, cx, cy;
+
+      if (_recursive) {
+        f1 = _recursive[0];
+        f2 = _recursive[1];
+        cx = _recursive[2];
+        cy = _recursive[3];
+      }
+      else {
+        var p1 = rotate(x1, y1, -angleRad);
+        x1 = p1.x;
+        y1 = p1.y;
+
+        var p2 = rotate(x2, y2, -angleRad);
+        x2 = p2.x;
+        y2 = p2.y;
+
+        var x = (x1 - x2) / 2;
+        var y = (y1 - y2) / 2;
+        var h = (x * x) / (r1 * r1) + (y * y) / (r2 * r2);
+
+        if (h > 1) {
+          h = Math.sqrt(h);
+          r1 = h * r1;
+          r2 = h * r2;
+        }
+
+        var sign;
+
+        if (largeArcFlag === sweepFlag) {
+          sign = -1;
+        }
+        else {
+          sign = 1;
+        }
+
+        var r1Pow = r1 * r1;
+        var r2Pow = r2 * r2;
+
+        var left = r1Pow * r2Pow - r1Pow * y * y - r2Pow * x * x;
+        var right = r1Pow * y * y + r2Pow * x * x;
+
+        var k = sign * Math.sqrt(Math.abs(left/right));
+
+        cx = k * r1 * y / r2 + (x1 + x2) / 2;
+        cy = k * -r2 * x / r1 + (y1 + y2) / 2;
+
+        f1 = Math.asin(parseFloat(((y1 - cy) / r2).toFixed(9)));
+        f2 = Math.asin(parseFloat(((y2 - cy) / r2).toFixed(9)));
+
+        if (x1 < cx) {
+          f1 = Math.PI - f1;
+        }
+        if (x2 < cx) {
+          f2 = Math.PI - f2;
+        }
+
+        if (f1 < 0) {
+          f1 = Math.PI * 2 + f1;
+        }
+        if (f2 < 0) {
+          f2 = Math.PI * 2 + f2;
+        }
+
+        if (sweepFlag && f1 > f2) {
+          f1 = f1 - Math.PI * 2;
+        }
+        if (!sweepFlag && f2 > f1) {
+          f2 = f2 - Math.PI * 2;
+        }
+      }
+
+      var df = f2 - f1;
+
+      if (Math.abs(df) > (Math.PI * 120 / 180)) {
+        var f2old = f2;
+        var x2old = x2;
+        var y2old = y2;
+
+        if (sweepFlag && f2 > f1) {
+          f2 = f1 + (Math.PI * 120 / 180) * (1);
+        }
+        else {
+          f2 = f1 + (Math.PI * 120 / 180) * (-1);
+        }
+
+        x2 = cx + r1 * Math.cos(f2);
+        y2 = cy + r2 * Math.sin(f2);
+        params = arcToCubicCurves(x2, y2, x2old, y2old, r1, r2, angle, 0, sweepFlag, [f2, f2old, cx, cy]);
+      }
+
+      df = f2 - f1;
+
+      var c1 = Math.cos(f1);
+      var s1 = Math.sin(f1);
+      var c2 = Math.cos(f2);
+      var s2 = Math.sin(f2);
+      var t = Math.tan(df / 4);
+      var hx = 4 / 3 * r1 * t;
+      var hy = 4 / 3 * r2 * t;
+
+      var m1 = [x1, y1];
+      var m2 = [x1 + hx * s1, y1 - hy * c1];
+      var m3 = [x2 + hx * s2, y2 - hy * c2];
+      var m4 = [x2, y2];
+
+      m2[0] = 2 * m1[0] - m2[0];
+      m2[1] = 2 * m1[1] - m2[1];
+
+      if (_recursive) {
+        return [m2, m3, m4].concat(params);
+      }
+      else {
+        params = [m2, m3, m4].concat(params).join().split(",");
+
+        var curves = [];
+        var curveParams = [];
+
+        params.forEach( function(param, i) {
+          if (i % 2) {
+            curveParams.push(rotate(params[i - 1], params[i], angleRad).y);
+          }
+          else {
+            curveParams.push(rotate(params[i], params[i + 1], angleRad).x);
+          }
+
+          if (curveParams.length === 6) {
+            curves.push(curveParams);
+            curveParams = [];
+          }
+        });
+
+        return curves;
+      }
+    };
+
+    var clonePathData = function(pathData) {
+      return pathData.map( function(seg) {
+        return {type: seg.type, values: Array.prototype.slice.call(seg.values)};
+      });
+    };
+
+    // @info
+    //   Takes any path data, returns path data that consists only from absolute commands.
+    var absolutizePathData = function(pathData) {
+      var absolutizedPathData = [];
+
+      var currentX = null;
+      var currentY = null;
+
+      var subpathX = null;
+      var subpathY = null;
+
+      pathData.forEach( function(seg) {
+        /* eslint-disable no-redeclare */
+        var type = seg.type;
+
+        if (type === "M") {
+          var x = seg.values[0];
+          var y = seg.values[1];
+
+          absolutizedPathData.push({type: "M", values: [x, y]});
+
+          subpathX = x;
+          subpathY = y;
+
+          currentX = x;
+          currentY = y;
+        }
+
+        else if (type === "m") {
+          var x = currentX + seg.values[0];
+          var y = currentY + seg.values[1];
+
+          absolutizedPathData.push({type: "M", values: [x, y]});
+
+          subpathX = x;
+          subpathY = y;
+
+          currentX = x;
+          currentY = y;
+        }
+
+        else if (type === "L") {
+          var x = seg.values[0];
+          var y = seg.values[1];
+
+          absolutizedPathData.push({type: "L", values: [x, y]});
+
+          currentX = x;
+          currentY = y;
+        }
+
+        else if (type === "l") {
+          var x = currentX + seg.values[0];
+          var y = currentY + seg.values[1];
+
+          absolutizedPathData.push({type: "L", values: [x, y]});
+
+          currentX = x;
+          currentY = y;
+        }
+
+        else if (type === "C") {
+          var x1 = seg.values[0];
+          var y1 = seg.values[1];
+          var x2 = seg.values[2];
+          var y2 = seg.values[3];
+          var x = seg.values[4];
+          var y = seg.values[5];
+
+          absolutizedPathData.push({type: "C", values: [x1, y1, x2, y2, x, y]});
+
+          currentX = x;
+          currentY = y;
+        }
+
+        else if (type === "c") {
+          var x1 = currentX + seg.values[0];
+          var y1 = currentY + seg.values[1];
+          var x2 = currentX + seg.values[2];
+          var y2 = currentY + seg.values[3];
+          var x = currentX + seg.values[4];
+          var y = currentY + seg.values[5];
+
+          absolutizedPathData.push({type: "C", values: [x1, y1, x2, y2, x, y]});
+
+          currentX = x;
+          currentY = y;
+        }
+
+        else if (type === "Q") {
+          var x1 = seg.values[0];
+          var y1 = seg.values[1];
+          var x = seg.values[2];
+          var y = seg.values[3];
+
+          absolutizedPathData.push({type: "Q", values: [x1, y1, x, y]});
+
+          currentX = x;
+          currentY = y;
+        }
+
+        else if (type === "q") {
+          var x1 = currentX + seg.values[0];
+          var y1 = currentY + seg.values[1];
+          var x = currentX + seg.values[2];
+          var y = currentY + seg.values[3];
+
+          absolutizedPathData.push({type: "Q", values: [x1, y1, x, y]});
+
+          currentX = x;
+          currentY = y;
+        }
+
+        else if (type === "A") {
+          var x = seg.values[5];
+          var y = seg.values[6];
+
+          absolutizedPathData.push({
+            type: "A",
+            values: [seg.values[0], seg.values[1], seg.values[2], seg.values[3], seg.values[4], x, y]
+          });
+
+          currentX = x;
+          currentY = y;
+        }
+
+        else if (type === "a") {
+          var x = currentX + seg.values[5];
+          var y = currentY + seg.values[6];
+
+          absolutizedPathData.push({
+            type: "A",
+            values: [seg.values[0], seg.values[1], seg.values[2], seg.values[3], seg.values[4], x, y]
+          });
+
+          currentX = x;
+          currentY = y;
+        }
+
+        else if (type === "H") {
+          var x = seg.values[0];
+          absolutizedPathData.push({type: "H", values: [x]});
+          currentX = x;
+        }
+
+        else if (type === "h") {
+          var x = currentX + seg.values[0];
+          absolutizedPathData.push({type: "H", values: [x]});
+          currentX = x;
+        }
+
+        else if (type === "V") {
+          var y = seg.values[0];
+          absolutizedPathData.push({type: "V", values: [y]});
+          currentY = y;
+        }
+
+        else if (type === "v") {
+          var y = currentY + seg.values[0];
+          absolutizedPathData.push({type: "V", values: [y]});
+          currentY = y;
+        }
+
+        else if (type === "S") {
+          var x2 = seg.values[0];
+          var y2 = seg.values[1];
+          var x = seg.values[2];
+          var y = seg.values[3];
+
+          absolutizedPathData.push({type: "S", values: [x2, y2, x, y]});
+
+          currentX = x;
+          currentY = y;
+        }
+
+        else if (type === "s") {
+          var x2 = currentX + seg.values[0];
+          var y2 = currentY + seg.values[1];
+          var x = currentX + seg.values[2];
+          var y = currentY + seg.values[3];
+
+          absolutizedPathData.push({type: "S", values: [x2, y2, x, y]});
+
+          currentX = x;
+          currentY = y;
+        }
+
+        else if (type === "T") {
+          var x = seg.values[0];
+          var y = seg.values[1];
+
+          absolutizedPathData.push({type: "T", values: [x, y]});
+
+          currentX = x;
+          currentY = y;
+        }
+
+        else if (type === "t") {
+          var x = currentX + seg.values[0];
+          var y = currentY + seg.values[1];
+
+          absolutizedPathData.push({type: "T", values: [x, y]});
+
+          currentX = x;
+          currentY = y;
+        }
+
+        else if (type === "Z" || type === "z") {
+          absolutizedPathData.push({type: "Z", values: []});
+
+          currentX = subpathX;
+          currentY = subpathY;
+        }
+        /* eslint-enable no-redeclare */
+      });
+
+      return absolutizedPathData;
+    };
+
+    // @info
+    //   Takes path data that consists only from absolute commands, returns path data that consists only from
+    //   "M", "L", "C" and "Z" commands.
+    var reducePathData = function(pathData) {
+      var reducedPathData = [];
+      var lastType = null;
+
+      var lastControlX = null;
+      var lastControlY = null;
+
+      var currentX = null;
+      var currentY = null;
+
+      var subpathX = null;
+      var subpathY = null;
+
+      pathData.forEach( function(seg) {
+        /* eslint-disable no-redeclare */
+        if (seg.type === "M") {
+          var x = seg.values[0];
+          var y = seg.values[1];
+
+          reducedPathData.push({type: "M", values: [x, y]});
+
+          subpathX = x;
+          subpathY = y;
+
+          currentX = x;
+          currentY = y;
+        }
+
+        else if (seg.type === "C") {
+          var x1 = seg.values[0];
+          var y1 = seg.values[1];
+          var x2 = seg.values[2];
+          var y2 = seg.values[3];
+          var x = seg.values[4];
+          var y = seg.values[5];
+
+          reducedPathData.push({type: "C", values: [x1, y1, x2, y2, x, y]});
+
+          lastControlX = x2;
+          lastControlY = y2;
+
+          currentX = x;
+          currentY = y;
+        }
+
+        else if (seg.type === "L") {
+          var x = seg.values[0];
+          var y = seg.values[1];
+
+          reducedPathData.push({type: "L", values: [x, y]});
+
+          currentX = x;
+          currentY = y;
+        }
+
+        else if (seg.type === "H") {
+          var x = seg.values[0];
+
+          reducedPathData.push({type: "L", values: [x, currentY]});
+
+          currentX = x;
+        }
+
+        else if (seg.type === "V") {
+          var y = seg.values[0];
+
+          reducedPathData.push({type: "L", values: [currentX, y]});
+
+          currentY = y;
+        }
+
+        else if (seg.type === "S") {
+          var x2 = seg.values[0];
+          var y2 = seg.values[1];
+          var x = seg.values[2];
+          var y = seg.values[3];
+
+          var cx1, cy1;
+
+          if (lastType === "C" || lastType === "S") {
+            cx1 = currentX + (currentX - lastControlX);
+            cy1 = currentY + (currentY - lastControlY);
+          }
+          else {
+            cx1 = currentX;
+            cy1 = currentY;
+          }
+
+          reducedPathData.push({type: "C", values: [cx1, cy1, x2, y2, x, y]});
+
+          lastControlX = x2;
+          lastControlY = y2;
+
+          currentX = x;
+          currentY = y;
+        }
+
+        else if (seg.type === "T") {
+          var x = seg.values[0];
+          var y = seg.values[1];
+
+          var x1, y1;
+
+          if (lastType === "Q" || lastType === "T") {
+            x1 = currentX + (currentX - lastControlX);
+            y1 = currentY + (currentY - lastControlY);
+          }
+          else {
+            x1 = currentX;
+            y1 = currentY;
+          }
+
+          var cx1 = currentX + 2 * (x1 - currentX) / 3;
+          var cy1 = currentY + 2 * (y1 - currentY) / 3;
+          var cx2 = x + 2 * (x1 - x) / 3;
+          var cy2 = y + 2 * (y1 - y) / 3;
+
+          reducedPathData.push({type: "C", values: [cx1, cy1, cx2, cy2, x, y]});
+
+          lastControlX = x1;
+          lastControlY = y1;
+
+          currentX = x;
+          currentY = y;
+        }
+
+        else if (seg.type === "Q") {
+          var x1 = seg.values[0];
+          var y1 = seg.values[1];
+          var x = seg.values[2];
+          var y = seg.values[3];
+
+          var cx1 = currentX + 2 * (x1 - currentX) / 3;
+          var cy1 = currentY + 2 * (y1 - currentY) / 3;
+          var cx2 = x + 2 * (x1 - x) / 3;
+          var cy2 = y + 2 * (y1 - y) / 3;
+
+          reducedPathData.push({type: "C", values: [cx1, cy1, cx2, cy2, x, y]});
+
+          lastControlX = x1;
+          lastControlY = y1;
+
+          currentX = x;
+          currentY = y;
+        }
+
+        else if (seg.type === "A") {
+          var r1 = seg.values[0];
+          var r2 = seg.values[1];
+          var angle = seg.values[2];
+          var largeArcFlag = seg.values[3];
+          var sweepFlag = seg.values[4];
+          var x = seg.values[5];
+          var y = seg.values[6];
+
+          if (r1 === 0 || r2 === 0) {
+            reducedPathData.push({type: "C", values: [currentX, currentY, x, y, x, y]});
+
+            currentX = x;
+            currentY = y;
+          }
+          else {
+            if (currentX !== x || currentY !== y) {
+              var curves = arcToCubicCurves(currentX, currentY, x, y, r1, r2, angle, largeArcFlag, sweepFlag);
+
+              curves.forEach( function(curve) {
+                reducedPathData.push({type: "C", values: curve});
+
+                currentX = x;
+                currentY = y;
+              });
+            }
+          }
+        }
+
+        else if (seg.type === "Z") {
+          reducedPathData.push(seg);
+
+          currentX = subpathX;
+          currentY = subpathY;
+        }
+
+        lastType = seg.type;
+        /* eslint-enable no-redeclare */
+      });
+
+      return reducedPathData;
+    };
+
+    window.SVGPathElement.prototype.setAttribute = function(name, value) {
+      if (name === "d") {
+        this[$cachedPathData] = null;
+        this[$cachedNormalizedPathData] = null;
+      }
+
+      setAttribute.call(this, name, value);
+    };
+
+    window.SVGPathElement.prototype.removeAttribute = function(name, value) {
+      if (name === "d") {
+        this[$cachedPathData] = null;
+        this[$cachedNormalizedPathData] = null;
+      }
+
+      removeAttribute.call(this, name);
+    };
+
+    window.SVGPathElement.prototype.getPathData = function(options) {
+      /* eslint-disable no-redeclare */
+      if (options && options.normalize) {
+        if (this[$cachedNormalizedPathData]) {
+          return clonePathData(this[$cachedNormalizedPathData]);
+        }
+        else {
+          var pathData;
+
+          if (this[$cachedPathData]) {
+            pathData = clonePathData(this[$cachedPathData]);
+          }
+          else {
+            pathData = parsePathDataString(this.getAttribute("d") || "");
+            this[$cachedPathData] = clonePathData(pathData);
+          }
+
+          var normalizedPathData = reducePathData(absolutizePathData(pathData));
+          this[$cachedNormalizedPathData] = clonePathData(normalizedPathData);
+          return normalizedPathData;
+        }
+      }
+      else {
+        if (this[$cachedPathData]) {
+          return clonePathData(this[$cachedPathData]);
+        }
+        else {
+          var pathData = parsePathDataString(this.getAttribute("d") || "");
+          this[$cachedPathData] = clonePathData(pathData);
+          return pathData;
+        }
+      }
+      /* eslint-enable no-redeclare */
+    };
+
+    window.SVGPathElement.prototype.setPathData = function(pathData) {
+      if (pathData.length === 0) {
+        if (isIE) {
+          // @bugfix https://github.com/mbostock/d3/issues/1737
+          this.setAttribute("d", "");
+        }
+        else {
+          this.removeAttribute("d");
+        }
+      }
+      else {
+        var d = "";
+
+        for (var i = 0, l = pathData.length; i < l; i += 1) {
+          var seg = pathData[i];
+
+          if (i > 0) {
+            d += " ";
+          }
+
+          d += seg.type;
+
+          if (seg.values && seg.values.length > 0) {
+            d += " " + seg.values.join(" ");
+          }
+        }
+
+        this.setAttribute("d", d);
+      }
+    };
+
+    window.SVGRectElement.prototype.getPathData = function(options) {
+      var x = this.x.baseVal.value;
+      var y = this.y.baseVal.value;
+      var width = this.width.baseVal.value;
+      var height = this.height.baseVal.value;
+      var rx = this.hasAttribute("rx") ? this.rx.baseVal.value : this.ry.baseVal.value;
+      var ry = this.hasAttribute("ry") ? this.ry.baseVal.value : this.rx.baseVal.value;
+
+      if (rx > width / 2) {
+        rx = width / 2;
+      }
+
+      if (ry > height / 2) {
+        ry = height / 2;
+      }
+
+      var pathData = [
+        {type: "M", values: [x+rx, y]},
+        {type: "H", values: [x+width-rx]},
+        {type: "A", values: [rx, ry, 0, 0, 1, x+width, y+ry]},
+        {type: "V", values: [y+height-ry]},
+        {type: "A", values: [rx, ry, 0, 0, 1, x+width-rx, y+height]},
+        {type: "H", values: [x+rx]},
+        {type: "A", values: [rx, ry, 0, 0, 1, x, y+height-ry]},
+        {type: "V", values: [y+ry]},
+        {type: "A", values: [rx, ry, 0, 0, 1, x+rx, y]},
+        {type: "Z", values: []}
+      ];
+
+      // Get rid of redundant "A" segs when either rx or ry is 0
+      pathData = pathData.filter(function(s) {
+        return s.type === "A" && (s.values[0] === 0 || s.values[1] === 0) ? false : true;
+      });
+
+      if (options && options.normalize === true) {
+        pathData = reducePathData(pathData);
+      }
+
+      return pathData;
+    };
+
+    window.SVGCircleElement.prototype.getPathData = function(options) {
+      var cx = this.cx.baseVal.value;
+      var cy = this.cy.baseVal.value;
+      var r = this.r.baseVal.value;
+
+      var pathData = [
+        { type: "M",  values: [cx + r, cy] },
+        { type: "A",  values: [r, r, 0, 0, 1, cx, cy+r] },
+        { type: "A",  values: [r, r, 0, 0, 1, cx-r, cy] },
+        { type: "A",  values: [r, r, 0, 0, 1, cx, cy-r] },
+        { type: "A",  values: [r, r, 0, 0, 1, cx+r, cy] },
+        { type: "Z",  values: [] }
+      ];
+
+      if (options && options.normalize === true) {
+        pathData = reducePathData(pathData);
+      }
+
+      return pathData;
+    };
+
+    window.SVGEllipseElement.prototype.getPathData = function(options) {
+      var cx = this.cx.baseVal.value;
+      var cy = this.cy.baseVal.value;
+      var rx = this.rx.baseVal.value;
+      var ry = this.ry.baseVal.value;
+
+      var pathData = [
+        { type: "M",  values: [cx + rx, cy] },
+        { type: "A",  values: [rx, ry, 0, 0, 1, cx, cy+ry] },
+        { type: "A",  values: [rx, ry, 0, 0, 1, cx-rx, cy] },
+        { type: "A",  values: [rx, ry, 0, 0, 1, cx, cy-ry] },
+        { type: "A",  values: [rx, ry, 0, 0, 1, cx+rx, cy] },
+        { type: "Z",  values: [] }
+      ];
+
+      if (options && options.normalize === true) {
+        pathData = reducePathData(pathData);
+      }
+
+      return pathData;
+    };
+
+    window.SVGLineElement.prototype.getPathData = function() {
+      return [
+        { type: "M", values: [this.x1.baseVal.value, this.y1.baseVal.value] },
+        { type: "L", values: [this.x2.baseVal.value, this.y2.baseVal.value] }
+      ];
+    };
+
+    window.SVGPolylineElement.prototype.getPathData = function() {
+      var pathData = [];
+
+      for (var i = 0; i < this.points.numberOfItems; i += 1) {
+        var point = this.points.getItem(i);
+
+        pathData.push({
+          type: (i === 0 ? "M" : "L"),
+          values: [point.x, point.y]
+        });
+      }
+
+      return pathData;
+    };
+
+    window.SVGPolygonElement.prototype.getPathData = function() {
+      var pathData = [];
+
+      for (var i = 0; i < this.points.numberOfItems; i += 1) {
+        var point = this.points.getItem(i);
+
+        pathData.push({
+          type: (i === 0 ? "M" : "L"),
+          values: [point.x, point.y]
+        });
+      }
+
+      pathData.push({
+        type: "Z",
+        values: []
+      });
+
+      return pathData;
+    };
+  })();
+}
+
+}
+,
+    AnimEvent = function(n){var e={};function t(r){if(e[r])return e[r].exports;var o=e[r]={i:r,l:!1,exports:{}};return n[r].call(o.exports,o,o.exports,t),o.l=!0,o.exports}return t.m=n,t.c=e,t.d=function(n,e,r){t.o(n,e)||Object.defineProperty(n,e,{enumerable:!0,get:r})},t.r=function(n){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(n,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(n,"__esModule",{value:!0})},t.t=function(n,e){if(1&e&&(n=t(n)),8&e)return n;if(4&e&&"object"==typeof n&&n&&n.__esModule)return n;var r=Object.create(null);if(t.r(r),Object.defineProperty(r,"default",{enumerable:!0,value:n}),2&e&&"string"!=typeof n)for(var o in n)t.d(r,o,function(e){return n[e]}.bind(null,o));return r},t.n=function(n){var e=n&&n.__esModule?function(){return n.default}:function(){return n};return t.d(e,"a",e),e},t.o=function(n,e){return Object.prototype.hasOwnProperty.call(n,e)},t.p="",t(t.s=0)}([function(n,e,t){"use strict";t.r(e);var r,o=[],i=window.requestAnimationFrame||window.mozRequestAnimationFrame||window.webkitRequestAnimationFrame||window.msRequestAnimationFrame||function(n){return setTimeout(n,1e3/60)},u=window.cancelAnimationFrame||window.mozCancelAnimationFrame||window.webkitCancelAnimationFrame||window.msCancelAnimationFrame||function(n){return clearTimeout(n)},a=Date.now();function l(){var n,e;r&&(u.call(window,r),r=null),o.forEach((function(e){var t;(t=e.event)&&(e.event=null,e.listener(t),n=!0)})),n?(a=Date.now(),e=!0):Date.now()-a<500&&(e=!0),e&&(r=i.call(window,l))}function c(n){var e=-1;return o.some((function(t,r){return t.listener===n&&(e=r,!0)})),e}var f={add:function(n){var e;return-1===c(n)?(o.push(e={listener:n}),function(n){e.event=n,r||l()}):null},remove:function(n){var e;(e=c(n))>-1&&(o.splice(e,1),!o.length&&r&&(u.call(window,r),r=null))}};e.default=f}]).default,
 
     /** @typedef {{hasSE, hasProps, iniValue}} StatConf */
     /** @type {{statId: string, StatConf}} */
@@ -196,23 +1584,6 @@
     insAttachProps = {}, insAttachId = 0,
     svg2SupportedReverse, svg2SupportedPaintOrder, svg2SupportedDropShadow; // Supported SVG 2 features
 
-  // [DEBUG]
-  window.insProps = insProps;
-  window.insAttachProps = insAttachProps;
-  window.isObject = isObject;
-  window.IS_TRIDENT = IS_TRIDENT;
-  window.IS_BLINK = IS_BLINK;
-  window.IS_GECKO = IS_GECKO;
-  window.IS_EDGE = IS_EDGE;
-  window.IS_WEBKIT = IS_WEBKIT;
-  window.engineFlags = function(flags) {
-    if (typeof flags.IS_TRIDENT === 'boolean') { window.IS_TRIDENT = IS_TRIDENT = flags.IS_TRIDENT; }
-    if (typeof flags.IS_BLINK === 'boolean') { window.IS_BLINK = IS_BLINK = flags.IS_BLINK; }
-    if (typeof flags.IS_GECKO === 'boolean') { window.IS_GECKO = IS_GECKO = flags.IS_GECKO; }
-    if (typeof flags.IS_EDGE === 'boolean') { window.IS_EDGE = IS_EDGE = flags.IS_EDGE; }
-    if (typeof flags.IS_WEBKIT === 'boolean') { window.IS_WEBKIT = IS_WEBKIT = flags.IS_WEBKIT; }
-  };
-  // [/DEBUG]
 
   function hasChanged(a, b) {
     var typeA, keysA;
@@ -228,7 +1599,6 @@
         a !== b
       );
   }
-  window.hasChanged = hasChanged; // [DEBUG/]
 
   function copyTree(obj) {
     return !obj ? obj :
@@ -238,7 +1608,6 @@
       }, {}) :
       Array.isArray(obj) ? obj.map(copyTree) : obj;
   }
-  window.copyTree = copyTree; // [DEBUG/]
 
   /**
    * Parse and get an alpha channel in color notation.
@@ -294,7 +1663,6 @@
     }
     return [alpha, baseColor];
   }
-  window.getAlpha = getAlpha; // [DEBUG/]
 
   /**
    * Add `mouseenter` and `mouseleave` event listeners to the element.
@@ -341,7 +1709,6 @@
       };
     }
   }
-  window.mouseEnterLeave = mouseEnterLeave; // [DEBUG/]
 
   function isElement(element) {
     // The checking the interface may not be required.
@@ -351,7 +1718,6 @@
     return !!(element && element.nodeType === Node.ELEMENT_NODE &&
       typeof element.getBoundingClientRect === 'function');
   }
-  window.isElement = isElement; // [DEBUG/]
 
   /**
    * Get an element's bounding-box that contains coordinates relative to the element's document or window.
@@ -386,7 +1752,6 @@
 
     return bBox;
   }
-  window.getBBox = getBBox; // [DEBUG/]
 
   /**
    * Get distance between an element's bounding-box and its content (`<iframe>` element and its document).
@@ -461,7 +1826,6 @@
     bBox.bottom += top;
     return bBox;
   }
-  window.getBBoxNest = getBBoxNest; // [DEBUG/]
 
   /**
    * Get a common ancestor window.
@@ -490,13 +1854,11 @@
     }
     return commonWindow || window;
   }
-  window.getCommonWindow = getCommonWindow; // [DEBUG/]
 
   function getPointsLength(p0, p1) {
     var lx = p0.x - p1.x, ly = p0.y - p1.y;
     return Math.sqrt(lx * lx + ly * ly);
   }
-  window.getPointsLength = getPointsLength; // [DEBUG/]
 
   function getPointOnLine(p0, p1, r) {
     var xA = p1.x - p0.x, yA = p1.y - p0.y;
@@ -506,7 +1868,6 @@
       angle: Math.atan2(yA, xA) / (Math.PI / 180)
     };
   }
-  window.getPointOnLine = getPointOnLine; // [DEBUG/]
 
   function getIntersection(line1P0, line1P1, line2P0, line2P1) {
     var sx1 = line1P1.x - line1P0.x, sy1 = line1P1.y - line1P0.y,
@@ -517,13 +1878,11 @@
     return s >= 0 && s <= 1 && t >= 0 && t <= 1 ?
       {x: line1P0.x + (t * sx1), y: line1P0.y + (t * sy1)} : null;
   }
-  window.getIntersection = getIntersection; // [DEBUG/]
 
   function extendLine(p0, p1, len) {
     var angle = Math.atan2(p0.y - p1.y, p1.x - p0.x);
     return {x: p1.x + Math.cos(angle) * len, y: p1.y + Math.sin(angle) * len * -1};
   }
-  window.extendLine = extendLine; // [DEBUG/]
 
   function getPointOnCubic(p0, p1, p2, p3, t) {
     var
@@ -557,7 +1916,6 @@
     };
     /* eslint-enable key-spacing */
   }
-  window.getPointOnCubic = getPointOnCubic; // [DEBUG/]
 
   function getCubicLength(p0, p1, p2, p3, t) {
     function base3(t, p0v, p1v, p2v, p3v) {
@@ -583,7 +1941,6 @@
     });
     return z2 * sum;
   }
-  window.getCubicLength = getCubicLength; // [DEBUG/]
 
   function getCubicT(p0, p1, p2, p3, len) {
     var E = 0.01,
@@ -596,7 +1953,6 @@
     }
     return t2;
   }
-  window.getCubicT = getCubicT; // [DEBUG/]
 
   function getOffsetLine(p0, p1, offsetLen) {
     var angle = Math.atan2(p0.y - p1.y, p1.x - p0.x) + Math.PI * 0.5;
@@ -605,7 +1961,6 @@
       {x: p1.x + Math.cos(angle) * offsetLen, y: p1.y + Math.sin(angle) * offsetLen * -1}
     ];
   }
-  window.getOffsetLine = getOffsetLine; // [DEBUG/]
 
   function getOffsetCubic(p0, p1, p2, p3, offsetLen, stepLen) {
     var parts = getCubicLength(p0, p1, p2, p3) / stepLen,
@@ -625,7 +1980,6 @@
     }
     return points;
   }
-  window.getOffsetCubic = getOffsetCubic; // [DEBUG/]
 
   function pathList2PathData(pathList, cbPoint) {
     var pathData;
@@ -644,7 +1998,6 @@
     });
     return pathData;
   }
-  window.pathList2PathData = pathList2PathData; // [DEBUG/]
 
   function getAllPathListLen(pathList) {
     var pathSegsLen = [], pathLenAll = 0;
@@ -684,7 +2037,6 @@
       return pathLenAll;
     }, 0);
   }
-  window.getAllPathDataLen = getAllPathDataLen; // [DEBUG/]
 
   function pathDataHasChanged(a, b) {
     return a == null || b == null ||
@@ -694,7 +2046,6 @@
           aSeg.values.some(function(aSegValue, i) { return aSegValue !== bSeg.values[i]; });
       });
   }
-  window.pathDataHasChanged = pathDataHasChanged; // [DEBUG/]
 
   function bBox2PathData(bBox) {
     var right = bBox.right != null ? bBox.right : bBox.left + bBox.width,
@@ -725,10 +2076,8 @@
 
   function addDelayedProc(proc) {
     function execDelayedProcs() {
-      traceLog.add('<execDelayedProcs>'); // [DEBUG/]
       delayedProcs.forEach(function(proc) { proc(); });
       delayedProcs = [];
-      traceLog.add('</execDelayedProcs>'); // [DEBUG/]
     }
     if (timerDelayedProc) { clearTimeout(timerDelayedProc); }
     delayedProcs.push(proc);
@@ -743,7 +2092,6 @@
       parent.insertBefore(parent.removeChild(target), next);
     }, 0);
   }
-  window.forceReflow = forceReflow; // [DEBUG/]
 
   function forceReflowAdd(props, target) {
     if (props.reflowTargets.indexOf(target) < 0) { props.reflowTargets.push(target); }
@@ -852,7 +2200,6 @@
     }
     return dropShadow;
   }
-  window.newDropShadow = newDropShadow; // [DEBUG/]
 
   function initStats(container, statsConf) {
     Object.keys(statsConf).forEach(function(statName) {
@@ -865,9 +2212,8 @@
     });
   }
 
-  function setStat(props, container, key, value, eventHandlers/* [DEBUG] */, log/* [/DEBUG] */) {
+  function setStat(props, container, key, value, eventHandlers) {
     if (value !== container[key]) {
-      traceLog.add(log || key + '=%s', value); // [DEBUG/]
       container[key] = value;
       if (eventHandlers) {
         eventHandlers.forEach(function(handler) { handler(props, value, key); });
@@ -929,7 +2275,6 @@
    * @returns {void}
    */
   function bindWindow(props, newWindow) {
-    traceLog.add('<bindWindow>'); // [DEBUG/]
     var aplStats = props.aplStats, baseDocument = newWindow.document,
       svg, defs, maskCaps, element, prefix = APP_ID + '-' + props._id,
       linePathId, lineShapeId, capsId, maskBGRectId, lineOutlineMaskId, plugOutlineMaskIdSE;
@@ -1139,16 +2484,13 @@
       }
     });
 
-    traceLog.add('</bindWindow>'); // [DEBUG/]
   }
-  window.bindWindow = bindWindow; // [DEBUG/]
 
   /**
    * @param {props} props - `props` of `LeaderLine` instance.
    * @returns {boolean} `true` if it was changed.
    */
   function updateLine(props) {
-    traceLog.add('<updateLine>'); // [DEBUG/]
     var options = props.options, curStats = props.curStats, events = props.events,
       updated = false;
 
@@ -1157,8 +2499,6 @@
     updated = setStat(props, curStats, 'line_strokeWidth', options.lineSize,
       events.cur_line_strokeWidth) || updated;
 
-    if (!updated) { traceLog.add('not-updated'); } // [DEBUG/]
-    traceLog.add('</updateLine>'); // [DEBUG/]
     return updated;
   }
 
@@ -1167,7 +2507,6 @@
    * @returns {boolean} `true` if it was changed.
    */
   function updatePlug(props) {
-    traceLog.add('<updatePlug>'); // [DEBUG/]
     var options = props.options, curStats = props.curStats, events = props.events,
       updated = false;
 
@@ -1175,14 +2514,11 @@
       var plugId = options.plugSE[i], symbolConf,
         width, height, plugMarkerWidth, plugMarkerHeight, plugSideLen, plugBackLen, value;
 
-      updated = setStat(props, curStats.plug_enabledSE, i, plugId !== PLUG_BEHIND
-        /* [DEBUG] */, null, 'plug_enabledSE[' + i + ']=%s'/* [/DEBUG] */) || updated;
-      updated = setStat(props, curStats.plug_plugSE, i, plugId
-        /* [DEBUG] */, null, 'plug_plugSE[' + i + ']=%s'/* [/DEBUG] */) || updated;
+      updated = setStat(props, curStats.plug_enabledSE, i, plugId !== PLUG_BEHIND) || updated;
+      updated = setStat(props, curStats.plug_plugSE, i, plugId) || updated;
       updated = setStat(props, curStats.plug_colorSE, i, (value = options.plugColorSE[i] || curStats.line_color),
-        events.cur_plug_colorSE/* [DEBUG] */, 'plug_colorSE[' + i + ']=%s'/* [/DEBUG] */) || updated;
-      updated = setStat(props, curStats.plug_colorTraSE, i, getAlpha(value)[0] < 1
-        /* [DEBUG] */, null, 'plug_colorTraSE[' + i + ']=%s'/* [/DEBUG] */) || updated;
+        events.cur_plug_colorSE) || updated;
+      updated = setStat(props, curStats.plug_colorTraSE, i, getAlpha(value)[0] < 1) || updated;
 
       if (plugId !== PLUG_BEHIND) { // Not depend on `curStats.plug_enabledSE`
         symbolConf = SYMBOLS[PLUG_2_SYMBOL[plugId]];
@@ -1194,10 +2530,8 @@
           plugMarkerHeight *= curStats.line_strokeWidth;
         }
 
-        updated = setStat(props, curStats.plug_markerWidthSE, i, plugMarkerWidth
-          /* [DEBUG] */, null, 'plug_markerWidthSE[' + i + ']%_'/* [/DEBUG] */) || updated;
-        updated = setStat(props, curStats.plug_markerHeightSE, i, plugMarkerHeight
-          /* [DEBUG] */, null, 'plug_markerHeightSE[' + i + ']%_'/* [/DEBUG] */) || updated;
+        updated = setStat(props, curStats.plug_markerWidthSE, i, plugMarkerWidth) || updated;
+        updated = setStat(props, curStats.plug_markerHeightSE, i, plugMarkerHeight) || updated;
 
         curStats.capsMaskMarker_markerWidthSE[i] = width;
         curStats.capsMaskMarker_markerHeightSE[i] = height;
@@ -1215,10 +2549,8 @@
         curStats.viewBox_plugBCircleSE[i] = plugSideLen = plugBackLen = 0;
       }
       // Check events for attachment
-      setStat(props, curStats.attach_plugSideLenSE, i, plugSideLen, events.cur_attach_plugSideLenSE
-        /* [DEBUG] */, 'attach_plugSideLenSE[' + i + ']%_'/* [/DEBUG] */);
-      setStat(props, curStats.attach_plugBackLenSE, i, plugBackLen, events.cur_attach_plugBackLenSE
-        /* [DEBUG] */, 'attach_plugBackLenSE[' + i + ']%_'/* [/DEBUG] */);
+      setStat(props, curStats.attach_plugSideLenSE, i, plugSideLen, events.cur_attach_plugSideLenSE);
+      setStat(props, curStats.attach_plugBackLenSE, i, plugBackLen, events.cur_attach_plugBackLenSE);
       curStats.capsMaskAnchor_enabledSE[i] = !curStats.plug_enabledSE[i];
     });
 
@@ -1226,8 +2558,6 @@
     updated = setStat(props, curStats, 'plug_enabled',
       curStats.plug_enabledSE[0] || curStats.plug_enabledSE[1]) || updated;
 
-    if (!updated) { traceLog.add('not-updated'); } // [DEBUG/]
-    traceLog.add('</updatePlug>'); // [DEBUG/]
     return updated;
   }
 
@@ -1236,7 +2566,6 @@
    * @returns {boolean} `true` if it was changed.
    */
   function updateLineOutline(props) {
-    traceLog.add('<updateLineOutline>'); // [DEBUG/]
     var options = props.options, curStats = props.curStats,
       outlineWidth,
       updated = false;
@@ -1248,16 +2577,12 @@
 
     outlineWidth = curStats.line_strokeWidth * options.lineOutlineSize;
 
-    updated = setStat(props, curStats, 'lineOutline_strokeWidth', curStats.line_strokeWidth - outlineWidth * 2
-      /* [DEBUG] */, null, 'lineOutline_strokeWidth%_'/* [/DEBUG] */) || updated;
+    updated = setStat(props, curStats, 'lineOutline_strokeWidth', curStats.line_strokeWidth - outlineWidth * 2) || updated;
     updated = setStat(props, curStats, 'lineOutline_inStrokeWidth',
       curStats.lineOutline_colorTra ?
         curStats.lineOutline_strokeWidth + SHAPE_GAP * 2 :
-        curStats.line_strokeWidth - outlineWidth /* half */
-      /* [DEBUG] */, null, 'lineOutline_inStrokeWidth%_'/* [/DEBUG] */) || updated;
+        curStats.line_strokeWidth - outlineWidth /* half */) || updated;
 
-    if (!updated) { traceLog.add('not-updated'); } // [DEBUG/]
-    traceLog.add('</updateLineOutline>'); // [DEBUG/]
     return updated;
   }
 
@@ -1266,7 +2591,6 @@
    * @returns {boolean} `true` if it was changed.
    */
   function updatePlugOutline(props) {
-    traceLog.add('<updatePlugOutline>'); // [DEBUG/]
     var options = props.options, curStats = props.curStats,
       updated = false;
 
@@ -1279,32 +2603,25 @@
         options.plugOutlineEnabledSE[i] &&
           // `curStats.plug_enabled` might be independent of `curStats.plug_enabledSE` in future version.
           curStats.plug_enabled && curStats.plug_enabledSE[i] &&
-          !!symbolConf && !!symbolConf.outlineBase /* Not depend on `curStats.plug_enabledSE` */
-        /* [DEBUG] */, null, 'plugOutline_enabledSE[' + i + ']=%s'/* [/DEBUG] */) || updated;
+          !!symbolConf && !!symbolConf.outlineBase /* Not depend on `curStats.plug_enabledSE` */) || updated;
       updated = setStat(props, curStats.plugOutline_colorSE, i,
-        (value = options.plugOutlineColorSE[i] || curStats.lineOutline_color)
-        /* [DEBUG] */, null, 'plugOutline_colorSE[' + i + ']=%s'/* [/DEBUG] */) || updated;
-      updated = setStat(props, curStats.plugOutline_colorTraSE, i, getAlpha(value)[0] < 1
-        /* [DEBUG] */, null, 'plugOutline_colorTraSE[' + i + ']=%s'/* [/DEBUG] */) || updated;
+        (value = options.plugOutlineColorSE[i] || curStats.lineOutline_color)) || updated;
+      updated = setStat(props, curStats.plugOutline_colorTraSE, i, getAlpha(value)[0] < 1) || updated;
 
       if (symbolConf && symbolConf.outlineBase) { // Not depend on `curStats.plugOutline_enabledSE`
 
         value = options.plugOutlineSizeSE[i];
         if (value > symbolConf.outlineMax) { value = symbolConf.outlineMax; }
         value *= symbolConf.outlineBase * 2;
-        updated = setStat(props, curStats.plugOutline_strokeWidthSE, i, value
-          /* [DEBUG] */, null, 'plugOutline_strokeWidthSE[' + i + ']%_'/* [/DEBUG] */) || updated;
+        updated = setStat(props, curStats.plugOutline_strokeWidthSE, i, value) || updated;
         updated = setStat(props, curStats.plugOutline_inStrokeWidthSE, i,
           curStats.plugOutline_colorTraSE[i] ?
             value - SHAPE_GAP / (curStats.line_strokeWidth / DEFAULT_OPTIONS.lineSize) /
               options.plugSizeSE[i] * 2 :
-            value / 2 /* half */
-          /* [DEBUG] */, null, 'plugOutline_inStrokeWidthSE[' + i + ']%_'/* [/DEBUG] */) || updated;
+            value / 2 /* half */) || updated;
       }
     });
 
-    if (!updated) { traceLog.add('not-updated'); } // [DEBUG/]
-    traceLog.add('</updatePlugOutline>'); // [DEBUG/]
     return updated;
   }
 
@@ -1313,7 +2630,6 @@
    * @returns {boolean} `true` if it was changed.
    */
   function updateFaces(props) {
-    traceLog.add('<updateFaces>'); // [DEBUG/]
     var curStats = props.curStats, aplStats = props.aplStats, events = props.events,
       value, updated = false;
 
@@ -1356,7 +2672,7 @@
       }
 
       if (setStat(props, aplStats, 'lineOutline_strokeWidth', (value = curStats.lineOutline_strokeWidth),
-          events.apl_lineOutline_strokeWidth/* [DEBUG] */, 'lineOutline_strokeWidth%_'/* [/DEBUG] */)) {
+          events.apl_lineOutline_strokeWidth)) {
         props.lineOutlineMaskShape.style.strokeWidth = value + 'px';
         updated = true;
         if (IS_TRIDENT) {
@@ -1368,7 +2684,7 @@
       }
 
       if (setStat(props, aplStats, 'lineOutline_inStrokeWidth', (value = curStats.lineOutline_inStrokeWidth),
-          events.apl_lineOutline_inStrokeWidth/* [DEBUG] */, 'lineOutline_inStrokeWidth%_'/* [/DEBUG] */)) {
+          events.apl_lineOutline_inStrokeWidth)) {
         props.lineMaskShape.style.strokeWidth = value + 'px';
         updated = true;
         if (IS_TRIDENT) {
@@ -1394,7 +2710,7 @@
           marker = getMarkerProps(i, symbolConf);
 
         if (setStat(props, aplStats.plug_enabledSE, i, (value = curStats.plug_enabledSE[i]),
-            events.apl_plug_enabledSE/* [DEBUG] */, 'plug_enabledSE[' + i + ']=%s'/* [/DEBUG] */)) {
+            events.apl_plug_enabledSE)) {
           props.plugsFace.style[marker.prop] = value ? 'url(#' + props.plugMarkerIdSE[i] + ')' : 'none';
           updated = true;
         }
@@ -1402,7 +2718,7 @@
         if (curStats.plug_enabledSE[i]) {
 
           if (setStat(props, aplStats.plug_plugSE, i, plugId,
-              events.apl_plug_plugSE/* [DEBUG] */, 'plug_plugSE[' + i + ']=%s'/* [/DEBUG] */)) {
+              events.apl_plug_plugSE)) {
             props.plugFaceSE[i].href.baseVal = '#' + symbolConf.elmId;
             setMarkerOrient(props, props.plugMarkerSE[i], marker.orient,
               symbolConf.bBox, props.svg, props.plugMarkerShapeSE[i], props.plugsFace);
@@ -1414,7 +2730,7 @@
           }
 
           if (setStat(props, aplStats.plug_colorSE, i, (value = curStats.plug_colorSE[i]),
-              events.apl_plug_colorSE/* [DEBUG] */, 'plug_colorSE[' + i + ']=%s'/* [/DEBUG] */)) {
+              events.apl_plug_colorSE)) {
             props.plugFaceSE[i].style.fill = value;
             updated = true;
             if ((IS_BLINK || IS_WEBKIT || IS_TRIDENT) && !curStats.line_colorTra) {
@@ -1427,15 +2743,14 @@
           ['markerWidth', 'markerHeight'].forEach(function(markerKey) {
             var statKey = 'plug_' + markerKey + 'SE';
             if (setStat(props, aplStats[statKey], i, (value = curStats[statKey][i]),
-                events['apl_' + statKey]/* [DEBUG] */, statKey + '[' + i + ']%_'/* [/DEBUG] */)) {
+                events['apl_' + statKey])) {
               props.plugMarkerSE[i][markerKey].baseVal.value = value;
               updated = true;
             }
           });
 
           if (setStat(props, aplStats.plugOutline_enabledSE, i, (value = curStats.plugOutline_enabledSE[i]),
-              events.apl_plugOutline_enabledSE
-              /* [DEBUG] */, 'plugOutline_enabledSE[' + i + ']=%s'/* [/DEBUG] */)) {
+              events.apl_plugOutline_enabledSE)) {
             if (value) {
               props.plugFaceSE[i].style.mask = 'url(#' + props.plugMaskIdSE[i] + ')';
               props.plugOutlineFaceSE[i].style.display = 'inline';
@@ -1449,8 +2764,7 @@
           if (curStats.plugOutline_enabledSE[i]) {
 
             if (setStat(props, aplStats.plugOutline_plugSE, i, plugId,
-                events.apl_plugOutline_plugSE
-                /* [DEBUG] */, 'plugOutline_plugSE[' + i + ']=%s'/* [/DEBUG] */)) {
+                events.apl_plugOutline_plugSE)) {
               props.plugOutlineFaceSE[i].href.baseVal =
                 props.plugMaskShapeSE[i].href.baseVal =
                 props.plugOutlineMaskShapeSE[i].href.baseVal = '#' + symbolConf.elmId;
@@ -1464,8 +2778,7 @@
             }
 
             if (setStat(props, aplStats.plugOutline_colorSE, i, (value = curStats.plugOutline_colorSE[i]),
-                events.apl_plugOutline_colorSE
-                /* [DEBUG] */, 'plugOutline_colorSE[' + i + ']=%s'/* [/DEBUG] */)) {
+                events.apl_plugOutline_colorSE)) {
               props.plugOutlineFaceSE[i].style.fill = value;
               updated = true;
               if (IS_TRIDENT) {
@@ -1477,16 +2790,14 @@
 
             if (setStat(props, aplStats.plugOutline_strokeWidthSE, i,
                 (value = curStats.plugOutline_strokeWidthSE[i]),
-                events.apl_plugOutline_strokeWidthSE
-                /* [DEBUG] */, 'plugOutline_strokeWidthSE[' + i + ']%_'/* [/DEBUG] */)) {
+                events.apl_plugOutline_strokeWidthSE)) {
               props.plugOutlineMaskShapeSE[i].style.strokeWidth = value + 'px';
               updated = true;
             }
 
             if (setStat(props, aplStats.plugOutline_inStrokeWidthSE, i,
                 (value = curStats.plugOutline_inStrokeWidthSE[i]),
-                events.apl_plugOutline_inStrokeWidthSE
-                /* [DEBUG] */, 'plugOutline_inStrokeWidthSE[' + i + ']%_'/* [/DEBUG] */)) {
+                events.apl_plugOutline_inStrokeWidthSE)) {
               props.plugMaskShapeSE[i].style.strokeWidth = value + 'px';
               updated = true;
             }
@@ -1495,8 +2806,6 @@
       });
     }
 
-    if (!updated) { traceLog.add('not-updated'); } // [DEBUG/]
-    traceLog.add('</updateFaces>'); // [DEBUG/]
     return updated;
   }
 
@@ -1505,7 +2814,6 @@
    * @returns {boolean} `true` if it was changed.
    */
   function updatePosition(props) {
-    traceLog.add('<updatePosition>'); // [DEBUG/]
     var options = props.options, curStats = props.curStats, aplStats = props.aplStats,
       curSocketXYSE = curStats.position_socketXYSE,
       curSocketGravitySE, anchorBBoxSE, pathList,
@@ -1621,23 +2929,6 @@
       }
     })();
 
-    // [DEBUG]
-    if (curStats.position_path !== aplStats.position_path) { traceLog.add('position_path'); }
-    if (curStats.position_lineStrokeWidth !== aplStats.position_lineStrokeWidth) {
-      traceLog.add('position_lineStrokeWidth');
-    }
-    [0, 1].forEach(function(i) {
-      if (curStats.position_plugOverheadSE[i] !== aplStats.position_plugOverheadSE[i]) {
-        traceLog.add('position_plugOverheadSE[' + i + ']');
-      }
-      if (socketXYHasChanged(curSocketXYSE[i], aplStats.position_socketXYSE[i])) {
-        traceLog.add('position_socketXYSE[' + i + ']');
-      }
-      if (socketGravityHasChanged(curSocketGravitySE[i], aplStats.position_socketGravitySE[i])) {
-        traceLog.add('position_socketGravitySE[' + i + ']');
-      }
-    });
-    // [/DEBUG]
 
     if (curStats.position_path !== aplStats.position_path ||
         curStats.position_lineStrokeWidth !== aplStats.position_lineStrokeWidth ||
@@ -1647,7 +2938,6 @@
             socketGravityHasChanged(curSocketGravitySE[i], aplStats.position_socketGravitySE[i]);
         })) {
       // New position
-      traceLog.add('new-position'); // [DEBUG/]
       props.pathList.baseVal = pathList = [];
       props.pathList.animVal = null;
 
@@ -2010,8 +3300,6 @@
       }
     }
 
-    if (!updated) { traceLog.add('not-updated'); } // [DEBUG/]
-    traceLog.add('</updatePosition>'); // [DEBUG/]
     return updated;
   }
 
@@ -2020,7 +3308,6 @@
    * @returns {boolean} `true` if it was changed.
    */
   function updatePath(props) {
-    traceLog.add('<updatePath>'); // [DEBUG/]
     var curStats = props.curStats, aplStats = props.aplStats,
       pathList = props.pathList.animVal || props.pathList.baseVal,
       curPathData, curEdge = curStats.path_edge,
@@ -2038,7 +3325,6 @@
 
       // Apply `pathData`
       if (pathDataHasChanged(curPathData, aplStats.path_pathData)) {
-        traceLog.add('path_pathData'); // [DEBUG/]
         props.linePath.setPathData(curPathData);
         aplStats.path_pathData = curPathData; // Since curPathData is new anytime, it doesn't need copy.
         updated = true;
@@ -2059,8 +3345,6 @@
       }
     }
 
-    if (!updated) { traceLog.add('not-updated'); } // [DEBUG/]
-    traceLog.add('</updatePath>'); // [DEBUG/]
     return updated;
   }
 
@@ -2069,7 +3353,6 @@
    * @returns {boolean} `true` if it was changed.
    */
   function updateViewBox(props) {
-    traceLog.add('<updateViewBox>'); // [DEBUG/]
     var curStats = props.curStats, aplStats = props.aplStats,
       curEdge = curStats.path_edge, padding, edge,
       curBBox = curStats.viewBox_bBox, aplBBox = aplStats.viewBox_bBox,
@@ -2093,7 +3376,6 @@
     ['x', 'y', 'width', 'height'].forEach(function(boxKey) {
       var value;
       if ((value = curBBox[boxKey]) !== aplBBox[boxKey]) {
-        traceLog.add(boxKey); // [DEBUG/]
         viewBox[boxKey] = aplBBox[boxKey] = value;
         styles[BBOX_PROP[boxKey]] = value +
           (boxKey === 'x' || boxKey === 'y' ? props.bodyOffset[boxKey] : 0) + 'px';
@@ -2101,8 +3383,6 @@
       }
     });
 
-    if (!updated) { traceLog.add('not-updated'); } // [DEBUG/]
-    traceLog.add('</updateViewBox>'); // [DEBUG/]
     return updated;
   }
 
@@ -2111,7 +3391,6 @@
    * @returns {boolean} `true` if it was changed.
    */
   function updateMask(props) {
-    traceLog.add('<updateMask>'); // [DEBUG/]
     var curStats = props.curStats, aplStats = props.aplStats,
       lineMaskBGEnabled, value,
       updated = false;
@@ -2140,8 +3419,7 @@
       // maskBGRect_x, maskBGRect_y
       ['x', 'y'].forEach(function(boxKey) {
         var statKey = 'maskBGRect_' + boxKey;
-        if (setStat(props, aplStats, statKey, (value = curStats[statKey])
-            /* [DEBUG] */, null, statKey + '%_'/* [/DEBUG] */)) {
+        if (setStat(props, aplStats, statKey, (value = curStats[statKey]))) {
           props.maskBGRect[boxKey].baseVal.value = value;
           updated = true;
         }
@@ -2173,8 +3451,7 @@
       // lineMask_x, lineMask_y
       ['x', 'y'].forEach(function(boxKey) {
         var statKey = 'lineMask_' + boxKey;
-        if (setStat(props, aplStats, statKey, (value = curStats[statKey])
-            /* [DEBUG] */, null, statKey + '%_'/* [/DEBUG] */)) {
+        if (setStat(props, aplStats, statKey, (value = curStats[statKey]))) {
           props.lineMask[boxKey].baseVal.value = value;
           updated = true;
         }
@@ -2195,8 +3472,7 @@
         [0, 1].forEach(function(i) {
           var curPathData;
 
-          if (setStat(props, aplStats.capsMaskAnchor_enabledSE, i, (value = curStats.capsMaskAnchor_enabledSE[i])
-              /* [DEBUG] */, null, 'capsMaskAnchor_enabledSE[' + i + ']=%s'/* [/DEBUG] */)) {
+          if (setStat(props, aplStats.capsMaskAnchor_enabledSE, i, (value = curStats.capsMaskAnchor_enabledSE[i]))) {
             props.capsMaskAnchorSE[i].style.display = value ? 'inline' : 'none';
             updated = true;
             if (IS_WEBKIT) {
@@ -2208,7 +3484,6 @@
             // capsMaskAnchor_pathDataSE
             if (pathDataHasChanged((curPathData = curStats.capsMaskAnchor_pathDataSE[i]),
                 aplStats.capsMaskAnchor_pathDataSE[i])) {
-              traceLog.add('capsMaskAnchor_pathDataSE[' + i + ']'); // [DEBUG/]
               props.capsMaskAnchorSE[i].setPathData(curPathData);
               aplStats.capsMaskAnchor_pathDataSE[i] = curPathData;
               updated = true;
@@ -2216,8 +3491,7 @@
 
             // capsMaskAnchor_strokeWidthSE
             if (setStat(props, aplStats.capsMaskAnchor_strokeWidthSE, i,
-                (value = curStats.capsMaskAnchor_strokeWidthSE[i])
-                /* [DEBUG] */, null, 'capsMaskAnchor_strokeWidthSE[' + i + ']=%s'/* [/DEBUG] */)) {
+                (value = curStats.capsMaskAnchor_strokeWidthSE[i]))) {
               props.capsMaskAnchorSE[i].style.strokeWidth = value + 'px';
               updated = true;
             }
@@ -2237,8 +3511,7 @@
               symbolConf = plugId !== PLUG_BEHIND ? SYMBOLS[PLUG_2_SYMBOL[plugId]] : null,
               marker = getMarkerProps(i, symbolConf);
 
-            if (setStat(props, aplStats.capsMaskMarker_enabledSE, i, (value = curStats.capsMaskMarker_enabledSE[i])
-                /* [DEBUG] */, null, 'capsMaskMarker_enabledSE[' + i + ']=%s'/* [/DEBUG] */)) {
+            if (setStat(props, aplStats.capsMaskMarker_enabledSE, i, (value = curStats.capsMaskMarker_enabledSE[i]))) {
               props.capsMaskLine.style[marker.prop] =
                 value ? 'url(#' + props.lineMaskMarkerIdSE[i] + ')' : 'none';
               updated = true;
@@ -2247,8 +3520,7 @@
             if (curStats.capsMaskMarker_enabledSE[i]) {
 
               // capsMaskMarker_plugSE
-              if (setStat(props, aplStats.capsMaskMarker_plugSE, i, plugId
-                  /* [DEBUG] */, null, 'capsMaskMarker_plugSE[' + i + ']=%s'/* [/DEBUG] */)) {
+              if (setStat(props, aplStats.capsMaskMarker_plugSE, i, plugId)) {
                 props.capsMaskMarkerShapeSE[i].href.baseVal = '#' + symbolConf.elmId;
                 setMarkerOrient(props, props.capsMaskMarkerSE[i], marker.orient,
                   symbolConf.bBox, props.svg, props.capsMaskMarkerShapeSE[i], props.capsMaskLine);
@@ -2263,8 +3535,7 @@
               // capsMaskMarker_markerWidthSE, capsMaskMarker_markerHeightSE
               ['markerWidth', 'markerHeight'].forEach(function(markerKey) {
                 var statKey = 'capsMaskMarker_' + markerKey + 'SE';
-                if (setStat(props, aplStats[statKey], i, (value = curStats[statKey][i])
-                    /* [DEBUG] */, null, statKey + '[' + i + ']%_'/* [/DEBUG] */)) {
+                if (setStat(props, aplStats[statKey], i, (value = curStats[statKey][i]))) {
                   props.capsMaskMarkerSE[i][markerKey].baseVal.value = value;
                   updated = true;
                 }
@@ -2279,16 +3550,13 @@
       // lineOutlineMask_x, lineOutlineMask_y
       ['x', 'y'].forEach(function(boxKey) {
         var statKey = 'lineOutlineMask_' + boxKey;
-        if (setStat(props, aplStats, statKey, (value = curStats[statKey])
-            /* [DEBUG] */, null, statKey + '%_'/* [/DEBUG] */)) {
+        if (setStat(props, aplStats, statKey, (value = curStats[statKey]))) {
           props.lineOutlineMask[boxKey].baseVal.value = value;
           updated = true;
         }
       });
     }
 
-    if (!updated) { traceLog.add('not-updated'); } // [DEBUG/]
-    traceLog.add('</updateMask>'); // [DEBUG/]
     return updated;
   }
 
@@ -2298,16 +3566,13 @@
    * @returns {void}
    */
   function svgShow(props, on) {
-    traceLog.add('<svgShow>'); // [DEBUG/]
     if (on !== props.isShown) {
-      traceLog.add('on=' + on); // [DEBUG/]
       if (!!on !== !!props.isShown) { props.svg.style.visibility = on ? '' : 'hidden'; }
       props.isShown = on;
       if (props.events && props.events.svgShow) {
         props.events.svgShow.forEach(function(handler) { handler(props, on); });
       }
     }
-    traceLog.add('</svgShow>'); // [DEBUG/]
   }
 
   /**
@@ -2316,7 +3581,6 @@
    * @returns {void}
    */
   function setEffect(props) {
-    traceLog.add('<setEffect>'); // [DEBUG/]
     var curStats = props.curStats, aplStats = props.aplStats, enabled;
 
     Object.keys(EFFECTS).forEach(function(effectName) {
@@ -2337,7 +3601,6 @@
       }
     });
 
-    traceLog.add('</setEffect>'); // [DEBUG/]
   }
 
   /**
@@ -2388,13 +3651,6 @@
     }
     forceReflowApply(props);
 
-    // [DEBUG]
-    traceLog.add('<update>');
-    Object.keys(updated).forEach(function(key) {
-      if (updated[key]) { traceLog.add('updated.' + key); }
-    });
-    traceLog.add('</update>');
-    // [/DEBUG]
   }
 
   function getValidAnimOptions(animOptions, defaultAnimOptions) {
@@ -2445,13 +3701,6 @@
       SHOW_EFFECTS[aplStats.show_effect].start(props);
     }
 
-    // [DEBUG]
-    traceLog.add('<show>');
-    Object.keys(update).forEach(function(key) {
-      if (update[key]) { traceLog.add('update.' + key); }
-    });
-    traceLog.add('</show>');
-    // [/DEBUG]
   }
 
   /**
@@ -2812,11 +4061,6 @@
       }
     });
 
-    // [DEBUG]
-    traceLog.add('<setOptions>');
-    Object.keys(needs).forEach(function(key) { if (needs[key]) { traceLog.add('needs.' + key); } });
-    traceLog.add('</setOptions>');
-    // [/DEBUG]
 
     update(props, needs);
   }
@@ -2853,15 +4097,12 @@
       ],
 
       init: function(props) {
-        traceLog.add('<EFFECTS.dash.init>'); // [DEBUG/]
         addEventHandler(props, 'apl_line_strokeWidth', EFFECTS.dash.update);
         props.lineFace.style.strokeDashoffset = 0;
         EFFECTS.dash.update(props);
-        traceLog.add('</EFFECTS.dash.init>'); // [DEBUG/]
       },
 
       remove: function(props) {
-        traceLog.add('<EFFECTS.dash.remove>'); // [DEBUG/]
         var curStats = props.curStats;
         removeEventHandler(props, 'apl_line_strokeWidth', EFFECTS.dash.update);
         if (curStats.dash_animId) {
@@ -2871,11 +4112,9 @@
         props.lineFace.style.strokeDasharray = 'none';
         props.lineFace.style.strokeDashoffset = 0;
         initStats(props.aplStats, EFFECTS.dash.stats);
-        traceLog.add('</EFFECTS.dash.remove>'); // [DEBUG/]
       },
 
       update: function(props) {
-        traceLog.add('<EFFECTS.dash.update>'); // [DEBUG/]
         var curStats = props.curStats, aplStats = props.aplStats,
           effectOptions = aplStats.dash_options,
           update = false, timeRatio;
@@ -2896,7 +4135,6 @@
           if (aplStats.dash_animOptions && ( // ON -> ON (update)
               // Normally, animOptions is not changed because the effect was removed when it was changed.
               update || hasChanged(curStats.dash_animOptions, aplStats.dash_animOptions))) {
-            traceLog.add('anim.remove'); // [DEBUG/]
             if (curStats.dash_animId) {
               timeRatio = anim.stop(curStats.dash_animId);
               anim.remove(curStats.dash_animId);
@@ -2905,7 +4143,6 @@
           }
 
           if (!aplStats.dash_animOptions) { // OFF -> ON
-            traceLog.add('anim.add'); // [DEBUG/]
             curStats.dash_animId = anim.add(
               function(outputRatio) { return (1 - outputRatio) * aplStats.dash_maxOffset + 'px'; },
               function(value) { props.lineFace.style.strokeDashoffset = value; },
@@ -2915,7 +4152,6 @@
 
         } else if (aplStats.dash_animOptions) { // ON -> OFF
           // Normally, anim was already removed when effectOptions was changed.
-          traceLog.add('anim.remove'); // [DEBUG/]
           if (curStats.dash_animId) {
             anim.remove(curStats.dash_animId);
             curStats.dash_animId = null;
@@ -2924,7 +4160,6 @@
           aplStats.dash_animOptions = null;
         }
 
-        traceLog.add('</EFFECTS.dash.update>'); // [DEBUG/]
       }
     },
 
@@ -2937,7 +4172,6 @@
       ],
 
       init: function(props) {
-        traceLog.add('<EFFECTS.gradient.init>'); // [DEBUG/]
         var baseDocument = props.baseWindow.document, defs = props.defs, element,
           id = APP_ID + '-' + props._id + '-gradient';
 
@@ -2967,11 +4201,9 @@
         props.curStats.line_altColor = true;
         props.lineFace.style.stroke = 'url(#' + id + ')';
         EFFECTS.gradient.update(props);
-        traceLog.add('</EFFECTS.gradient.init>'); // [DEBUG/]
       },
 
       remove: function(props) {
-        traceLog.add('<EFFECTS.gradient.remove>'); // [DEBUG/]
         if (props.efc_gradient_gradient) {
           props.defs.removeChild(props.efc_gradient_gradient);
           props.efc_gradient_gradient = props.efc_gradient_stopSE = null;
@@ -2982,11 +4214,9 @@
         props.curStats.line_altColor = false;
         props.lineFace.style.stroke = props.curStats.line_color;
         initStats(props.aplStats, EFFECTS.gradient.stats);
-        traceLog.add('</EFFECTS.gradient.remove>'); // [DEBUG/]
       },
 
       update: function(props) {
-        traceLog.add('<EFFECTS.gradient.update>'); // [DEBUG/]
         var curStats = props.curStats, aplStats = props.aplStats,
           effectOptions = aplStats.gradient_options,
           pathList = props.pathList.animVal || props.pathList.baseVal,
@@ -3005,8 +4235,7 @@
         [0, 1].forEach(function(i) {
           var value;
 
-          if (setStat(props, aplStats.gradient_colorSE, i, (value = curStats.gradient_colorSE[i])
-              /* [DEBUG] */, null, 'gradient_colorSE[' + i + ']=%s'/* [/DEBUG] */)) {
+          if (setStat(props, aplStats.gradient_colorSE, i, (value = curStats.gradient_colorSE[i]))) {
             if (IS_WEBKIT) {
               // [WEBKIT] stopColor doesn't support alpha channel
               value = getAlpha(value);
@@ -3019,13 +4248,11 @@
 
           ['x', 'y'].forEach(function(pointKey) {
             if ((value = curStats.gradient_pointSE[i][pointKey]) !== aplStats.gradient_pointSE[i][pointKey]) {
-              traceLog.add('gradient_pointSE[' + i + '].' + pointKey); // [DEBUG/]
               props.efc_gradient_gradient[pointKey + (i + 1)].baseVal.value =
                 aplStats.gradient_pointSE[i][pointKey] = value;
             }
           });
         });
-        traceLog.add('</EFFECTS.gradient.update>'); // [DEBUG/]
       }
     },
 
@@ -3042,7 +4269,6 @@
       ],
 
       init: function(props) {
-        traceLog.add('<EFFECTS.dropShadow.init>'); // [DEBUG/]
         var baseDocument = props.baseWindow.document, defs = props.defs,
           id = APP_ID + '-' + props._id + '-dropShadow',
           dropShadow = newDropShadow(baseDocument, id);
@@ -3055,11 +4281,9 @@
 
         addEventHandler(props, 'new_edge4viewBox', EFFECTS.dropShadow.adjustEdge);
         EFFECTS.dropShadow.update(props);
-        traceLog.add('</EFFECTS.dropShadow.init>'); // [DEBUG/]
       },
 
       remove: function(props) {
-        traceLog.add('<EFFECTS.dropShadow.remove>'); // [DEBUG/]
         var defs = props.defs;
         if (props.efc_dropShadow_elmsAppend) {
           props.efc_dropShadow_elmsAppend.forEach(function(elm) { defs.removeChild(elm); });
@@ -3071,11 +4295,9 @@
         update(props, {}); // To call updateViewBox()
         props.face.removeAttribute('filter');
         initStats(props.aplStats, EFFECTS.dropShadow.stats);
-        traceLog.add('</EFFECTS.dropShadow.remove>'); // [DEBUG/]
       },
 
       update: function(props) {
-        traceLog.add('<EFFECTS.dropShadow.update>'); // [DEBUG/]
         var curStats = props.curStats, aplStats = props.aplStats,
           effectOptions = aplStats.dropShadow_options,
           value, updateBBox;
@@ -3110,11 +4332,9 @@
           props.efc_dropShadow_styleFlood.floodOpacity = value;
         }
 
-        traceLog.add('</EFFECTS.dropShadow.update>'); // [DEBUG/]
       },
 
       adjustEdge: function(props, edge) {
-        traceLog.add('<EFFECTS.dropShadow.adjustEdge>'); // [DEBUG/]
         var curStats = props.curStats, aplStats = props.aplStats, margin, shadowEdge;
         if (curStats.dropShadow_dx != null) {
           margin = curStats.dropShadow_blur * 3; // nearly standard deviation
@@ -3138,11 +4358,9 @@
             }
           });
         }
-        traceLog.add('</EFFECTS.dropShadow.adjustEdge>'); // [DEBUG/]
       }
     }
   };
-  window.EFFECTS = EFFECTS; // [DEBUG/]
 
   Object.keys(EFFECTS).forEach(function(effectName) {
     var effectConf = EFFECTS[effectName], effectStats = effectConf.stats;
@@ -3169,37 +4387,23 @@
       defaultAnimOptions: {},
 
       init: function(props, timeRatio) {
-        traceLog.add('<SHOW_EFFECTS.none.init>'); // [DEBUG/]
         var curStats = props.curStats;
         if (curStats.show_animId) {
           anim.remove(curStats.show_animId);
           curStats.show_animId = null;
         }
         SHOW_EFFECTS.none.start(props, timeRatio);
-        traceLog.add('</SHOW_EFFECTS.none.init>'); // [DEBUG/]
       },
 
       start: function(props, timeRatio) {
-        traceLog.add('<SHOW_EFFECTS.none.start>'); // [DEBUG/]
-        // [DEBUG]
-        traceLog.add('timeRatio=' + (timeRatio != null ? 'timeRatio' : 'NONE'));
-        // [/DEBUG]
         SHOW_EFFECTS.none.stop(props, true);
-        traceLog.add('</SHOW_EFFECTS.none.start>'); // [DEBUG/]
       },
 
       stop: function(props, finish, on) {
-        traceLog.add('<SHOW_EFFECTS.none.stop>'); // [DEBUG/]
-        traceLog.add('finish=' + finish); // [DEBUG/]
-        // [DEBUG]
-        var dbgLog = 'on=' + (on != null ? 'on' : 'aplStats.show_on');
-        // [/DEBUG]
         var curStats = props.curStats;
         on = on != null ? on : props.aplStats.show_on;
-        traceLog.add(dbgLog + '=' + on); // [DEBUG/]
         curStats.show_inAnim = false;
         if (finish) { svgShow(props, on); }
-        traceLog.add('</SHOW_EFFECTS.none.stop>'); // [DEBUG/]
         return on ? 1 : 0;
       }
     },
@@ -3208,7 +4412,6 @@
       defaultAnimOptions: {duration: 300, timing: 'linear'},
 
       init: function(props, timeRatio) {
-        traceLog.add('<SHOW_EFFECTS.fade.init>'); // [DEBUG/]
         var curStats = props.curStats, aplStats = props.aplStats;
         if (curStats.show_animId) { anim.remove(curStats.show_animId); }
         curStats.show_animId = anim.add(
@@ -3224,42 +4427,28 @@
           },
           aplStats.show_animOptions.duration, 1, aplStats.show_animOptions.timing, null, false);
         SHOW_EFFECTS.fade.start(props, timeRatio);
-        traceLog.add('</SHOW_EFFECTS.fade.init>'); // [DEBUG/]
       },
 
       start: function(props, timeRatio) {
-        traceLog.add('<SHOW_EFFECTS.fade.start>'); // [DEBUG/]
         var curStats = props.curStats, prevTimeRatio;
         if (curStats.show_inAnim) {
           prevTimeRatio = anim.stop(curStats.show_animId);
         }
         svgShow(props, 1);
-        // [DEBUG]
-        traceLog.add('timeRatio=' +
-          (timeRatio != null ? 'timeRatio' : prevTimeRatio != null ? 'prevTimeRatio' : 'NONE'));
-        // [/DEBUG]
         curStats.show_inAnim = true;
         anim.start(curStats.show_animId, !props.aplStats.show_on,
           timeRatio != null ? timeRatio : prevTimeRatio);
-        traceLog.add('</SHOW_EFFECTS.fade.start>'); // [DEBUG/]
       },
 
       stop: function(props, finish, on) {
-        traceLog.add('<SHOW_EFFECTS.fade.stop>'); // [DEBUG/]
-        traceLog.add('finish=' + finish); // [DEBUG/]
-        // [DEBUG]
-        var dbgLog = 'on=' + (on != null ? 'on' : 'aplStats.show_on');
-        // [/DEBUG]
         var curStats = props.curStats, timeRatio;
         on = on != null ? on : props.aplStats.show_on;
-        traceLog.add(dbgLog + '=' + on); // [DEBUG/]
         timeRatio = curStats.show_inAnim ? anim.stop(curStats.show_animId) : on ? 1 : 0;
         curStats.show_inAnim = false;
         if (finish) {
           props.svg.style.opacity = on ? '' : '0';
           svgShow(props, on);
         }
-        traceLog.add('</SHOW_EFFECTS.fade.stop>'); // [DEBUG/]
         return timeRatio;
       }
     },
@@ -3268,7 +4457,6 @@
       defaultAnimOptions: {duration: 500, timing: [0.58, 0, 0.42, 1]},
 
       init: function(props, timeRatio) {
-        traceLog.add('<SHOW_EFFECTS.draw.init>'); // [DEBUG/]
         var curStats = props.curStats, aplStats = props.aplStats,
           pathList = props.pathList.baseVal,
           allPathLen = getAllPathListLen(pathList), pathSegsLen = allPathLen.segsLen, pathLenAll = allPathLen.lenAll;
@@ -3317,36 +4505,23 @@
           },
           aplStats.show_animOptions.duration, 1, aplStats.show_animOptions.timing, null, false);
         SHOW_EFFECTS.draw.start(props, timeRatio);
-        traceLog.add('</SHOW_EFFECTS.draw.init>'); // [DEBUG/]
       },
 
       start: function(props, timeRatio) {
-        traceLog.add('<SHOW_EFFECTS.draw.start>'); // [DEBUG/]
         var curStats = props.curStats, prevTimeRatio;
         if (curStats.show_inAnim) {
           prevTimeRatio = anim.stop(curStats.show_animId);
         }
         svgShow(props, 1);
-        // [DEBUG]
-        traceLog.add('timeRatio=' +
-          (timeRatio != null ? 'timeRatio' : prevTimeRatio != null ? 'prevTimeRatio' : 'NONE'));
-        // [/DEBUG]
         curStats.show_inAnim = true;
         addEventHandler(props, 'apl_position', SHOW_EFFECTS.draw.update);
         anim.start(curStats.show_animId, !props.aplStats.show_on,
           timeRatio != null ? timeRatio : prevTimeRatio);
-        traceLog.add('</SHOW_EFFECTS.draw.start>'); // [DEBUG/]
       },
 
       stop: function(props, finish, on) {
-        traceLog.add('<SHOW_EFFECTS.draw.stop>'); // [DEBUG/]
-        traceLog.add('finish=' + finish); // [DEBUG/]
-        // [DEBUG]
-        var dbgLog = 'on=' + (on != null ? 'on' : 'aplStats.show_on');
-        // [/DEBUG]
         var curStats = props.curStats, timeRatio;
         on = on != null ? on : props.aplStats.show_on;
-        traceLog.add(dbgLog + '=' + on); // [DEBUG/]
         timeRatio = curStats.show_inAnim ? anim.stop(curStats.show_animId) : on ? 1 : 0;
         curStats.show_inAnim = false;
         if (finish) {
@@ -3362,7 +4537,6 @@
           }
           svgShow(props, on);
         }
-        traceLog.add('</SHOW_EFFECTS.draw.stop>'); // [DEBUG/]
         return timeRatio;
       },
 
@@ -3376,7 +4550,6 @@
       }
     }
   };
-  window.SHOW_EFFECTS = SHOW_EFFECTS; // [DEBUG/]
 
   /**
    * @class
@@ -3574,16 +4747,12 @@
    * @returns {void}
    */
   removeAttachment = function(attachProps) {
-    traceLog.add('<removeAttachment>'); // [DEBUG/]
     if (attachProps && insAttachProps[attachProps._id]) {
       attachProps.boundTargets.slice().forEach(
         function(boundTarget) { unbindAttachment(boundTarget.props, attachProps, true); });
       if (attachProps.conf.remove) { attachProps.conf.remove(attachProps); }
       delete insAttachProps[attachProps._id];
-    } else { // [DEBUG/]
-      traceLog.add('not-found'); // [DEBUG/]
     }
-    traceLog.add('</removeAttachment>'); // [DEBUG/]
   };
 
   LeaderLineAttachment = (function() {
@@ -3630,7 +4799,6 @@
     }
 
     LeaderLineAttachment.prototype.remove = function() {
-      traceLog.add('<LeaderLineAttachment.remove>'); // [DEBUG/]
       var that = this, attachProps = insAttachProps[that._id];
       if (attachProps) {
         attachProps.boundTargets.slice().forEach( // Copy boundTargets because removeOption may change array.
@@ -3638,16 +4806,12 @@
 
         addDelayedProc(function() {
           var attachProps = insAttachProps[that._id];
-          traceLog.add('<LeaderLineAttachment.remove.delayedProc>'); // [DEBUG/]
           if (attachProps) { // it should be removed by unbinding all
-            traceLog.add('error-not-removed'); // [DEBUG/]
             console.error('LeaderLineAttachment was not removed by removeOption');
             removeAttachment(attachProps); // force
           }
-          traceLog.add('</LeaderLineAttachment.remove.delayedProc>'); // [DEBUG/]
         });
       }
-      traceLog.add('</LeaderLineAttachment.remove>'); // [DEBUG/]
     };
 
     return LeaderLineAttachment;
@@ -3688,17 +4852,13 @@
 
       // attachOptions: element, x, y
       init: function(attachProps, attachOptions) {
-        traceLog.add('<ATTACHMENTS.pointAnchor.init>'); // [DEBUG/]
         attachProps.element = ATTACHMENTS.pointAnchor.checkElement(attachOptions.element);
         attachProps.x = ATTACHMENTS.pointAnchor.parsePercent(attachOptions.x, true) || [0.5, true];
         attachProps.y = ATTACHMENTS.pointAnchor.parsePercent(attachOptions.y, true) || [0.5, true];
-        traceLog.add('</ATTACHMENTS.pointAnchor.init>'); // [DEBUG/]
         return true;
       },
 
       removeOption: function(attachProps, boundTarget) {
-        traceLog.add('<ATTACHMENTS.pointAnchor.removeOption>'); // [DEBUG/]
-        traceLog.add('optionName=%s', boundTarget.optionName); // [DEBUG/]
         var props = boundTarget.props, newOptions = {}, element = attachProps.element,
           another = props.options.anchorSE[boundTarget.optionName === 'start' ? 1 : 0];
         if (element === another) { // must be not another
@@ -3707,7 +4867,6 @@
         }
         newOptions[boundTarget.optionName] = element;
         setOptions(props, newOptions);
-        traceLog.add('</ATTACHMENTS.pointAnchor.removeOption>'); // [DEBUG/]
       },
 
       getBBoxNest: function(attachProps, props) {
@@ -3748,7 +4907,6 @@
 
       // attachOptions: element, color(A), fillColor, size(A), dash, shape, x, y, width, height, radius, points
       init: function(attachProps, attachOptions) {
-        traceLog.add('<ATTACHMENTS.areaAnchor.init>'); // [DEBUG/]
         var points = [], baseDocument, svg, window;
         attachProps.element = ATTACHMENTS.pointAnchor.checkElement(attachOptions.element);
         if (typeof attachOptions.color === 'string') {
@@ -3820,7 +4978,6 @@
 
         // event handler for this instance
         attachProps.updateColor = function() {
-          traceLog.add('<ATTACHMENTS.areaAnchor.updateColor>'); // [DEBUG/]
           var curStats = attachProps.curStats, aplStats = attachProps.aplStats,
             llStats = attachProps.boundTargets.length ? attachProps.boundTargets[0].props.curStats : null,
             value;
@@ -3829,7 +4986,6 @@
           if (setStat(attachProps, aplStats, 'color', value)) {
             attachProps.path.style.stroke = value;
           }
-          traceLog.add('</ATTACHMENTS.areaAnchor.updateColor>'); // [DEBUG/]
         };
 
         attachProps.updateShow = function() {
@@ -3839,12 +4995,10 @@
         // event handler to update `strokeWidth` is unnecessary
         // because `getStrokeWidth` is triggered by `updateLine` and `updatePosition`
 
-        traceLog.add('</ATTACHMENTS.areaAnchor.init>'); // [DEBUG/]
         return true;
       },
 
       bind: function(attachProps, bindTarget) {
-        traceLog.add('<ATTACHMENTS.areaAnchor.bind>'); // [DEBUG/]
         var props = bindTarget.props;
         if (!attachProps.color) { addEventHandler(props, 'cur_line_color', attachProps.updateColor); }
         addEventHandler(props, 'svgShow', attachProps.updateShow);
@@ -3852,31 +5006,25 @@
           attachProps.updateColor();
           attachProps.updateShow();
         });
-        traceLog.add('</ATTACHMENTS.areaAnchor.bind>'); // [DEBUG/]
         return true;
       },
 
       unbind: function(attachProps, boundTarget) {
-        traceLog.add('<ATTACHMENTS.areaAnchor.unbind>'); // [DEBUG/]
         var props = boundTarget.props;
         if (!attachProps.color) { removeEventHandler(props, 'cur_line_color', attachProps.updateColor); }
         removeEventHandler(props, 'svgShow', attachProps.updateShow);
 
         if (attachProps.boundTargets.length > 1) { // It's not removed yet.
           addDelayedProc(function() { // after updating `attachProps.boundTargets`
-            traceLog.add('<ATTACHMENTS.areaAnchor.unbind.delayedProc>'); // [DEBUG/]
             attachProps.updateColor();
             attachProps.updateShow();
             if (ATTACHMENTS.areaAnchor.update(attachProps)) { // it's not called by unbound ll
-              traceLog.add('update-boundTargets'); // [DEBUG/]
               attachProps.boundTargets.forEach(function(boundTarget) { // Update other instances.
                 update(boundTarget.props, {position: true});
               });
             }
-            traceLog.add('</ATTACHMENTS.areaAnchor.unbind.delayedProc>'); // [DEBUG/]
           });
         }
-        traceLog.add('</ATTACHMENTS.areaAnchor.unbind>'); // [DEBUG/]
       },
 
       removeOption: function(attachProps, boundTarget) {
@@ -3884,28 +5032,22 @@
       },
 
       remove: function(attachProps) {
-        traceLog.add('<ATTACHMENTS.areaAnchor.remove>'); // [DEBUG/]
         if (attachProps.boundTargets.length) { // it should be unbound by LeaderLineAttachment.remove
-          traceLog.add('error-not-unbound'); // [DEBUG/]
           console.error('LeaderLineAttachment was not unbound by remove');
           attachProps.boundTargets.forEach(
             function(boundTarget) { ATTACHMENTS.areaAnchor.unbind(attachProps, boundTarget); });
         }
         attachProps.svg.parentNode.removeChild(attachProps.svg);
-        traceLog.add('</ATTACHMENTS.areaAnchor.remove>'); // [DEBUG/]
       },
 
       getStrokeWidth: function(attachProps, props) {
-        traceLog.add('<ATTACHMENTS.areaAnchor.getStrokeWidth>'); // [DEBUG/]
         if (ATTACHMENTS.areaAnchor.update(attachProps) && attachProps.boundTargets.length > 1) {
-          traceLog.add('update-boundTargets'); // [DEBUG/]
           addDelayedProc(function() {
             attachProps.boundTargets.forEach(function(boundTarget) { // Update other instances.
               if (boundTarget.props !== props) { update(boundTarget.props, {position: true}); }
             });
           });
         }
-        traceLog.add('</ATTACHMENTS.areaAnchor.getStrokeWidth>'); // [DEBUG/]
         return attachProps.curStats.strokeWidth;
       },
 
@@ -3931,7 +5073,6 @@
       },
 
       update: function(attachProps) {
-        traceLog.add('<ATTACHMENTS.areaAnchor.update>'); // [DEBUG/]
         var curStats = attachProps.curStats, aplStats = attachProps.aplStats,
           llStats = attachProps.boundTargets.length ? attachProps.boundTargets[0].props.curStats : null,
           elementBBox, value, updated = {};
@@ -3948,7 +5089,6 @@
 
         if (updated.strokeWidth ||
             attachProps.hasRatio && (updated.elementWidth || updated.elementHeight)) { // generate path
-          traceLog.add('generate-path'); // [DEBUG/]
           switch (attachProps.shape) {
 
             case 'rect':
@@ -4138,7 +5278,6 @@
 
         // Apply `pathData`
         if (pathDataHasChanged((value = curStats.pathData), aplStats.pathData)) {
-          traceLog.add('pathData'); // [DEBUG/]
           attachProps.path.setPathData(value);
           aplStats.pathData = value;
           updated.pathData = true;
@@ -4177,7 +5316,6 @@
           curVBBBox.height = curStats.bBoxRel.height;
           ['x', 'y', 'width', 'height'].forEach(function(boxKey) {
             if ((value = curVBBBox[boxKey]) !== aplVBBBox[boxKey]) {
-              traceLog.add(boxKey); // [DEBUG/]
               viewBox[boxKey] = aplVBBBox[boxKey] = value;
               styles[BBOX_PROP[boxKey]] = value +
                 (boxKey === 'x' || boxKey === 'y' ? attachProps.bodyOffset[boxKey] : 0) + 'px';
@@ -4185,7 +5323,6 @@
           });
         })();
 
-        traceLog.add('</ATTACHMENTS.areaAnchor.update>'); // [DEBUG/]
         // Returns `true`, when stats anchors use are updated.
         return updated.strokeWidth || updated.pathListRel || updated.bBoxRel;
       }
@@ -4215,7 +5352,6 @@
 
       // attachOptions: element, style, hoverStyle, showEffectName, animOptions, onSwitch
       init: function(attachProps, attachOptions) {
-        traceLog.add('<ATTACHMENTS.mouseHoverAnchor.init>'); // [DEBUG/]
         var conf = ATTACHMENTS.mouseHoverAnchor,
           curStyle, elmStyle, bBox, displaySave, paddingSave = {},
           showEffectName, animOptions, onSwitch;
@@ -4333,32 +5469,26 @@
 
         // event handler for this instance
         attachProps.mouseenter = function(event) {
-          traceLog.add('<ATTACHMENTS.mouseHoverAnchor.mouseenter>'); // [DEBUG/]
           attachProps.hoverStyleSave = conf.getStyles(elmStyle, Object.keys(attachProps.hoverStyle));
           conf.setStyles(elmStyle, attachProps.hoverStyle);
           attachProps.boundTargets.forEach(function(boundTarget) {
             show(boundTarget.props, true, showEffectName, animOptions);
           });
           if (onSwitch) { onSwitch(event); }
-          traceLog.add('</ATTACHMENTS.mouseHoverAnchor.mouseenter>'); // [DEBUG/]
         };
 
         attachProps.mouseleave = function(event) {
-          traceLog.add('<ATTACHMENTS.mouseHoverAnchor.mouseleave>'); // [DEBUG/]
           conf.setStyles(elmStyle, attachProps.hoverStyleSave);
           attachProps.boundTargets.forEach(function(boundTarget) {
             show(boundTarget.props, false, showEffectName, animOptions);
           });
           if (onSwitch) { onSwitch(event); }
-          traceLog.add('</ATTACHMENTS.mouseHoverAnchor.mouseleave>'); // [DEBUG/]
         };
 
-        traceLog.add('</ATTACHMENTS.mouseHoverAnchor.init>'); // [DEBUG/]
         return true;
       },
 
       bind: function(attachProps, bindTarget) {
-        traceLog.add('<ATTACHMENTS.mouseHoverAnchor.bind>'); // [DEBUG/]
         if (bindTarget.props.svg) {
           ATTACHMENTS.mouseHoverAnchor.llShow(bindTarget.props, false, attachProps.showEffectName);
         } else { // SVG is not setup yet.
@@ -4374,19 +5504,16 @@
             mouseEnterLeave(attachProps.element, attachProps.mouseenter, attachProps.mouseleave);
           attachProps.enabled = true;
         }
-        traceLog.add('</ATTACHMENTS.mouseHoverAnchor.bind>'); // [DEBUG/]
         return true;
       },
 
       unbind: function(attachProps, boundTarget) {
-        traceLog.add('<ATTACHMENTS.mouseHoverAnchor.unbind>'); // [DEBUG/]
         if (attachProps.enabled && attachProps.boundTargets.length <= 1) { // last one that is unbound
           attachProps.removeEventListener();
           ATTACHMENTS.mouseHoverAnchor.setStyles(attachProps.elmStyle, attachProps.styleSave);
           attachProps.enabled = false;
         }
         ATTACHMENTS.mouseHoverAnchor.llShow(boundTarget.props, true, attachProps.showEffectName);
-        traceLog.add('</ATTACHMENTS.mouseHoverAnchor.unbind>'); // [DEBUG/]
       },
 
       removeOption: function(attachProps, boundTarget) {
@@ -4394,14 +5521,11 @@
       },
 
       remove: function(attachProps) {
-        traceLog.add('<ATTACHMENTS.mouseHoverAnchor.remove>'); // [DEBUG/]
         if (attachProps.boundTargets.length) { // it should be unbound by LeaderLineAttachment.remove
-          traceLog.add('error-not-unbound'); // [DEBUG/]
           console.error('LeaderLineAttachment was not unbound by remove');
           attachProps.boundTargets.forEach(
             function(boundTarget) { ATTACHMENTS.mouseHoverAnchor.unbind(attachProps, boundTarget); });
         }
-        traceLog.add('</ATTACHMENTS.mouseHoverAnchor.remove>'); // [DEBUG/]
       },
 
       getBBoxNest: function(attachProps, props) {
@@ -4435,12 +5559,10 @@
 
       // attachOptions: text, color(A), outlineColor, offset(A), lineOffset, <textStyleProps>
       init: function(attachProps, attachOptions) {
-        traceLog.add('<ATTACHMENTS.captionLabel.init>'); // [DEBUG/]
         if (typeof attachOptions.text === 'string') {
           attachProps.text = attachOptions.text.trim();
         }
         if (!attachProps.text) {
-          traceLog.add('</ATTACHMENTS.captionLabel.init>'); // [DEBUG/]
           return false;
         }
         if (typeof attachOptions.color === 'string') {
@@ -4463,20 +5585,15 @@
 
         // event handler for this instance
         attachProps.updateColor = function(props) {
-          traceLog.add('<ATTACHMENTS.captionLabel.updateColor>'); // [DEBUG/]
           ATTACHMENTS.captionLabel.updateColor(attachProps, props);
-          traceLog.add('</ATTACHMENTS.captionLabel.updateColor>'); // [DEBUG/]
         };
 
         attachProps.updateSocketXY = function(props) {
-          traceLog.add('<ATTACHMENTS.captionLabel.updateSocketXY>'); // [DEBUG/]
           var curStats = attachProps.curStats, aplStats = attachProps.aplStats,
             llStats = props.curStats, socketXY = llStats.position_socketXYSE[attachProps.socketIndex],
             margin, plugSideLen, anotherSocketXY, value;
           // It's not ready yet.
           if (socketXY.x == null) {
-            traceLog.add('not-ready'); // [DEBUG/]
-            traceLog.add('</ATTACHMENTS.captionLabel.updateSocketXY>'); // [DEBUG/]
             return;
           }
 
@@ -4503,26 +5620,20 @@
             }
           }
 
-          if (setStat(attachProps, aplStats, 'x', (value = curStats.x)
-              /* [DEBUG] */, null, 'x%_'/* [/DEBUG] */)) {
+          if (setStat(attachProps, aplStats, 'x', (value = curStats.x))) {
             attachProps.elmPosition.x.baseVal.getItem(0).value = value;
           }
-          if (setStat(attachProps, aplStats, 'y', (value = curStats.y)
-              /* [DEBUG] */, null, 'y%_'/* [/DEBUG] */)) {
+          if (setStat(attachProps, aplStats, 'y', (value = curStats.y))) {
             attachProps.elmPosition.y.baseVal.getItem(0).value = value + attachProps.height;
           }
-          traceLog.add('</ATTACHMENTS.captionLabel.updateSocketXY>'); // [DEBUG/]
         };
 
         attachProps.updatePath = function(props) {
-          traceLog.add('<ATTACHMENTS.captionLabel.updatePath>'); // [DEBUG/]
           var curStats = attachProps.curStats, aplStats = attachProps.aplStats,
             pathList = props.pathList.animVal || props.pathList.baseVal,
             point, value;
           // It's not ready yet.
           if (!pathList) {
-            traceLog.add('not-ready'); // [DEBUG/]
-            traceLog.add('</ATTACHMENTS.captionLabel.updatePath>'); // [DEBUG/]
             return;
           }
 
@@ -4536,29 +5647,23 @@
           if (setStat(attachProps, aplStats, 'y', (value = curStats.y))) {
             attachProps.elmPosition.y.baseVal.getItem(0).value = value + attachProps.height;
           }
-          traceLog.add('</ATTACHMENTS.captionLabel.updatePath>'); // [DEBUG/]
         };
 
         attachProps.updateShow = function(props) {
-          traceLog.add('<ATTACHMENTS.captionLabel.updateShow>'); // [DEBUG/]
           ATTACHMENTS.captionLabel.updateShow(attachProps, props);
-          traceLog.add('</ATTACHMENTS.captionLabel.updateShow>'); // [DEBUG/]
         };
 
         if (IS_WEBKIT) { // [WEBKIT] overflow:visible is ignored
           attachProps.adjustEdge = function(props, edge) {
-            traceLog.add('<ATTACHMENTS.captionLabel.adjustEdge>'); // [DEBUG/]
             var curStats = attachProps.curStats;
             if (curStats.x != null) {
               ATTACHMENTS.captionLabel.adjustEdge(edge,
                 {x: curStats.x, y: curStats.y, width: attachProps.width, height: attachProps.height},
                 attachProps.strokeWidth / 2);
             }
-            traceLog.add('</ATTACHMENTS.captionLabel.adjustEdge>'); // [DEBUG/]
           };
         }
 
-        traceLog.add('</ATTACHMENTS.captionLabel.init>'); // [DEBUG/]
         return true;
       },
 
@@ -4575,7 +5680,6 @@
       updateShow: function(attachProps, props) {
         var on = props.isShown === true;
         if (on !== attachProps.isShown) {
-          traceLog.add('on=' + on); // [DEBUG/]
           attachProps.styleShow.visibility = on ? '' : 'hidden';
           attachProps.isShown = on;
         }
@@ -4676,7 +5780,6 @@
       },
 
       initSvg: function(attachProps, props) {
-        traceLog.add('<ATTACHMENTS.captionLabel.initSvg>'); // [DEBUG/]
         var text = ATTACHMENTS.captionLabel.newText(attachProps.text, props.baseWindow.document,
             props.svg, APP_ID + '-captionLabel-' + attachProps._id, attachProps.outlineColor),
           bBox, strokeWidth;
@@ -4711,12 +5814,9 @@
         }
         if (IS_WEBKIT) { update(props, {}); } // [WEBKIT] overflow:visible is ignored (To call updateViewBox())
         attachProps.updateShow(props);
-        traceLog.add('</ATTACHMENTS.captionLabel.initSvg>'); // [DEBUG/]
       },
 
       bind: function(attachProps, bindTarget) {
-        traceLog.add('<ATTACHMENTS.captionLabel.bind>'); // [DEBUG/]
-        traceLog.add('optionName=%s', bindTarget.optionName); // [DEBUG/]
         var props = bindTarget.props;
 
         if (!attachProps.color) { addEventHandler(props, 'cur_line_color', attachProps.updateColor); }
@@ -4738,12 +5838,10 @@
         // after set attachProps.refSocketXY
         ATTACHMENTS.captionLabel.initSvg(attachProps, props);
 
-        traceLog.add('</ATTACHMENTS.captionLabel.bind>'); // [DEBUG/]
         return true;
       },
 
       unbind: function(attachProps, boundTarget) {
-        traceLog.add('<ATTACHMENTS.captionLabel.unbind>'); // [DEBUG/]
         var props = boundTarget.props;
 
         if (attachProps.elmsAppend) {
@@ -4770,27 +5868,20 @@
           // addDelayedProc(function() { update(props, {}); }); // reset path_edge
           update(props, {}); // To call updateViewBox()
         }
-        traceLog.add('</ATTACHMENTS.captionLabel.unbind>'); // [DEBUG/]
       },
 
       removeOption: function(attachProps, boundTarget) {
-        traceLog.add('<ATTACHMENTS.captionLabel.removeOption>'); // [DEBUG/]
-        traceLog.add('optionName=%s', boundTarget.optionName); // [DEBUG/]
         var props = boundTarget.props, newOptions = {};
         newOptions[boundTarget.optionName] = '';
         setOptions(props, newOptions);
-        traceLog.add('</ATTACHMENTS.captionLabel.removeOption>'); // [DEBUG/]
       },
 
       remove: function(attachProps) {
-        traceLog.add('<ATTACHMENTS.captionLabel.remove>'); // [DEBUG/]
         if (attachProps.boundTargets.length) { // it should be unbound by LeaderLineAttachment.remove
-          traceLog.add('error-not-unbound'); // [DEBUG/]
           console.error('LeaderLineAttachment was not unbound by remove');
           attachProps.boundTargets.forEach(
             function(boundTarget) { ATTACHMENTS.captionLabel.unbind(attachProps, boundTarget); });
         }
-        traceLog.add('</ATTACHMENTS.captionLabel.remove>'); // [DEBUG/]
       }
     },
 
@@ -4801,12 +5892,10 @@
 
       // attachOptions: text, color(A), outlineColor, lineOffset, <textStyleProps>
       init: function(attachProps, attachOptions) {
-        traceLog.add('<ATTACHMENTS.pathLabel.init>'); // [DEBUG/]
         if (typeof attachOptions.text === 'string') {
           attachProps.text = attachOptions.text.trim();
         }
         if (!attachProps.text) {
-          traceLog.add('</ATTACHMENTS.pathLabel.init>'); // [DEBUG/]
           return false;
         }
         if (typeof attachOptions.color === 'string') {
@@ -4825,20 +5914,15 @@
 
         // event handler for this instance
         attachProps.updateColor = function(props) {
-          traceLog.add('<ATTACHMENTS.pathLabel.updateColor>'); // [DEBUG/]
           ATTACHMENTS.captionLabel.updateColor(attachProps, props);
-          traceLog.add('</ATTACHMENTS.pathLabel.updateColor>'); // [DEBUG/]
         };
 
         attachProps.updatePath = function(props) {
-          traceLog.add('<ATTACHMENTS.pathLabel.updatePath>'); // [DEBUG/]
           var curStats = attachProps.curStats, aplStats = attachProps.aplStats,
             llStats = props.curStats, pathList = props.pathList.animVal || props.pathList.baseVal,
             value;
           // It's not ready yet.
           if (!pathList) {
-            traceLog.add('not-ready'); // [DEBUG/]
-            traceLog.add('</ATTACHMENTS.pathLabel.updatePath>'); // [DEBUG/]
             return;
           }
 
@@ -4851,28 +5935,21 @@
 
           // Apply `pathData`
           if (pathDataHasChanged(value, aplStats.pathData)) {
-            traceLog.add('pathData'); // [DEBUG/]
             attachProps.elmPath.setPathData(value);
             aplStats.pathData = value;
             attachProps.bBox = attachProps.elmPosition.getBBox(); // for adjustEdge
             attachProps.updateStartOffset(props);
           }
-          traceLog.add('</ATTACHMENTS.pathLabel.updatePath>'); // [DEBUG/]
         };
 
         attachProps.updateStartOffset = function(props) {
-          traceLog.add('<ATTACHMENTS.pathLabel.updateStartOffset>'); // [DEBUG/]
           var curStats = attachProps.curStats, aplStats = attachProps.aplStats,
             llStats = props.curStats, pathLenAll, plugBackLen, startOffset;
           // It's not ready yet.
           if (!curStats.pathData) {
-            traceLog.add('not-ready'); // [DEBUG/]
-            traceLog.add('</ATTACHMENTS.pathLabel.updateStartOffset>'); // [DEBUG/]
             return;
           }
           if (attachProps.semIndex === 2 && !attachProps.lineOffset) {
-            traceLog.add('static'); // [DEBUG/]
-            traceLog.add('</ATTACHMENTS.pathLabel.updateStartOffset>'); // [DEBUG/]
             return;
           }
 
@@ -4893,30 +5970,23 @@
           }
 
           curStats.startOffset = startOffset;
-          if (setStat(attachProps, aplStats, 'startOffset', startOffset
-              /* [DEBUG] */, null, 'startOffset%_'/* [/DEBUG] */)) {
+          if (setStat(attachProps, aplStats, 'startOffset', startOffset)) {
             attachProps.elmOffset.startOffset.baseVal.value = startOffset;
           }
-          traceLog.add('</ATTACHMENTS.pathLabel.updateStartOffset>'); // [DEBUG/]
         };
 
         attachProps.updateShow = function(props) {
-          traceLog.add('<ATTACHMENTS.pathLabel.updateShow>'); // [DEBUG/]
           ATTACHMENTS.captionLabel.updateShow(attachProps, props);
-          traceLog.add('</ATTACHMENTS.pathLabel.updateShow>'); // [DEBUG/]
         };
 
         if (IS_WEBKIT) { // [WEBKIT] overflow:visible is ignored
           attachProps.adjustEdge = function(props, edge) {
-            traceLog.add('<ATTACHMENTS.pathLabel.adjustEdge>'); // [DEBUG/]
             if (attachProps.bBox) {
               ATTACHMENTS.captionLabel.adjustEdge(edge, attachProps.bBox, attachProps.strokeWidth / 2);
             }
-            traceLog.add('</ATTACHMENTS.pathLabel.adjustEdge>'); // [DEBUG/]
           };
         }
 
-        traceLog.add('</ATTACHMENTS.pathLabel.init>'); // [DEBUG/]
         return true;
       },
 
@@ -5079,7 +6149,6 @@
       },
 
       initSvg: function(attachProps, props) {
-        traceLog.add('<ATTACHMENTS.pathLabel.initSvg>'); // [DEBUG/]
         var text = ATTACHMENTS.pathLabel.newText(attachProps.text, props.baseWindow.document,
             APP_ID + '-pathLabel-' + attachProps._id, attachProps.outlineColor),
           bBox, strokeWidth;
@@ -5126,12 +6195,9 @@
         attachProps.updateStartOffset(props);
         if (IS_WEBKIT) { update(props, {}); } // [WEBKIT] overflow:visible is ignored (To call updateViewBox())
         attachProps.updateShow(props);
-        traceLog.add('</ATTACHMENTS.pathLabel.initSvg>'); // [DEBUG/]
       },
 
       bind: function(attachProps, bindTarget) {
-        traceLog.add('<ATTACHMENTS.pathLabel.bind>'); // [DEBUG/]
-        traceLog.add('optionName=%s', bindTarget.optionName); // [DEBUG/]
         var props = bindTarget.props;
 
         if (!attachProps.color) { addEventHandler(props, 'cur_line_color', attachProps.updateColor); }
@@ -5149,12 +6215,10 @@
         // after set attachProps.semIndex
         ATTACHMENTS.pathLabel.initSvg(attachProps, props);
 
-        traceLog.add('</ATTACHMENTS.pathLabel.bind>'); // [DEBUG/]
         return true;
       },
 
       unbind: function(attachProps, boundTarget) {
-        traceLog.add('<ATTACHMENTS.pathLabel.unbind>'); // [DEBUG/]
         var props = boundTarget.props;
 
         if (attachProps.elmsAppend) {
@@ -5177,31 +6241,23 @@
           // addDelayedProc(function() { update(props, {}); }); // reset path_edge
           update(props, {}); // To call updateViewBox()
         }
-        traceLog.add('</ATTACHMENTS.pathLabel.unbind>'); // [DEBUG/]
       },
 
       removeOption: function(attachProps, boundTarget) {
-        traceLog.add('<ATTACHMENTS.pathLabel.removeOption>'); // [DEBUG/]
-        traceLog.add('optionName=%s', boundTarget.optionName); // [DEBUG/]
         var props = boundTarget.props, newOptions = {};
         newOptions[boundTarget.optionName] = '';
         setOptions(props, newOptions);
-        traceLog.add('</ATTACHMENTS.pathLabel.removeOption>'); // [DEBUG/]
       },
 
       remove: function(attachProps) {
-        traceLog.add('<ATTACHMENTS.pathLabel.remove>'); // [DEBUG/]
         if (attachProps.boundTargets.length) { // it should be unbound by LeaderLineAttachment.remove
-          traceLog.add('error-not-unbound'); // [DEBUG/]
           console.error('LeaderLineAttachment was not unbound by remove');
           attachProps.boundTargets.forEach(
             function(boundTarget) { ATTACHMENTS.pathLabel.unbind(attachProps, boundTarget); });
         }
-        traceLog.add('</ATTACHMENTS.pathLabel.remove>'); // [DEBUG/]
       }
     }
   };
-  window.ATTACHMENTS = ATTACHMENTS; // [DEBUG/]
 
   Object.keys(ATTACHMENTS).forEach(function(attachmentName) {
     LeaderLine[attachmentName] = function() {
@@ -5212,7 +6268,6 @@
   // Update position automatically
   LeaderLine.positionByWindowResize = true;
   window.addEventListener('resize', AnimEvent.add(function(/* event */) {
-    traceLog.add('<positionByWindowResize>'); // [DEBUG/]
     // var eventWindow;
     if (LeaderLine.positionByWindowResize) {
       // eventWindow = event.target;
@@ -5221,15 +6276,12 @@
         /*
         var props = insProps[id];
         if (props.baseWindow === eventWindow) {
-          traceLog.add('id=%s', id); // [DEBUG/]
           update(props, {position: true});
         }
         */
-        traceLog.add('id=%s', id); // [DEBUG/]
         update(insProps[id], {position: true});
       });
     }
-    traceLog.add('</positionByWindowResize>'); // [DEBUG/]
   }), false);
 
   return LeaderLine;
