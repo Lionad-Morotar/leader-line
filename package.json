@@ -51,7 +51,7 @@
   },
   "scripts": {
     "dev": "pnpm clean && cross-env NODE_ENV=development grunt",
-    "build": "pnpm clean && pnpm build:esm && pnpm build:iife",
+    "build": "pnpm clean && pnpm build:iife && pnpm build:esm",
     "build:iife": "cross-env NODE_ENV=production grunt",
     "build:esm": "cross-env NODE_ENV=production gulp --require @esbuild-kit/cjs-loader -f gulpfile.ts",
     "clean": "rm -f leader-line.min.js leader-line.esm.css"

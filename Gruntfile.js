@@ -15,7 +15,8 @@ module.exports = grunt => {
     ROOT_PATH = __dirname,
     SRC_DIR_PATH = pathUtil.join(ROOT_PATH, 'src'),
     CSS_PATH = pathUtil.join(SRC_DIR_PATH, 'leader-line.css'),
-    DEST_DIR_PATH = pathUtil.join(ROOT_PATH, 'leader-line.min.js'),
+    DEST_DIR_PATH = pathUtil.join(ROOT_PATH, 'leader-line.js'),
+    DEST_MIN_DIR_PATH = pathUtil.join(ROOT_PATH, 'leader-line.min.js'),
 
     PACK_LIBS = [
       ['anim', 'anim.js'],
@@ -171,7 +172,7 @@ module.exports = grunt => {
             });
 
             const banner = `/*! ${PKG.title || PKG.name} v${PKG.version} (c) ${PKG.author.name} ${PKG.homepage} */\n`;
-            return banner + minJs(preProc.removeTag('DEBUG',
+            return banner + (preProc.removeTag('DEBUG',
               content.replace(/@INCLUDE\[code:([^\n]+?)\]@/g,
                 (s, codeKey) => {
                   if (typeof code[codeKey] !== 'string') {
@@ -185,8 +186,33 @@ module.exports = grunt => {
         },
         src: `${SRC_DIR_PATH}/leader-line.js`,
         dest: DEST_DIR_PATH
+      },
+      packMinJs: {
+        options: {
+          handlerByContent: content => {
+            const reEXPORT = /^[\s\S]*?@EXPORT@\s*(?:\*\/\s*)?([\s\S]*?)\s*(?:\/\*\s*|\/\/\s*)?@\/EXPORT@[\s\S]*$/;
+            PACK_LIBS.forEach(keyPath => {
+              code[keyPath[0]] = fs.readFileSync(pathUtil.join(SRC_DIR_PATH, keyPath[1]), {encoding: 'utf8'})
+                .replace(keyPath[2] || reEXPORT, '$1');
+            });
+  
+            const banner = `/*! ${PKG.title || PKG.name} v${PKG.version} (c) ${PKG.author.name} ${PKG.homepage} */\n`;
+            return banner + minJs(preProc.removeTag('DEBUG',
+              content.replace(/@INCLUDE\[code:([^\n]+?)\]@/g,
+                (s, codeKey) => {
+                  if (typeof code[codeKey] !== 'string') {
+                    grunt.fail.fatal(`File doesn't exist code: ${codeKey}`);
+                  }
+                  return code[codeKey];
+                }
+              )
+            ));
+          }
+        },
+        src: `${SRC_DIR_PATH}/leader-line.js`,
+        dest: DEST_MIN_DIR_PATH
       }
-    }
+    },
   });
 
   grunt.loadNpmTasks('grunt-task-helper');
@@ -201,7 +227,8 @@ module.exports = grunt => {
 
   grunt.registerTask('build', [
     'defs',
-    'taskHelper:packJs'
+    'taskHelper:packJs',
+    'taskHelper:packMinJs'
   ]);
 
   grunt.registerTask('default', ['build']);

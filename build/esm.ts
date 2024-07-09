@@ -33,7 +33,7 @@ export const buildESM = async () => {
   } as RollupOptions;
 
   const bundle = await rollup({
-    input: './src/leader-line.js',
+    input: './leader-line.js',
     ...rollupConfig
   });
   await writeBundles(bundle, [
