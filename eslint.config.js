@@ -42,7 +42,7 @@ export default [
       ecmaVersion: 2022,
       sourceType: 'module',
       globals: { ...browserGlobals, process: 'readonly', Buffer: 'readonly', __dirname: 'readonly',
-        globalThis: 'readonly', URL: 'readonly', URLSearchParams: 'readonly' }
+        globalThis: 'readonly', URL: 'readonly', URLSearchParams: 'readonly', AbortController: 'readonly' }
     },
     rules: {
       'no-unused-vars': ['warn', { args: 'none' }],

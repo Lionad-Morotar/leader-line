@@ -51,6 +51,11 @@ lines.forEach(line => line.position());
 `position()` keeps its synchronous semantics by default (fully backward compatible).
 `LeaderLine.positionByWindowResize` now uses the scheduler internally.
 
+Known limits of the scheduler: it dispatches on the module window's rAF, so lines whose
+`baseWindow` is a separate popup window are flushed on the main window's frame clock
+(paused while the main window is hidden). Per-frame scheduling is also skipped when
+the tab is in the background — updates flush once when the tab becomes visible again.
+
 ---
 
 在稍微复杂的绘图中，LeaderLine 有着糟糕的性能，此时你应该选择 antd 或类似的（reactflow、vueflow、litegraph 等）专业绘图库

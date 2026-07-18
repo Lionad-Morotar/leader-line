@@ -86,4 +86,80 @@ describe('update-scheduler', () => {
     rafQ.flushNext();
     expect(scheduler.size).toBe(0);
   });
+
+  it('isolates per-item measure errors:其余实例仍被完整处理', () => {
+    const rafQ = createRafQueue();
+    const applied = [];
+    const errors = [];
+    const scheduler = createScheduler({
+      raf: rafQ.raf,
+      measure: i => {
+        if (i === 'bad') { throw new Error('measure boom'); }
+        applied.push(['m', i]);
+      },
+      apply: i => applied.push(['a', i]),
+      onError: (err, item, phase) => errors.push([String(err), item, phase])
+    });
+
+    scheduler.schedule('good-1');
+    scheduler.schedule('bad');
+    scheduler.schedule('good-2');
+    rafQ.flushNext();
+
+    // 坏实例被跳过,健康实例 measure+apply 完整
+    expect(applied).toEqual([
+      ['m', 'good-1'], ['m', 'good-2'],
+      ['a', 'good-1'], ['a', 'good-2']
+    ]);
+    expect(errors).toEqual([['Error: measure boom', 'bad', 'measure']]);
+    expect(scheduler.size).toBe(0);
+  });
+
+  it('isolates per-item apply errors:不级联到后续实例', () => {
+    const rafQ = createRafQueue();
+    const applied = [];
+    const errors = [];
+    const scheduler = createScheduler({
+      raf: rafQ.raf,
+      measure: i => applied.push(['m', i]),
+      apply: i => {
+        if (i === 'bad') { throw new Error('apply boom'); }
+        applied.push(['a', i]);
+      },
+      onError: (err, item, phase) => errors.push([String(err), item, phase])
+    });
+
+    scheduler.schedule('good-1');
+    scheduler.schedule('bad');
+    scheduler.schedule('good-2');
+    rafQ.flushNext();
+
+    expect(applied).toEqual([
+      ['m', 'good-1'], ['m', 'bad'], ['m', 'good-2'],
+      ['a', 'good-1'], ['a', 'good-2']
+    ]);
+    expect(errors).toEqual([['Error: apply boom', 'bad', 'apply']]);
+  });
+
+  it('unschedule removes a pending item before flush', () => {
+    const rafQ = createRafQueue();
+    const applied = [];
+    const scheduler = createScheduler({ raf: rafQ.raf, measure: i => applied.push(['m', i]), apply: i => applied.push(['a', i]) });
+
+    scheduler.schedule('A');
+    scheduler.schedule('B');
+    scheduler.unschedule('A');
+    expect(scheduler.size).toBe(1);
+
+    rafQ.flushNext();
+    expect(applied).toEqual([['m', 'B'], ['a', 'B']]);
+  });
+
+  it('unschedule is a no-op for items not in the queue', () => {
+    const rafQ = createRafQueue();
+    const scheduler = createScheduler({ raf: rafQ.raf, measure: () => {}, apply: () => {} });
+    scheduler.schedule('A');
+    scheduler.unschedule('not-exists');
+    expect(scheduler.size).toBe(1);
+  });
 });

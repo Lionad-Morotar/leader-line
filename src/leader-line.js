@@ -16,7 +16,7 @@ import { createScheduler } from './update-scheduler.js';
 import { DEFS_HTML, SYMBOLS, PLUG_KEY_2_ID, PLUG_2_SYMBOL, DEFAULT_END_PLUG }
   from 'virtual:leader-line-defs';
 
-;var LeaderLine = (function() { // eslint-disable-line no-extra-semi
+;var LeaderLine = (function() {  
   'use strict';
 
   /**
@@ -312,23 +312,23 @@ import { DEFS_HTML, SYMBOLS, PLUG_KEY_2_ID, PLUG_2_SYMBOL, DEFAULT_END_PLUG }
     } else { // Unsupported
       console.warn('mouseenter and mouseleave events polyfill is enabled.');
       over = function(event) {
-        /* eslint-disable no-invalid-this */
+         
         if (!event.relatedTarget ||
             event.relatedTarget !== this &&
             !(this.compareDocumentPosition(event.relatedTarget) & Node.DOCUMENT_POSITION_CONTAINED_BY)) {
           enter.apply(this, arguments);
         }
-        /* eslint-enable no-invalid-this */
+         
       };
       element.addEventListener('mouseover', over);
       out = function(event) {
-        /* eslint-disable no-invalid-this */
+         
         if (!event.relatedTarget ||
             event.relatedTarget !== this &&
             !(this.compareDocumentPosition(event.relatedTarget) & Node.DOCUMENT_POSITION_CONTAINED_BY)) {
           leave.apply(this, arguments);
         }
-        /* eslint-enable no-invalid-this */
+         
       };
       element.addEventListener('mouseout', out);
       return function() {
@@ -367,7 +367,7 @@ import { DEFS_HTML, SYMBOLS, PLUG_KEY_2_ID, PLUG_2_SYMBOL, DEFAULT_END_PLUG }
     }
 
     rect = element.getBoundingClientRect();
-    for (prop in rect) { bBox[prop] = rect[prop]; } // eslint-disable-line guard-for-in
+    for (prop in rect) { bBox[prop] = rect[prop]; }  
 
     if (!relWindow) {
       if (!(win = doc.defaultView)) {
@@ -543,7 +543,7 @@ import { DEFS_HTML, SYMBOLS, PLUG_KEY_2_ID, PLUG_2_SYMBOL, DEFAULT_END_PLUG }
     angle += angle > 180 ? -180 : 180;
     // from:  new path of side to p0
     // to:    new path of side to p3
-    /* eslint-disable key-spacing */
+     
     return {x: x, y: y,
       fromP2: {x: mx, y: my},
       toP1:   {x: nx, y: ny},
@@ -551,7 +551,7 @@ import { DEFS_HTML, SYMBOLS, PLUG_KEY_2_ID, PLUG_2_SYMBOL, DEFAULT_END_PLUG }
       toP2:   {x: cx, y: cy},
       angle:  angle
     };
-    /* eslint-enable key-spacing */
+     
   }
   window.getPointOnCubic = getPointOnCubic; // [DEBUG/]
 
@@ -1509,9 +1509,12 @@ import { DEFS_HTML, SYMBOLS, PLUG_KEY_2_ID, PLUG_2_SYMBOL, DEFAULT_END_PLUG }
     var options = props.options;
     return [0, 1].map(function(i) {
       var anchor = options.anchorSE[i], isAttach = props.optionIsAttach.anchorSE[i],
-        attachProps = isAttach !== false ? insAttachProps[anchor._id] : null,
+        attachProps = isAttach !== false ? insAttachProps[anchor._id] : null;
 
-        strokeWidth = isAttach !== false && attachProps.conf.getStrokeWidth ?
+      // attachment 可能在调度后被移除(insAttachProps 延迟删除):安全降级为元素路径失败(null)
+      if (isAttach !== false && !attachProps) { return null; }
+
+      var strokeWidth = isAttach !== false && attachProps.conf.getStrokeWidth ?
           attachProps.conf.getStrokeWidth(attachProps, props) : 0,
         anchorBBox = isAttach !== false && attachProps.conf.getBBoxNest ?
           attachProps.conf.getBBoxNest(attachProps, props, strokeWidth) :
@@ -1565,6 +1568,13 @@ import { DEFS_HTML, SYMBOLS, PLUG_KEY_2_ID, PLUG_2_SYMBOL, DEFAULT_END_PLUG }
     curStats.position_socketGravitySE = curSocketGravitySE = copyTree(options.socketGravitySE);
 
     anchorBBoxSE = measuredBBoxSE || measurePosition(props);
+
+    // anchor 不可测量(元素 detach 或 attachment 已被移除):本次不更新,保持现状
+    if (!anchorBBoxSE[0] || !anchorBBoxSE[1]) {
+      traceLog.add('no-anchor-bBox'); // [DEBUG/]
+      traceLog.add('</updatePosition>'); // [DEBUG/]
+      return false;
+    }
 
     // Decide each socket
     (function() {
@@ -3465,7 +3475,7 @@ import { DEFS_HTML, SYMBOLS, PLUG_KEY_2_ID, PLUG_2_SYMBOL, DEFAULT_END_PLUG }
       return function(value) {
         var options = {};
         options[propName] = value;
-        this.setOptions(options); // eslint-disable-line no-invalid-this
+        this.setOptions(options);  
       };
     }
 
@@ -3591,6 +3601,9 @@ import { DEFS_HTML, SYMBOLS, PLUG_KEY_2_ID, PLUG_2_SYMBOL, DEFAULT_END_PLUG }
 
   LeaderLine.prototype.remove = function() {
     var props = insProps[this._id], curStats = props.curStats;
+
+    // 清理调度残留:flush-after-remove 的无效写与 attachProps undefined 崩溃
+    positionScheduler.unschedule(props);
 
     Object.keys(EFFECTS).forEach(function(effectName) {
       var keyAnimId = effectName + '_animId';

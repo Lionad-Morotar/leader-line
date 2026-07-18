@@ -1,5 +1,3 @@
-/* eslint no-underscore-dangle: [2, {"allow": ["_isObject"]}] */
-
 import { getExportedFuncSource } from '../exported-funcs.js';
 
 describe('func-PATH_FLUID', function() {

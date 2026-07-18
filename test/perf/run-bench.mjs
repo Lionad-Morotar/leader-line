@@ -7,6 +7,22 @@ const PORT = process.env.BENCH_PORT || 5199;
 const FRAMES = 40;
 const WARMUP = 10;
 
+// server 存活检测:无 server 时给出可操作提示而非误导性超时
+{
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 3000);
+  try {
+    const res = await fetch(`http://localhost:${PORT}/test/perf/bench.html`, { signal: controller.signal });
+    if (!res.ok) { throw new Error(`HTTP ${res.status}`); }
+  } catch (err) {
+    console.error(`BENCH FAILED: vite dev server not reachable at :${PORT} (${err.message || err}).`);
+    console.error(`Start one first:  pnpm exec vite --port ${PORT}`);
+    process.exit(1);
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 const browser = await chromium.launch();
 const page = await browser.newPage();
 await page.goto(`http://localhost:${PORT}/test/perf/bench.html`);

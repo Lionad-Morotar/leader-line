@@ -17,6 +17,7 @@ export default defineConfig(({ mode }) => ({
     debugStripPlugin({ strip: mode === 'production' })
   ],
   build: {
+    target: 'es2020', // 2.0 起不再支持 IE11/旧 Edge(README 迁移指南)
     lib: {
       entry: 'src/leader-line.js',
       name: 'LeaderLine',

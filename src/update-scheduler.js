@@ -10,11 +10,21 @@
  * @param {(cb: Function) => void} conf.raf - requestAnimationFrame 等价物
  * @param {(item: any) => void} conf.measure - 读阶段回调(仅允许布局读)
  * @param {(item: any) => void} conf.apply - 写阶段回调(仅允许 DOM 写与内存计算)
- * @returns {{schedule: (item: any) => void, size: number}}
+ * @param {(err: Error, item: any, phase: 'measure'|'apply') => void} [conf.onError]
+ *   单实例异常隔离上报;缺省时 flush 末尾以 console.error 聚合上报。
+ * @returns {{schedule: (item: any) => void, unschedule: (item: any) => void, size: number}}
  */
 export function createScheduler(conf) {
   const dirty = new Set();
   let scheduled = false;
+
+  function report(err, item, phase) {
+    if (conf.onError) {
+      conf.onError(err, item, phase);
+    } else {
+      console.error(`[leader-line] scheduled ${phase} failed:`, err);
+    }
+  }
 
   function flush() {
     scheduled = false;
@@ -24,8 +34,24 @@ export function createScheduler(conf) {
       dirty.delete(item);
       items.push(item);
     });
-    items.forEach(conf.measure);
-    items.forEach(conf.apply);
+    const measureFailed = new Set();
+    items.forEach(item => {
+      try {
+        conf.measure(item);
+      } catch (err) {
+        // 单实例失败不拖垮整批;该实例跳过 apply
+        measureFailed.add(item);
+        report(err, item, 'measure');
+      }
+    });
+    items.forEach(item => {
+      if (measureFailed.has(item)) { return; }
+      try {
+        conf.apply(item);
+      } catch (err) {
+        report(err, item, 'apply');
+      }
+    });
   }
 
   return {
@@ -35,6 +61,9 @@ export function createScheduler(conf) {
         scheduled = true;
         conf.raf(flush);
       }
+    },
+    unschedule(item) {
+      dirty.delete(item);
     },
     get size() {
       return dirty.size;

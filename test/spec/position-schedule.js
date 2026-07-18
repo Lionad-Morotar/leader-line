@@ -84,4 +84,31 @@ describe('position scheduling', function() {
     // flush 后路径仍与同步结果一致(幂等)
     expect(window.insProps[ll1._id].linePath.getPathData()).toEqual(pathAfterSync);
   });
+
+  it('remove() after requestPosition does not break the flush of other lines', async () => {
+    var path2Before = window.insProps[ll2._id].linePath.getPathData();
+    moveAnchors();
+    ll1.requestPosition();
+    ll2.requestPosition();
+    ll1.remove(); // flush 前移除:ll1 的调度应被清理
+
+    await NEXT_FRAMES();
+    // ll2 不受 ll1 移除影响,正常更新
+    expect(window.insProps[ll2._id].linePath.getPathData()).not.toEqual(path2Before);
+  });
+
+  it('remove() of an attachment-anchored line does not crash the flush', async () => {
+    // reliability 场景:anchor attachment 移除后 insAttachProps 延迟删除,
+    // 而线的 optionIsAttach.anchorSE 仍标记 attach——flush 不得抛 TypeError
+    var anchor = window.LeaderLine.areaAnchor({element: document.getElementById('elm1')}),
+      ll3 = new window.LeaderLine(anchor, document.getElementById('elm2')),
+      path2Before = window.insProps[ll2._id].linePath.getPathData();
+    moveAnchors();
+    ll3.requestPosition();
+    ll2.requestPosition();
+    ll3.remove(); // unbind + 延迟删除 insAttachProps
+
+    await NEXT_FRAMES();
+    expect(window.insProps[ll2._id].linePath.getPathData()).not.toEqual(path2Before);
+  });
 });
