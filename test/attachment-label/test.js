@@ -9,7 +9,7 @@ window.addEventListener('load', function() {
       color: 'rgba(255, 0, 0, 0.5)', endPlug: 'disc', endPlugSize: 4
     });
 
-  new PlainDraggable(anchor1, { // eslint-disable-line no-new
+  new PlainDraggable(anchor1, {  
     onMove: function() { ll.position(); },
     zIndex: false
   });

@@ -19,7 +19,10 @@ export default defineNuxtConfig({
     resolve: {
       alias: {
         // 库源码直引:改 src/ 即时 HMR
-        'leader-line': fileURLToPath(new URL('../src/leader-line.js', import.meta.url))
+        'leader-line': fileURLToPath(new URL('../src/leader-line.js', import.meta.url)),
+        // plain-draggable 直引其 ESM 构建,绕开 optimizeDeps 缓存(504 Outdated Optimize Dep)
+        'plain-draggable': fileURLToPath(
+          new URL('./node_modules/plain-draggable/plain-draggable.esm.js', import.meta.url))
       }
     },
     plugins: [
