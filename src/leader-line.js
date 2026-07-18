@@ -10,10 +10,14 @@
 /* eslint no-underscore-dangle: [2, {"allow": ["_id"]}] */
 /* global traceLog:false */
 
+import anim from './anim.js';
+import pathDataPolyfill from './path-data-polyfill/path-data-polyfill.js';
+import AnimEvent from './anim-event/anim-event.js';
+import { DEFS_HTML, SYMBOLS, PLUG_KEY_2_ID, PLUG_2_SYMBOL, DEFAULT_END_PLUG }
+  from 'virtual:leader-line-defs';
+
 ;var LeaderLine = (function() { // eslint-disable-line no-extra-semi
   'use strict';
-
-  const isDev = process.env.NODE_ENV === 'development';
 
   /**
    * An object that simulates `DOMRect` to indicate a bounding-box.
@@ -69,20 +73,6 @@
 
     PLUG_BEHIND = 'behind',
     DEFS_ID = APP_ID + '-defs',
-    /* [DEBUG/]
-    DEFS_HTML = @INCLUDE[code:DEFS_HTML]@,
-    SYMBOLS = @INCLUDE[code:SYMBOLS]@,
-    PLUG_KEY_2_ID = @INCLUDE[code:PLUG_KEY_2_ID]@,
-    PLUG_2_SYMBOL = @INCLUDE[code:PLUG_2_SYMBOL]@,
-    DEFAULT_END_PLUG = @INCLUDE[code:DEFAULT_END_PLUG]@,
-    [DEBUG/] */
-    // [DEBUG]
-    DEFS_HTML = window.DEFS_HTML,
-    SYMBOLS = window.SYMBOLS,
-    PLUG_KEY_2_ID = window.PLUG_KEY_2_ID,
-    PLUG_2_SYMBOL = window.PLUG_2_SYMBOL,
-    DEFAULT_END_PLUG = window.DEFAULT_END_PLUG,
-    // [/DEBUG]
 
     SOCKET_IDS = [SOCKET_TOP, SOCKET_RIGHT, SOCKET_BOTTOM, SOCKET_LEFT],
     KEYWORD_AUTO = 'auto',
@@ -134,19 +124,6 @@
       };
     })(),
     isFinite = Number.isFinite || function(value) { return typeof value === 'number' && window.isFinite(value); },
-
-    /* [DEBUG/]
-    anim = @INCLUDE[code:anim]@,
-    [DEBUG/] */
-    anim = window.anim, // [DEBUG/]
-    /* [DEBUG/]
-    pathDataPolyfill = @INCLUDE[code:pathDataPolyfill]@,
-    [DEBUG/] */
-    pathDataPolyfill = window.pathDataPolyfill, // [DEBUG/]
-    /* [DEBUG/]
-    AnimEvent = @INCLUDE[code:AnimEvent]@,
-    [DEBUG/] */
-    AnimEvent = window.AnimEvent, // [DEBUG/]
 
     /** @typedef {{hasSE, hasProps, iniValue}} StatConf */
     /** @type {{statId: string, StatConf}} */

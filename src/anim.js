@@ -1,8 +1,6 @@
 /* exported anim */
 
-var anim =
-// @EXPORT@
-(function() {
+const anim = (function() {
   'use strict';
 
   var
@@ -278,6 +276,6 @@ var anim =
         null;
     }
   };
-})()
-// @/EXPORT@
-;
+})();
+
+export default anim;
