@@ -1,4 +1,3 @@
-/* eslint-env jasmine */
 /* global loadPage:false, customMatchers:false */
 /* eslint no-underscore-dangle: [2, {"allow": ["_id"]}] */
 

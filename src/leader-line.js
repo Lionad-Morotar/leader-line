@@ -7,7 +7,6 @@
  */
 
 /* exported LeaderLine */
-/* eslint no-underscore-dangle: [2, {"allow": ["_id"]}] */
 /* global traceLog:false */
 
 import anim from './anim.js';

@@ -46,9 +46,9 @@ export function generateDefs(symbolsHtml, css) {
       SYMBOLS[id] = {elmId};
       props.forEach(prop => {
         let matches;
-        if ((matches = prop.match(/prop\-([^\s]+)/))) {
+        if ((matches = prop.match(/prop-([^\s]+)/))) {
           SYMBOLS[id][matches[1]] = true;
-        } else if ((matches = prop.match(/varId\-([^\s]+)/))) {
+        } else if ((matches = prop.match(/varId-([^\s]+)/))) {
           varIds[matches[1]] = id;
         } else if (prop === 'no-overhead') {
           noOverhead = true;

@@ -1,6 +1,6 @@
 {
   "name": "leader-line",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "title": "LeaderLine",
   "description": "Draw a leader line in your web page.",
   "keywords": [
@@ -28,19 +28,15 @@
     "index.d.ts"
   ],
   "devDependencies": {
+    "@eslint/js": "^9.39.5",
     "@typescript/native-preview": "7.0.0-dev.20260707.2",
     "@vitest/browser-playwright": "^4.1.10",
-    "anim-event": "^1.0.16",
     "cheerio": "^1.2.0",
     "clean-css": "^5.1.2",
+    "eslint": "^9.39.5",
     "htmlclean": "^3.0.8",
-    "jasmine-core": "^3.7.1",
-    "log4js": "^6.4.0",
-    "node-static-alias": "^1.1.2",
-    "plain-draggable": "^2.5.12",
     "playwright": "^1.61.1",
     "pre-proc": "^1.0.2",
-    "test-page-loader": "^1.0.8",
     "vite": "^8.1.5",
     "vitest": "^4.1.10"
   },
@@ -52,7 +48,8 @@
     "clean": "rm -rf dist",
     "prepublishOnly": "pnpm build",
     "test:bench": "node test/perf/run-bench.mjs",
-    "typecheck": "tsgo --noEmit -p tsconfig.json"
+    "typecheck": "tsgo --noEmit -p tsconfig.json",
+    "lint": "eslint ."
   },
   "homepage": "https://github.com/Lionad-Morotar/leader-line",
   "repository": {

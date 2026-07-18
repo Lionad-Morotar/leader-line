@@ -1,5 +1,5 @@
 // update-scheduler 行为测试:dirty set + rAF 两阶段 flush(measure 全部先于 apply)
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { createScheduler } from '../../src/update-scheduler.js';
 
 function createRafQueue() {

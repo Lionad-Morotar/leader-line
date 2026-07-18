@@ -95,29 +95,6 @@ window.loadPageAsync = function loadPageAsync(url) {
 
 // ---------- 3. jasmine 自定义 matcher ----------
 
-/**
- * 加载页面到 iframe,回调 (frameWindow, frameDocument, body, done)。
- * done() 移除 iframe(页面清理)。与 test-page-loader 的回调签名一致。
- */
-window.loadPage = function loadPage(url, cb /* , title */) {
-  // 旧 httpd 以 test/ 为根,vitest server 以项目根为根;统一规范为根绝对路径
-  const src = url.startsWith('/') ? url : '/test/' + url;
-  const frame = document.createElement('iframe');
-  frame.style.cssText = 'position:absolute;left:-600px;width:500px;height:500px;';
-  frame.addEventListener('load', function loaded() {
-    const win = frame.contentWindow;
-    // module 脚本为 deferred,load 事件时页面已就绪
-    frame.removeEventListener('load', loaded);
-    console.log('[loadPage] loaded:', src, '| LeaderLine:', typeof win.LeaderLine, '| traceLog:', typeof win.traceLog);
-    cb(win, win.document, win.document.body, function done() {
-      frame.remove();
-    });
-  });
-  frame.addEventListener('error', e => console.error('[loadPage] error:', src, e));
-  frame.src = src;
-  document.body.appendChild(frame);
-};
-
 function toContainAll(log, keys) {
   let logSeq;
 

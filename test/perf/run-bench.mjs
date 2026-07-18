@@ -56,9 +56,9 @@ const deferResult = await page.evaluate(async n => {
 }, FRAMES);
 const layoutsBeforeDefer = await getLayoutCount();
 await page.evaluate(async n => {
-  for (let i = 0; i < n; i++) { times.push(await window.bench.deferFrame(i)); }
-  return times;
-}, FRAMES).catch(() => []);
+  // 仅为产生 layout 负载;耗时采集已在上方 deferResult 完成
+  for (let i = 0; i < n; i++) { await window.bench.deferFrame(i); }
+}, FRAMES);
 const layoutsAfterDefer = await getLayoutCount();
 
 await browser.close();
