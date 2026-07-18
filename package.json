@@ -69,5 +69,5 @@
   },
   "module": "./dist/leader-line.mjs",
   "types": "./index.d.ts",
-  "sideEffects": false
+  "sideEffects": true
 }
