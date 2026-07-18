@@ -86,6 +86,13 @@ window.loadPage = function loadPage(url, cb /* , title */) {
   document.body.appendChild(frame);
 };
 
+// Promise 版:供 async/await 风格的新 spec 使用(避免事件回调内断言逃逸)
+window.loadPageAsync = function loadPageAsync(url) {
+  return new Promise(resolve => {
+    window.loadPage(url, (win, doc, body, done) => resolve({ window: win, document: doc, body, done }));
+  });
+};
+
 // ---------- 3. jasmine 自定义 matcher ----------
 
 /**

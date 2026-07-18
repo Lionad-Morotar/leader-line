@@ -13,6 +13,7 @@
 import anim from './anim.js';
 import pathDataPolyfill from './path-data-polyfill/path-data-polyfill.js';
 import AnimEvent from './anim-event/anim-event.js';
+import { createScheduler } from './update-scheduler.js';
 import { DEFS_HTML, SYMBOLS, PLUG_KEY_2_ID, PLUG_2_SYMBOL, DEFAULT_END_PLUG }
   from 'virtual:leader-line-defs';
 
@@ -172,6 +173,19 @@ import { DEFS_HTML, SYMBOLS, PLUG_KEY_2_ID, PLUG_2_SYMBOL, DEFAULT_END_PLUG }
     insProps = {}, insId = 0,
     /** @type {Object.<_id: number, props>} */
     insAttachProps = {}, insAttachId = 0,
+    /**
+     * 位置更新调度内核:同帧多次请求合并为一次 rAF flush,
+     * measure(全实例读)→ apply(全实例写),reflow 由 N 次降为 ≤1 次。
+     */
+    positionScheduler = createScheduler({
+      raf: function(cb) { window.requestAnimationFrame(cb); },
+      measure: function(props) { props.measuredBBoxSE = measurePosition(props); },
+      apply: function(props) {
+        var measuredBBoxSE = props.measuredBBoxSE;
+        delete props.measuredBBoxSE;
+        update(props, {position: true}, measuredBBoxSE);
+      }
+    }),
     svg2SupportedReverse, svg2SupportedPaintOrder, svg2SupportedDropShadow; // Supported SVG 2 features
 
   // [DEBUG]
@@ -1484,10 +1498,40 @@ import { DEFS_HTML, SYMBOLS, PLUG_KEY_2_ID, PLUG_2_SYMBOL, DEFAULT_END_PLUG }
   }
 
   /**
+   * Measure anchor bBoxes(布局读阶段)。被 updatePosition 调用;
+   * 调度内核(update-scheduler)也会先对所有实例调用本函数,
+   * 再统一进入写阶段——读写分离,一帧至多一次强制同步 reflow。
+   * 注意:attachment anchor 的 getBBoxNest 内部可能附带自身形状更新(写),
+   * 属已知残留交替,仅影响 attach 混合场景。
    * @param {props} props - `props` of `LeaderLine` instance.
+   * @returns {BBox[]} anchorBBoxSE
+   */
+  function measurePosition(props) {
+    var options = props.options;
+    return [0, 1].map(function(i) {
+      var anchor = options.anchorSE[i], isAttach = props.optionIsAttach.anchorSE[i],
+        attachProps = isAttach !== false ? insAttachProps[anchor._id] : null,
+
+        strokeWidth = isAttach !== false && attachProps.conf.getStrokeWidth ?
+          attachProps.conf.getStrokeWidth(attachProps, props) : 0,
+        anchorBBox = isAttach !== false && attachProps.conf.getBBoxNest ?
+          attachProps.conf.getBBoxNest(attachProps, props, strokeWidth) :
+          getBBoxNest(anchor, props.baseWindow);
+
+      props.curStats.capsMaskAnchor_pathDataSE[i] = isAttach !== false && attachProps.conf.getPathData ?
+        attachProps.conf.getPathData(attachProps, props, strokeWidth) : bBox2PathData(anchorBBox);
+      props.curStats.capsMaskAnchor_strokeWidthSE[i] = strokeWidth;
+      return anchorBBox;
+    });
+  }
+
+  /**
+   * @param {props} props - `props` of `LeaderLine` instance.
+   * @param {BBox[]} [measuredBBoxSE] - 已由调度内核预先测量的 anchorBBoxSE;
+   *    缺省时同步调用 measurePosition(兼容同步路径)。
    * @returns {boolean} `true` if it was changed.
    */
-  function updatePosition(props) {
+  function updatePosition(props, measuredBBoxSE) {
     traceLog.add('<updatePosition>'); // [DEBUG/]
     var options = props.options, curStats = props.curStats, aplStats = props.aplStats,
       curSocketXYSE = curStats.position_socketXYSE,
@@ -1521,21 +1565,7 @@ import { DEFS_HTML, SYMBOLS, PLUG_KEY_2_ID, PLUG_2_SYMBOL, DEFAULT_END_PLUG }
     curStats.position_lineStrokeWidth = curStats.line_strokeWidth;
     curStats.position_socketGravitySE = curSocketGravitySE = copyTree(options.socketGravitySE);
 
-    anchorBBoxSE = [0, 1].map(function(i) {
-      var anchor = options.anchorSE[i], isAttach = props.optionIsAttach.anchorSE[i],
-        attachProps = isAttach !== false ? insAttachProps[anchor._id] : null,
-
-        strokeWidth = isAttach !== false && attachProps.conf.getStrokeWidth ?
-          attachProps.conf.getStrokeWidth(attachProps, props) : 0,
-        anchorBBox = isAttach !== false && attachProps.conf.getBBoxNest ?
-          attachProps.conf.getBBoxNest(attachProps, props, strokeWidth) :
-          getBBoxNest(anchor, props.baseWindow);
-
-      curStats.capsMaskAnchor_pathDataSE[i] = isAttach !== false && attachProps.conf.getPathData ?
-        attachProps.conf.getPathData(attachProps, props, strokeWidth) : bBox2PathData(anchorBBox);
-      curStats.capsMaskAnchor_strokeWidthSE[i] = strokeWidth;
-      return anchorBBox;
-    });
+    anchorBBoxSE = measuredBBoxSE || measurePosition(props);
 
     // Decide each socket
     (function() {
@@ -2348,9 +2378,10 @@ import { DEFS_HTML, SYMBOLS, PLUG_KEY_2_ID, PLUG_2_SYMBOL, DEFAULT_END_PLUG }
    * Apply current `options`.
    * @param {props} props - `props` of `LeaderLine` instance.
    * @param {Object} needs - `group` of stats.
+   * @param {BBox[]} [measuredBBoxSE] - 调度内核预测量的 anchorBBoxSE(仅 position 路径)。
    * @returns {void}
    */
-  function update(props, needs) {
+  function update(props, needs, measuredBBoxSE) {
     // console.log('[debug] update options', props, needs)
 
     var updated = {};
@@ -2370,7 +2401,7 @@ import { DEFS_HTML, SYMBOLS, PLUG_KEY_2_ID, PLUG_2_SYMBOL, DEFAULT_END_PLUG }
       updated.faces = updateFaces(props);
     }
     if (needs.position || updated.line || updated.plug) {
-      updated.position = updatePosition(props);
+      updated.position = updatePosition(props, measuredBBoxSE);
     }
     if (needs.path || updated.position) {
       updated.path = updatePath(props);
@@ -3544,7 +3575,18 @@ import { DEFS_HTML, SYMBOLS, PLUG_KEY_2_ID, PLUG_2_SYMBOL, DEFAULT_END_PLUG }
   };
 
   LeaderLine.prototype.position = function() {
+    if (LeaderLine.deferPositionUpdate) { return this.requestPosition(); }
     update(insProps[this._id], {position: true});
+    return this;
+  };
+
+  /**
+   * 请求在下一次动画帧批量更新位置(读写分离调度)。
+   * 同帧重复调用自动去重;适合拖拽等高频多线更新场景。
+   * @returns {LeaderLine} this
+   */
+  LeaderLine.prototype.requestPosition = function() {
+    positionScheduler.schedule(insProps[this._id]);
     return this;
   };
 
@@ -5216,6 +5258,12 @@ import { DEFS_HTML, SYMBOLS, PLUG_KEY_2_ID, PLUG_2_SYMBOL, DEFAULT_END_PLUG }
 
   // Update position automatically
   LeaderLine.positionByWindowResize = true;
+
+  /**
+   * 为 true 时,position() 等价于 requestPosition()(调度合帧)。
+   * 默认 false 保持同步语义(向后兼容)。
+   */
+  LeaderLine.deferPositionUpdate = false;
   window.addEventListener('resize', AnimEvent.add(function(/* event */) {
     traceLog.add('<positionByWindowResize>'); // [DEBUG/]
     // var eventWindow;
@@ -5231,7 +5279,7 @@ import { DEFS_HTML, SYMBOLS, PLUG_KEY_2_ID, PLUG_2_SYMBOL, DEFAULT_END_PLUG }
         }
         */
         traceLog.add('id=%s', id); // [DEBUG/]
-        update(insProps[id], {position: true});
+        positionScheduler.schedule(insProps[id]);
       });
     }
     traceLog.add('</positionByWindowResize>'); // [DEBUG/]

@@ -7,13 +7,11 @@ describe('options.svgContainer', function() {
 
   var window, document, pageDone;
 
-  beforeEach(function(beforeDone) {
-    loadPage('spec/common/page.html', function(frmWindow, frmDocument, body, done) {
-      window = frmWindow;
-      document = frmDocument;
-      pageDone = done;
-      beforeDone();
-    });
+  beforeEach(async () => {
+    const page = await loadPageAsync('spec/common/page.html');
+    window = page.window;
+    document = page.document;
+    pageDone = page.done;
   });
 
   afterEach(function() { pageDone(); });
