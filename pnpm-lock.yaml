@@ -57,12 +57,24 @@ importers:
 
   playground:
     devDependencies:
+      anim-event:
+        specifier: ^1.0.17
+        version: 1.0.17
+      cssprefix:
+        specifier: ^2.0.17
+        version: 2.0.17
+      m-class-list:
+        specifier: ^1.1.10
+        version: 1.1.10
       nuxt:
         specifier: ^4.1.3
         version: 4.4.8(@babel/plugin-syntax-jsx@7.29.7(@babel/core@7.29.7))(@babel/plugin-syntax-typescript@7.29.7(@babel/core@7.29.7))(@parcel/watcher@2.5.6)(@vue/compiler-sfc@3.5.40)(cac@6.7.14)(db0@0.3.4)(esbuild@0.28.1)(eslint@9.39.5(jiti@2.7.0))(ioredis@5.11.1)(lightningcss@1.32.0)(magicast@0.5.3)(optionator@0.9.4)(rolldown@1.1.5)(rollup-plugin-visualizer@7.0.1(rolldown@1.1.5)(rollup@4.62.2))(rollup@4.62.2)(srvx@0.11.22)(terser@5.49.0)(vite@7.3.6(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.49.0)(yaml@2.9.0))(yaml@2.9.0)
       plain-draggable:
         specifier: ^2.5.12
         version: 2.5.15
+      pointer-event:
+        specifier: ^1.3.1
+        version: 1.3.1
       vue:
         specifier: ^3.5.13
         version: 3.5.40

@@ -22,15 +22,15 @@
     <section v-if="report" class="report" data-testid="report">
       <h3>结果({{ lineCount }} 线 × {{ frames }} 帧)</h3>
       <p class="note">
-        口径说明:defer 数字含 rAF 帧对齐等待(均值约半帧),非 flush 实际执行耗时;
-        机制性收益(reflow 次数 N→1)以 CDP LayoutCount 为准,见 <code>pnpm test:bench</code>(test/perf)。
+        口径:sync = N 次 position() 同步耗时(含 N 次强制 reflow);
+        defer = 调度器 flush 实际执行耗时(来自调度器内部打点,≤1 次 reflow,不含帧对齐等待)。
+        机制性指标(reflow 次数 N→1)见 <code>pnpm test:bench</code> 的 CDP LayoutCount。
       </p>
       <table>
         <thead><tr><th></th><th>mean</th><th>p95</th></tr></thead>
         <tbody>
           <tr v-if="report.sync"><td>sync position()</td><td>{{ report.sync.mean }}ms</td><td>{{ report.sync.p95 }}ms</td></tr>
-          <tr v-if="report.defer"><td>defer requestPosition()</td><td>{{ report.defer.mean }}ms</td><td>{{ report.defer.p95 }}ms</td></tr>
-          <tr v-if="report.speedup"><td>speedup</td><td colspan="2">{{ report.speedup }}×</td></tr>
+          <tr v-if="report.defer"><td>defer flush 执行</td><td>{{ report.defer.mean }}ms</td><td>{{ report.defer.p95 }}ms</td></tr>
         </tbody>
       </table>
     </section>
@@ -47,7 +47,7 @@ const frames = 30;
 const running = ref(false);
 
 interface Stat { mean: string; p95: string }
-const report = ref<{ sync?: Stat; defer?: Stat; speedup?: string } | null>(null);
+const report = ref<{ sync?: Stat; defer?: Stat } | null>(null);
 
 let lines: InstanceType<typeof LeaderLine>[] = [];
 let anchors: Array<[HTMLElement, HTMLElement]> = [];
@@ -103,10 +103,12 @@ async function measure(mode: 'sync' | 'defer'): Promise<Stat> {
       samples.push(performance.now() - t0);
     } else {
       lines.forEach(l => l.requestPosition());
-      const t0 = performance.now();
       // 调度器先注册 rAF(flush);本 promise 的 rAF 在其后,resolve 时 flush 已完成
       await new Promise(r => requestAnimationFrame(r));
-      samples.push(performance.now() - t0);
+      // 读调度器内部打点的真实 flush 耗时(不含帧对齐等待)
+      const stats = (window as unknown as { positionScheduler: { stats: { lastFlushMs: number } } })
+        .positionScheduler.stats;
+      samples.push(stats.lastFlushMs);
     }
   }
   return stats(samples);
@@ -128,7 +130,7 @@ async function runBoth() {
   running.value = true;
   const sync = await measure('sync');
   const defer = await measure('defer');
-  report.value = { sync, defer, speedup: (parseFloat(sync.mean) / parseFloat(defer.mean)).toFixed(1) };
+  report.value = { sync, defer };
   running.value = false;
 }
 

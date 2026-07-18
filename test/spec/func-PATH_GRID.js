@@ -6,7 +6,7 @@ describe('func-PATH_GRID', function() {
 
   var func;
 
-  /* eslint-disable no-unused-vars, indent */
+   
   // ================ context
   var
     SOCKET_TOP = 1, SOCKET_RIGHT = 2, SOCKET_BOTTOM = 3, SOCKET_LEFT = 4,
@@ -19,7 +19,7 @@ describe('func-PATH_GRID', function() {
     curSocketXYSE, curSocketGravitySE, pathList;
     function socketXY2Point(socketXY) { return {x: socketXY.x, y: socketXY.y}; }
   // ================ /context
-  /* eslint-enable no-unused-vars, indent */
+   
 
   function initContext(socketXYSE, socketGravitySE) {
     curSocketXYSE = socketXYSE;
@@ -28,7 +28,7 @@ describe('func-PATH_GRID', function() {
   }
 
   beforeAll(function() {
-    func = eval('(' + getExportedFuncSource('PATH_GRID') + ')'); // eslint-disable-line no-eval
+    func = eval('(' + getExportedFuncSource('PATH_GRID') + ')');  
   });
 
   testCases.forEach(function(testCase) {

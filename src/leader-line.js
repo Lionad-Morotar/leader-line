@@ -191,6 +191,7 @@ import { DEFS_HTML, SYMBOLS, PLUG_KEY_2_ID, PLUG_2_SYMBOL, DEFAULT_END_PLUG }
   window.insProps = insProps;
   window.insAttachProps = insAttachProps;
   window.isObject = isObject;
+  window.positionScheduler = positionScheduler;
   window.DEFS_HTML = DEFS_HTML;
   window.SYMBOLS = SYMBOLS;
   window.PLUG_KEY_2_ID = PLUG_KEY_2_ID;

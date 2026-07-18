@@ -12,11 +12,15 @@
  * @param {(item: any) => void} conf.apply - 写阶段回调(仅允许 DOM 写与内存计算)
  * @param {(err: Error, item: any, phase: 'measure'|'apply') => void} [conf.onError]
  *   单实例异常隔离上报;缺省时 flush 末尾以 console.error 聚合上报。
- * @returns {{schedule: (item: any) => void, unschedule: (item: any) => void, size: number}}
+ * @returns {{schedule: (item: any) => void, unschedule: (item: any) => void, size: number,
+ *   stats: {lastFlushMs: number, flushCount: number}}}
  */
 export function createScheduler(conf) {
   const dirty = new Set();
   let scheduled = false;
+
+  // flush 执行统计(供 bench/诊断读取真实 flush 耗时,而非帧对齐等待)
+  const stats = { lastFlushMs: 0, flushCount: 0 };
 
   function report(err, item, phase) {
     if (conf.onError) {
@@ -28,6 +32,7 @@ export function createScheduler(conf) {
 
   function flush() {
     scheduled = false;
+    const t0 = typeof performance !== 'undefined' ? performance.now() : 0;
     // flush 期间新入队的任务留在 dirty 中,由下一轮 rAF 处理
     const items = [];
     dirty.forEach(item => {
@@ -52,6 +57,10 @@ export function createScheduler(conf) {
         report(err, item, 'apply');
       }
     });
+    if (t0) {
+      stats.lastFlushMs = performance.now() - t0;
+      stats.flushCount++;
+    }
   }
 
   return {
@@ -67,7 +76,8 @@ export function createScheduler(conf) {
     },
     get size() {
       return dirty.size;
-    }
+    },
+    stats
   };
 }
 
