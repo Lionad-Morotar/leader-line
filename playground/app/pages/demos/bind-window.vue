@@ -159,7 +159,8 @@ function toggleMixWindow() {
 }
 
 onMounted(() => {
-  // iframe 内联文档:与主窗口同构的锚点容器
+  // iframe 内联文档:与主窗口同构的锚点容器。
+  // 注意:若用户在 iframe 内手动刷新,内联文档重建,引用需重新初始化(本 demo 不处理该边角)。
   childDoc = iframeRef.value!.contentDocument;
   childDoc!.body.innerHTML =
     '<style>.anchor{position:relative;width:120px;height:32px;margin:4px;background:rgba(150,255,127,.5);border-radius:6px;display:flex;align-items:center;justify-content:center;font:12px system-ui}</style>' +

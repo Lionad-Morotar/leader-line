@@ -6,7 +6,7 @@
 
     <p class="controls">
       <label>线数:
-        <select v-model.number="lineCount" data-testid="line-count" @change="rebuild">
+        <select v-model.number="lineCount" data-testid="line-count" :disabled="running" @change="rebuild">
           <option :value="20">20</option>
           <option :value="50">50</option>
           <option :value="100">100</option>
@@ -51,6 +51,7 @@ const report = ref<{ sync?: Stat; defer?: Stat } | null>(null);
 
 let lines: InstanceType<typeof LeaderLine>[] = [];
 let anchors: Array<[HTMLElement, HTMLElement]> = [];
+let unmounted = false;
 
 function clearLines() {
   lines.forEach(l => l.remove());
@@ -95,7 +96,7 @@ function stats(samples: number[]): Stat {
 
 async function measure(mode: 'sync' | 'defer'): Promise<Stat> {
   const samples: number[] = [];
-  for (let f = 0; f < frames; f++) {
+  for (let f = 0; f < frames && !unmounted; f++) {
     moveAnchors(f);
     if (mode === 'sync') {
       const t0 = performance.now();
@@ -134,8 +135,8 @@ async function runBoth() {
   running.value = false;
 }
 
-onMounted(rebuild);
-onBeforeUnmount(clearLines);
+onMounted(() => { unmounted = false; rebuild(); });
+onBeforeUnmount(() => { unmounted = true; clearLines(); });
 </script>
 
 <style scoped>
