@@ -26,6 +26,7 @@
     "bower.json"
   ],
   "devDependencies": {
+    "@vitest/browser-playwright": "^4.1.10",
     "anim-event": "^1.0.16",
     "cheerio": "^1.2.0",
     "clean-css": "^5.1.2",

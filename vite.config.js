@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite';
 import fs from 'node:fs';
+import { playwright } from '@vitest/browser-playwright';
 import { defsPlugin } from './build/vite-plugin-defs.js';
 import { debugStripPlugin } from './build/vite-plugin-debug-strip.js';
 
@@ -12,7 +13,8 @@ export default defineConfig(({ mode }) => ({
   },
   plugins: [
     defsPlugin(),
-    debugStripPlugin({ strip: mode !== 'development' })
+    // 仅生产构建剥除 [DEBUG];dev server(development)与 vitest(test)均保留 window.* 调试句柄
+    debugStripPlugin({ strip: mode === 'production' })
   ],
   build: {
     lib: {
@@ -29,7 +31,29 @@ export default defineConfig(({ mode }) => ({
     }
   },
   test: {
-    environment: 'node',
-    include: ['test/unit/**/*.test.js']
+    projects: [
+      {
+        test: {
+          name: 'unit',
+          environment: 'node',
+          include: ['test/unit/**/*.test.js']
+        }
+      },
+      {
+        plugins: [defsPlugin()],
+        test: {
+          name: 'browser',
+          globals: true,
+          include: ['test/spec/*.js'],
+          setupFiles: ['test/setup-browser.js'],
+          browser: {
+            enabled: true,
+            provider: playwright(),
+            headless: true,
+            instances: [{ browser: 'chromium' }]
+          }
+        }
+      }
+    ]
   }
 }));

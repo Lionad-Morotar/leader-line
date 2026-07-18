@@ -1,5 +1,5 @@
-/* eslint-env jasmine */
-/* global getSource:false, testCases:false */
+import { getExportedFuncSource } from '../exported-funcs.js';
+import testCases from '../func-PATH_GRID/testCases.json.js';
 
 describe('func-PATH_GRID', function() {
   'use strict';
@@ -27,12 +27,8 @@ describe('func-PATH_GRID', function() {
     pathList = [];
   }
 
-  beforeAll(function(done) {
-    getSource('./spec/func/PATH_GRID', function(error, source) {
-      if (error) { throw error; }
-      func = eval('(' + source + ')'); // eslint-disable-line no-eval
-      done();
-    });
+  beforeAll(function() {
+    func = eval('(' + getExportedFuncSource('PATH_GRID') + ')'); // eslint-disable-line no-eval
   });
 
   testCases.forEach(function(testCase) {

@@ -1,5 +1,6 @@
-/* eslint-env jasmine */
-/* global getSource:false */
+/* eslint no-underscore-dangle: [2, {"allow": ["_isObject"]}] */
+
+import { getExportedFuncSource } from '../exported-funcs.js';
 
 describe('func-PATH_FLUID', function() {
   'use strict';
@@ -28,12 +29,8 @@ describe('func-PATH_FLUID', function() {
     pathList = [];
   }
 
-  beforeAll(function(done) {
-    getSource('./spec/func/PATH_FLUID', function(error, source) {
-      if (error) { throw error; }
-      func = eval('(' + source + ')'); // eslint-disable-line no-eval
-      done();
-    });
+  beforeAll(function() {
+    func = eval('(' + getExportedFuncSource('PATH_FLUID') + ')'); // eslint-disable-line no-eval
   });
 
   it('should set offset by SocketGravity Array', function() {

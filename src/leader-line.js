@@ -91,7 +91,8 @@ import { DEFS_HTML, SYMBOLS, PLUG_KEY_2_ID, PLUG_2_SYMBOL, DEFAULT_END_PLUG }
     IS_TRIDENT = !IS_EDGE && !!document.uniqueID, // Future Edge might support `document.uniqueID`.
     IS_GECKO = 'MozAppearance' in document.documentElement.style,
     IS_BLINK = !IS_EDGE && !IS_GECKO && // Edge has `window.chrome`, and future Gecko might have that.
-      !!window.chrome && !!window.CSS,
+      !!window.CSS && // `window.chrome` was removed from Chrome-for-Testing(headless); UA is the fallback.
+      (!!window.chrome || /Chrome\//.test(window.navigator.userAgent)),
     IS_WEBKIT = !IS_EDGE && !IS_TRIDENT &&
       !IS_GECKO && !IS_BLINK && // Some engines support `webkit-*` properties.
       !window.chrome && 'WebkitAppearance' in document.documentElement.style,
@@ -177,6 +178,11 @@ import { DEFS_HTML, SYMBOLS, PLUG_KEY_2_ID, PLUG_2_SYMBOL, DEFAULT_END_PLUG }
   window.insProps = insProps;
   window.insAttachProps = insAttachProps;
   window.isObject = isObject;
+  window.DEFS_HTML = DEFS_HTML;
+  window.SYMBOLS = SYMBOLS;
+  window.PLUG_KEY_2_ID = PLUG_KEY_2_ID;
+  window.PLUG_2_SYMBOL = PLUG_2_SYMBOL;
+  window.DEFAULT_END_PLUG = DEFAULT_END_PLUG;
   window.IS_TRIDENT = IS_TRIDENT;
   window.IS_BLINK = IS_BLINK;
   window.IS_GECKO = IS_GECKO;
@@ -1514,8 +1520,6 @@ import { DEFS_HTML, SYMBOLS, PLUG_KEY_2_ID, PLUG_2_SYMBOL, DEFAULT_END_PLUG }
     curStats.position_path = options.path;
     curStats.position_lineStrokeWidth = curStats.line_strokeWidth;
     curStats.position_socketGravitySE = curSocketGravitySE = copyTree(options.socketGravitySE);
-    aplStats.position_socketXYSE = copyTree(curSocketXYSE);
-    aplStats.position_plugOverheadSE = copyTree(curStats.position_plugOverheadSE);
 
     anchorBBoxSE = [0, 1].map(function(i) {
       var anchor = options.anchorSE[i], isAttach = props.optionIsAttach.anchorSE[i],
@@ -1977,6 +1981,8 @@ import { DEFS_HTML, SYMBOLS, PLUG_KEY_2_ID, PLUG_2_SYMBOL, DEFAULT_END_PLUG }
       })();
 
       // apply
+      aplStats.position_socketXYSE = copyTree(curSocketXYSE);
+      aplStats.position_plugOverheadSE = copyTree(curStats.position_plugOverheadSE);
       aplStats.position_path = curStats.position_path;
       aplStats.position_lineStrokeWidth = curStats.position_lineStrokeWidth;
       aplStats.position_socketGravitySE = copyTree(curSocketGravitySE);
@@ -2270,6 +2276,27 @@ import { DEFS_HTML, SYMBOLS, PLUG_KEY_2_ID, PLUG_2_SYMBOL, DEFAULT_END_PLUG }
   }
 
   /**
+   * Re-mount `props.svg` when `options.svgContainer` was changed via `setOptions`.
+   * @param {props} props - `props` of `LeaderLine` instance.
+   * @returns {boolean} `true` if the svg was moved to another container.
+   */
+  function updateSvgContainer(props) {
+    traceLog.add('<updateSvgContainer>'); // [DEBUG/]
+    var curContainer = props.svgContainer || props.baseWindow.document.body,
+      newContainer = props.options.svgContainer || props.baseWindow.document.body,
+      updated = false;
+    if (props.svg && newContainer !== curContainer) {
+      curContainer.removeChild(props.svg);
+      newContainer.appendChild(props.svg);
+      props.svgContainer = props.options.svgContainer || null;
+      updated = true;
+    }
+    if (!updated) { traceLog.add('not-updated'); } // [DEBUG/]
+    traceLog.add('</updateSvgContainer>'); // [DEBUG/]
+    return updated;
+  }
+
+  /**
    * @param {props} props - `props` of `LeaderLine` instance.
    * @param {(boolean|number)} on - true:show | false:hide | 1:show(in anim)
    * @returns {void}
@@ -2350,7 +2377,9 @@ import { DEFS_HTML, SYMBOLS, PLUG_KEY_2_ID, PLUG_2_SYMBOL, DEFAULT_END_PLUG }
     }
     updated.viewBox = updateViewBox(props);
     updated.mask = updateMask(props);
-    // updated.svgContainer = updated.svgContainer;
+    if (needs.svgContainer) {
+      updated.svgContainer = updateSvgContainer(props);
+    }
     if (needs.effect) {
       setEffect(props);
     }
@@ -3726,7 +3755,7 @@ import { DEFS_HTML, SYMBOLS, PLUG_KEY_2_ID, PLUG_2_SYMBOL, DEFAULT_END_PLUG }
       // attachOptions: element, color(A), fillColor, size(A), dash, shape, x, y, width, height, radius, points
       init: function(attachProps, attachOptions) {
         traceLog.add('<ATTACHMENTS.areaAnchor.init>'); // [DEBUG/]
-        var points = [], baseDocument, svg, window;
+        var points = [], baseDocument, svg, window, svgContainer;
         attachProps.element = ATTACHMENTS.pointAnchor.checkElement(attachOptions.element);
         if (typeof attachOptions.color === 'string') {
           attachProps.color = attachOptions.color.trim();
@@ -3789,10 +3818,9 @@ import { DEFS_HTML, SYMBOLS, PLUG_KEY_2_ID, PLUG_2_SYMBOL, DEFAULT_END_PLUG }
         svg.style.visibility = 'hidden';
 
         svgContainer = attachOptions.svgContainer || baseDocument.body;
-        // console.log('[debug] anchor props', props)
         svgContainer.appendChild(svg);
 
-        setupWindow(props, (window = baseDocument.defaultView));
+        setupWindow({svgContainer: attachOptions.svgContainer}, (window = baseDocument.defaultView));
         attachProps.bodyOffset = getBodyOffset(window); // Get `bodyOffset`
 
         // event handler for this instance
