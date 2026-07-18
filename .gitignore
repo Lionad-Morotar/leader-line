@@ -3,3 +3,4 @@ node_modules
 dist/
 .vitest-attachments/
 test/spec/__screenshots__/
+.context/

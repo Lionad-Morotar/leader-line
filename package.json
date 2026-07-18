@@ -14,18 +14,21 @@
     "bubble",
     "svg"
   ],
-  "main": "leader-line.esm.js",
+  "main": "./dist/leader-line.cjs",
   "exports": {
     ".": {
-      "import": "./leader-line.esm.js",
-      "require": "./leader-line.min.js"
+      "types": "./index.d.ts",
+      "import": "./dist/leader-line.mjs",
+      "require": "./dist/leader-line.cjs",
+      "default": "./dist/leader-line.mjs"
     }
   },
   "files": [
-    "leader-line.min.js",
-    "bower.json"
+    "dist",
+    "index.d.ts"
   ],
   "devDependencies": {
+    "@typescript/native-preview": "7.0.0-dev.20260707.2",
     "@vitest/browser-playwright": "^4.1.10",
     "anim-event": "^1.0.16",
     "cheerio": "^1.2.0",
@@ -46,7 +49,10 @@
     "build": "vite build",
     "test": "vitest run",
     "test:smoke": "node test/smoke/dist-smoke.mjs",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "prepublishOnly": "pnpm build",
+    "test:bench": "node test/perf/run-bench.mjs",
+    "typecheck": "tsgo --noEmit -p tsconfig.json"
   },
   "homepage": "https://github.com/Lionad-Morotar/leader-line",
   "repository": {
@@ -63,5 +69,8 @@
       "esbuild",
       "fsevents"
     ]
-  }
+  },
+  "module": "./dist/leader-line.mjs",
+  "types": "./index.d.ts",
+  "sideEffects": false
 }

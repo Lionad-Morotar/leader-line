@@ -20,8 +20,12 @@ export default defineConfig(({ mode }) => ({
     lib: {
       entry: 'src/leader-line.js',
       name: 'LeaderLine',
-      formats: ['es', 'iife'],
-      fileName: (format) => (format === 'es' ? 'leader-line.mjs' : 'leader-line.min.js')
+      formats: ['es', 'cjs', 'iife'],
+      fileName: (format) => ({
+        es: 'leader-line.mjs',
+        cjs: 'leader-line.cjs',
+        iife: 'leader-line.min.js'
+      })[format]
     },
     sourcemap: true,
     minify: mode !== 'development',
