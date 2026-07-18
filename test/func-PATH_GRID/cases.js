@@ -3,7 +3,7 @@
 (function() {
   'use strict';
 
-  /* eslint-disable no-unused-vars, indent */
+   
   // ================ context
   var
     SOCKET_TOP = 1, SOCKET_RIGHT = 2, SOCKET_BOTTOM = 3, SOCKET_LEFT = 4,
@@ -15,7 +15,7 @@
     curSocketXYSE, curSocketGravitySE, pathList;
     function socketXY2Point(socketXY) { return {x: socketXY.x, y: socketXY.y}; }
   // ================ /context
-  /* eslint-enable no-unused-vars, indent */
+   
 
   var func,
     testCasesSrc = [
@@ -384,7 +384,7 @@
   window.addEventListener('load', function() {
     getSource('../spec/func/PATH_GRID', function(error, source) {
       if (error) { throw error; }
-      func = eval('(' + source + ')'); // eslint-disable-line no-eval
+      func = eval('(' + source + ')');  
       cases();
     });
   }, false);

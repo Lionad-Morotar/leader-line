@@ -25,8 +25,7 @@ const scenes = [
   { path: '/demos/mask', title: 'mask', desc: 'outline/mask 渲染形态' },
   { path: '/demos/reflow', title: 'reflow', desc: 'forceReflow 场景' },
   { path: '/demos/grid-cases', title: 'grid-cases', desc: 'PATH_GRID 折线形态' },
-  { path: '/demos/shape-gap', title: 'shape-gap', desc: 'SHAPE_GAP 行为对比' },
-  { path: '/demos/function-test', title: 'function-test', desc: '内部函数可视化检查' },
+  { path: '/demos/shape-gap', title: 'shape-gap', desc: 'plug 符号形态与几何参数' },
   { path: '/bench', title: 'bench', desc: '渲染管线基准:sync vs defer 帧耗时' }
 ];
 </script>

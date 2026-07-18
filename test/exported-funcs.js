@@ -3,7 +3,7 @@
  * 通过 vite ?raw 读取源码文本,按 @EXPORT[file:...]@ 标记提取函数源码,
  * 供 spec eval 注入 mock 上下文——保持"测试与构建同一份源码"的原设计。
  */
-import leaderLineSrc from '/src/leader-line.js?raw';
+import leaderLineSrc from '../src/leader-line.js?raw';
 
 const cache = {};
 
