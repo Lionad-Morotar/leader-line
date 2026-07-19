@@ -6,8 +6,9 @@
 
 **Runner:**
 - vitest 4.1，双 project（`vite.config.js` 的 `test.projects`）：
-  - `unit` —— node 环境，`test/unit/**/*.test.js`（构建插件、调度内核等纯逻辑）
-  - `browser` —— playwright chromium headless，`test/spec/*.js`（迁移的 jasmine spec，真实布局引擎）
+  - `unit` —— node 环境，`test/unit/**/*.test.js` + `packages/*/src/**/*.test.ts`(构建插件、调度内核、packages 纯逻辑:resolve-anchor/registry)
+  - `browser` —— playwright chromium headless，`test/spec/*.js` + `packages/*/test/browser/**/*.test.ts`(迁移的 jasmine spec + packages 组合式 API 测试,真实布局引擎)
+- packages 浏览器测试经 browser project 的 alias `@lionad/leader-line → src/leader-line.js` 直引库源码;公共设施 `packages/vue/test/browser/helpers.ts`(traceLog stub、锚点元素工厂、`mountSetup` 组件 scope 挂载——LIFO 清理,先 unmount 再摘元素,否则 line.remove() 重定位读不到盒模型)
 - 浏览器 project 启 `globals: true`（`describe`/`it`/`expect` 全局可用），spec 页面由 vitest 内置 vite server 服务（ESM 转换 + `virtual:leader-line-defs` 解析）
 - 适配层 `test/setup-browser.js`：jasmine done 回调 shim（vitest 4 移除了 `fn(done)` 风格）、`jasmine.addMatchers` shim、`loadPage`/`loadPageAsync`（替代 test-page-loader）、自定义 matcher `expect.extend`
 

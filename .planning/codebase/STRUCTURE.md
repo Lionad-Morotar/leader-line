@@ -21,11 +21,27 @@ leader-line/                        # @lionad/leader-line@1.0.0(scoped 包)
 │   ├── vite-plugin-defs.js       # symbols.html+css → 虚拟 defs 模块
 │   └── vite-plugin-debug-strip.js # [DEBUG] 区域生产剥除(pre-proc)
 ├── playground/                   # Nuxt 4 开发测试子包(pnpm workspace)
-│   ├── nuxt.config.ts            #   vite alias 直引 ../src + 复用构建插件
+│   ├── nuxt.config.ts            #   vite alias 直引 ../src + 复用构建插件 + 接入 nuxt 模块
 │   ├── app/
 │   │   ├── app.vue               #   根组件(NuxtPage)
-│   │   └── pages/                #   index 索引 + demos/(7 场景)+ bench
+│   │   └── pages/                #   index 索引 + demos/(7 场景)+ vue-api + bench
 │   └── public/traceLog.js        #   [DEBUG] 依赖的全局 traceLog
+├── packages/
+│   ├── vue/                      # @lionad/leader-line-vue —— 声明式封装(tsdown 构建)
+│   │   ├── src/
+│   │   │   ├── resolve-anchor.ts #     锚点解析(Element/attachment/selector/组件实例/嵌套 ref)
+│   │   │   ├── registry.ts       #     连线注册表(keyed 存取 + 谓词查询,纯逻辑)
+│   │   │   ├── defaults.ts       #     默认 options 的 provide/inject 通道
+│   │   │   ├── use-leader-line.ts    # 单线 composable(options 深度响应)
+│   │   │   ├── use-leader-lines.ts   # 数组 composable(keyed diff)
+│   │   │   ├── use-drag-connect.ts   # 拖拽建连(预览线 + 异步门禁)
+│   │   │   ├── use-attachment.ts     # 锚点/标签工厂的 scope 托管封装
+│   │   │   └── leader-line.ts        # <LeaderLine> 组件(无 DOM 渲染)
+│   │   └── test/browser/         #   playwright 浏览器测试(真实 DOM 挂载)
+│   └── nuxt/                     # @lionad/leader-line-nuxt —— Nuxt 模块(module-builder)
+│       └── src/
+│           ├── module.ts         #     auto-import/组件注册/runtimeConfig 写入
+│           └── runtime/plugin.client.ts # client-only 插件:provide 模块级 defaults
 ├── dist/                         # 构建产物(gitignore):leader-line.{mjs,cjs,min.js}+map
 ├── test/                         # vitest 测试(unit node + browser playwright)
 │   ├── setup-browser.js          #   browser 适配层(jasmine shim/loadPage/matcher)
@@ -56,16 +72,11 @@ leader-line/                        # @lionad/leader-line@1.0.0(scoped 包)
 ├── index.d.ts                    # 手写公开 API 类型定义
 ├── package.json                  # 脚本 + 依赖（pnpm）
 ├── pnpm-lock.yaml
-├── package-lock.json             # 遗留的 npm lockfile（仅作参考）
-├── bower.json                    # 遗留的 Bower 清单（仍会发布）
 ├── Agents.md                     # AI 代理项目上下文（中文）
 ├── Claude.md -> Agents.md        # 符号链接
 ├── README.md                     # Fork 说明（英文 + 中文）
 ├── LICENSE
-├── .eslintrc.json, .stylelintrc, .gitignore
-├── leader-line.js                # 构建产物 —— IIFE 调试 dist（256k）
-├── leader-line.min.js            # 构建产物 —— IIFE 生产 dist（100k）
-└── leader-line.esm.js            # 构建产物 —— ESM dist（240k，gulp/rollup 输出）
+└── .eslintrc.json, .stylelintrc, .gitignore
 ```
 
 ## 目录用途（Directory Purposes）

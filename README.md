@@ -31,6 +31,89 @@ const line = new LeaderLine(
 );
 ```
 
+## Vue / Nuxt 集成
+
+命令式 API 的声明式封装,两个平行子包:`@lionad/leader-line-vue`(composable + 组件)与 `@lionad/leader-line-nuxt`(Nuxt 模块)。
+
+```bash
+pnpm add @lionad/leader-line @lionad/leader-line-vue   # Vue 3
+pnpm add @lionad/leader-line-nuxt                       # Nuxt 4(含 vue 包)
+```
+
+**Vue:单线(options 深度响应)**
+
+```vue
+<script setup>
+import { ref, useTemplateRef } from 'vue';
+import { useLeaderLine } from '@lionad/leader-line-vue';
+
+const a = useTemplateRef('a');
+const b = useTemplateRef('b');
+const color = ref('coral');
+
+// 锚点支持 Element / 模板 ref / selector / 组件实例;
+// options 字段可为 ref——color.value = 'red' 即自动 setOptions(不重建)
+const { line, position, show, hide, remove } = useLeaderLine(a, b, {
+  color,
+  endPlug: 'arrow2'
+});
+// 组件卸载自动 remove,无需手动清理
+</script>
+```
+
+**Vue:批量连线(keyed diff)**
+
+```ts
+import { useLeaderLines } from '@lionad/leader-line-vue';
+
+const edges = ref([
+  { key: 'a→b', start: elA, end: elB, color: 'coral', data: { fieldId: 'x' } }
+]);
+const { lines, getLine, findWhere, removeWhere } = useLeaderLines(edges, {
+  preventSame: true // 同 (start, end) 锚点对去重
+});
+// push → 新增;splice → 移除;同 key 改属性 → 就地更新;重排 → 零重建
+removeWhere(e => e.data.fieldId === 'x'); // 谓词查询逃逸舱
+```
+
+**Vue:拖拽建连**
+
+```ts
+import { useDragConnect } from '@lionad/leader-line-vue';
+
+const { isDragging, startConnect } = useDragConnect({
+  validTarget: '.field-node',               // selector 或谓词
+  preventSame: true,
+  onConnect: async (from, toEl, data) => {  // 异步门禁,返回 false 拦截
+    return typeCheck(from, toEl);
+  }
+});
+// 模板:@mousedown="startConnect($event, elRef, { fieldId })"
+```
+
+**Vue:`<LeaderLine>` 组件糖**
+
+```vue
+<LeaderLine :start="a" :end="b" color="coral" end-plug="arrow2" :dash="true" />
+<!-- v-for 场景直接配合 :key 使用 -->
+```
+
+**Nuxt:零配置模块**
+
+```ts
+// nuxt.config.ts
+export default defineNuxtConfig({
+  modules: ['@lionad/leader-line-nuxt'],
+  leaderLine: {
+    defaults: { color: '#4a9eff', size: 2 } // 全局默认 options(需可 JSON 序列化)
+  }
+});
+// 之后全部 composable 与 <LeaderLine> 组件免 import 直接使用;
+// 默认值合并优先级:调用处 > 模块默认 > 库默认。SSR 安全(client-only)
+```
+
+锚点工厂也有托管封装(`usePointAnchor` / `useAreaAnchor` / `useMouseHoverAnchor` / `useCaptionLabel` / `usePathLabel`),scope 销毁时自动 `remove()`,杜绝 attachment 泄漏。
+
 ## 相比上游的新增
 
 **功能**

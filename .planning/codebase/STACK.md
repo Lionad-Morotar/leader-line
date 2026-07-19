@@ -95,9 +95,15 @@
 **脚本：**
 - `pnpm dev` = `vite build --watch --mode development`（不压缩、保留 [DEBUG]、watch）
 - `pnpm build` = `vite build`（production 三产物）
-- `pnpm test` = `vitest run`（unit node + browser playwright 双 project）
-- `pnpm lint` / `pnpm typecheck` / `pnpm test:smoke` / `pnpm test:bench`（性能基准，需先起 vite dev server）
+- `pnpm build:packages` = packages/vue(tsdown:ESM/CJS + d.mts/d.cts 双类型)→ packages/nuxt(@nuxt/module-builder)
+- `pnpm test` = `vitest run`（unit node + browser playwright 双 project;packages 测试随两 project 一并收集）
+- `pnpm lint` / `pnpm typecheck`（库 tsgo + packages 双包 tsgo + playground nuxi typecheck)/ `pnpm test:smoke` / `pnpm test:bench`（性能基准，需先起 vite dev server）
 - `pnpm clean` = `rm -rf dist`
+
+**packages 工具链备注：**
+- packages/vue:tsdown(rolldown 系),`deps.neverBundle` 外置 vue 与 @lionad/leader-line(均为 peer)
+- packages/nuxt:@nuxt/module-builder 需要真实 `typescript@~5.8.3`(npm 最新 7.x 与其 CJS named-import 不兼容,已显式锁定 devDep)
+- packages 浏览器测试经根 vite.config browser project 的 alias `@lionad/leader-line → src/leader-line.js` 直引库源码,与 playground 同策略
 
 ## 平台要求（Platform Requirements）
 

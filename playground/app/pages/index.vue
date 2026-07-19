@@ -3,6 +3,7 @@
   <main class="index-page">
     <h1>LeaderLine Playground</h1>
     <p class="hint">开发测试站点 · 库代码直引 <code>src/leader-line.js</code>(HMR 即时生效)</p>
+    <p class="hint">文档见：https://anseki.github.io/leader-line/</p>
     <nav>
       <ul class="scene-list">
         <li v-for="scene in scenes" :key="scene.path">
