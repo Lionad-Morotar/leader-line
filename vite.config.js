@@ -41,7 +41,7 @@ export default defineConfig(({ mode }) => ({
         test: {
           name: 'unit',
           environment: 'node',
-          include: ['test/unit/**/*.test.js']
+          include: ['test/unit/**/*.test.js', 'packages/*/src/**/*.test.ts']
         }
       },
       {
