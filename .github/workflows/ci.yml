@@ -29,11 +29,13 @@ jobs:
       - name: Lint
         run: pnpm lint
 
+      # playground 经 nuxt.config 加载 @lionad/leader-line-nuxt 模块,dist 均为 gitignore 产物,
+      # typecheck/build 前必须按依赖序构建(workspace 拓扑:主库 → vue → nuxt)
+      - name: Build workspace packages
+        run: pnpm --filter "@lionad/leader-line-nuxt..." -r build
+
       - name: Typecheck
         run: pnpm typecheck
-
-      - name: Build
-        run: pnpm build
 
       - name: Test
         run: pnpm test

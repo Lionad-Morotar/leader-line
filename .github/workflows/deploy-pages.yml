@@ -36,6 +36,11 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      # playground 经 nuxt.config 加载 @lionad/leader-line-nuxt 模块,dist 均为 gitignore 产物,
+      # 必须先按依赖序构建(workspace 拓扑:主库 → vue → nuxt)
+      - name: Build workspace packages
+        run: pnpm --filter "@lionad/leader-line-nuxt..." -r build
+
       # baseURL 须为 /<repo>/ 子路径,构建期固化进 asset 路径;仓库改名时随事件变量自适应
       - name: Build playground site
         run: pnpm --dir playground build:pages
