@@ -30,9 +30,10 @@ jobs:
         run: pnpm lint
 
       # playground 经 nuxt.config 加载 @lionad/leader-line-nuxt 模块,dist 均为 gitignore 产物,
-      # typecheck/build 前必须按依赖序构建(workspace 拓扑:主库 → vue → nuxt)
+      # typecheck/smoke 前必须按依赖序构建(workspace 拓扑:主库 → vue → nuxt);
+      # 跳过根 prebuild 测试钩子——质量门禁由下方 Test 步骤独立承担,避免全量测试双跑
       - name: Build workspace packages
-        run: pnpm --filter "@lionad/leader-line-nuxt..." -r build
+        run: npm_config_enable_pre_post_scripts=false pnpm --filter "@lionad/leader-line-nuxt..." -r build
 
       - name: Typecheck
         run: pnpm typecheck
