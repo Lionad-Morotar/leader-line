@@ -48,8 +48,9 @@
     "clean": "rm -rf dist",
     "prepublishOnly": "pnpm build",
     "test:bench": "node test/perf/run-bench.mjs",
-    "typecheck": "tsgo --noEmit -p tsconfig.json",
-    "lint": "eslint ."
+    "typecheck": "tsgo --noEmit -p tsconfig.json && cd playground && node node_modules/nuxt/bin/nuxi.mjs typecheck",
+    "lint": "eslint .",
+    "dev:playground": "cd playground && node node_modules/nuxt/bin/nuxt.mjs dev --host 0.0.0.0 --port $(npx -y @lionad/port-key playground)"
   },
   "homepage": "https://github.com/Lionad-Morotar/leader-line",
   "repository": {
@@ -64,10 +65,17 @@
   "pnpm": {
     "onlyBuiltDependencies": [
       "esbuild",
-      "fsevents"
+      "fsevents",
+      "@parcel/watcher"
     ]
   },
   "module": "./dist/leader-line.mjs",
   "types": "./index.d.ts",
-  "sideEffects": true
+  "sideEffects": true,
+  "dependencies": {
+    "anim-event": "^1.0.17",
+    "cssprefix": "^2.0.17",
+    "m-class-list": "^1.1.10",
+    "pointer-event": "^1.3.1"
+  }
 }

@@ -1,0 +1,82 @@
+<template>
+  <!-- grid-cases:PATH_GRID 折线形态查看器(@EXPORT 函数 eval + testCases 驱动) -->
+  <main class="demo-page">
+    <h1>grid-cases</h1>
+    <p>PATH_GRID 路径函数形态:socket 方向 × socketGravity 组合</p>
+
+    <p class="controls">
+      <select v-model="selectedTitle" data-testid="case-select">
+        <option v-for="tc in testCases" :key="tc.title" :value="tc.title">{{ tc.title }}</option>
+      </select>
+    </p>
+
+    <svg class="grid-view" viewBox="0 0 320 280">
+      <circle v-for="(p, i) in currentSockets" :key="i" :cx="p.x" :cy="p.y" r="5"
+        :fill="i === 0 ? '#4a9eff' : '#ff6b6b'" />
+      <path v-if="pathD" :d="pathD" fill="none" stroke="coral" stroke-width="4" />
+    </svg>
+
+    <pre class="path-data">{{ pathDataText }}</pre>
+  </main>
+</template>
+
+<script setup lang="ts">
+import { computed, ref } from 'vue';
+import { getExportedFuncSource } from '../../../../test/exported-funcs.js';
+import testCasesJson from '../../../../test/func-PATH_GRID/testCases.json.js';
+
+interface SocketXY { x: number; y: number; socketId: number }
+interface TestCase {
+  title: string;
+  args: { socketXYSE: SocketXY[]; socketGravitySE: unknown[] };
+  expected: { pathList: Array<Array<{ x: number; y: number }>> };
+}
+
+const testCases = testCasesJson as TestCase[];
+const selectedTitle = ref(testCases[0]?.title ?? '');
+
+/* eslint-disable no-unused-vars */
+// ================ context(与 test/spec/func-PATH_GRID.js 同构:eval 函数的闭包上下文)
+const SOCKET_TOP = 1, SOCKET_RIGHT = 2, SOCKET_BOTTOM = 3, SOCKET_LEFT = 4;
+const PATH_STRAIGHT = 1, PATH_ARC = 2, PATH_FLUID = 3, PATH_MAGNET = 4, PATH_GRID = 5;
+const MIN_GRAVITY = 80, MIN_GRAVITY_SIZE = 4, MIN_GRAVITY_R = 5,
+  MIN_OH_GRAVITY = 120, MIN_OH_GRAVITY_OH = 8, MIN_OH_GRAVITY_R = 3.75,
+  MIN_ADJUST_LEN = 10, MIN_GRID_LEN = 30;
+
+let curSocketXYSE: SocketXY[], curSocketGravitySE: unknown[], pathList: Array<Array<{ x: number; y: number }>>;
+function socketXY2Point(socketXY: SocketXY) { return { x: socketXY.x, y: socketXY.y }; }
+// ================ /context
+/* eslint-enable no-unused-vars */
+
+// 直接 eval:函数体引用上述本作用域变量(与 spec 的 beforeAll 同构)
+const func: () => void = eval('(' + getExportedFuncSource('PATH_GRID') + ')'); // eslint-disable-line no-eval
+
+const current = computed(() => testCases.find(tc => tc.title === selectedTitle.value) ?? testCases[0]);
+
+const result = computed(() => {
+  const tc = current.value;
+  if (!tc) { return { sockets: [] as SocketXY[], path: [] as Array<Array<{ x: number; y: number }>> }; }
+  curSocketXYSE = tc.args.socketXYSE.map(s => ({ ...s }));
+  curSocketGravitySE = tc.args.socketGravitySE.slice();
+  pathList = [];
+  func(); // 无参调用:闭包读写本作用域的 pathList
+  return { sockets: curSocketXYSE, path: pathList };
+});
+
+const currentSockets = computed(() => result.value.sockets);
+
+const pathD = computed(() => {
+  const segs = result.value.path;
+  if (!segs.length) { return ''; }
+  return segs.map((seg, i) =>
+    (i === 0 ? 'M' : 'L') + seg.map(p => `${p.x} ${p.y}`).join(' L')).join(' ');
+});
+
+const pathDataText = computed(() => JSON.stringify(result.value.path, null, 1));
+</script>
+
+<style scoped>
+.demo-page { font-family: system-ui, sans-serif; padding: 20px; }
+.grid-view { width: 480px; height: 420px; border: 1px dashed #ccc; border-radius: 8px; background: #fafafa; }
+.path-data { font-size: 11px; color: #666; max-height: 200px; overflow: auto; }
+</style>

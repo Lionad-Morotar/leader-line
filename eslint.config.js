@@ -31,7 +31,12 @@ export default [
       '.context/**',
       'src/anim-event/**', // vendored 第三方,保持原样
       'test/spec/__screenshots__/**',
-      'test/func-PATH_GRID/**/*.json.js' // 生成数据
+      'test/func-PATH_GRID/**/*.json.js', // 生成数据
+      'playground/.nuxt/**', // nuxt 构建产物
+      'playground/.output/**',
+      'playground/node_modules/**',
+      'playground/public/traceLog.js' // test/ 的 classic script 副本,由源文件 lint
+      // playground 的 .vue/.ts 由 nuxi typecheck(vue-tsc)兜底,eslint 只管 .js
     ]
   },
   js.configs.recommended,
