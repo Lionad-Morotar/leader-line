@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "nuxt dev --host 0.0.0.0 --port $(npx -y @lionad/port-key playground)",
     "build": "nuxt build",
+    "build:pages": "nuxt build --preset github_pages",
     "typecheck": "nuxi typecheck"
   },
   "devDependencies": {
