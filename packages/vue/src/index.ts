@@ -3,4 +3,5 @@ export * from './resolve-anchor';
 export * from './registry';
 export * from './use-leader-line';
 export * from './use-leader-lines';
+export * from './use-drag-connect';
 export * from './use-attachment';
