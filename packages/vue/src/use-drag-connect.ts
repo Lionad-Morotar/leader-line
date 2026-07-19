@@ -4,6 +4,7 @@ import LeaderLine from '@lionad/leader-line';
 import { resolveAnchor, type AnchorValue, type MaybeAnchor } from './resolve-anchor';
 import { resolveOptions, type LeaderLineVueOptions } from './use-leader-line';
 import { createLineRegistry, type LineRegistry } from './registry';
+import { injectLeaderLineDefaults } from './defaults';
 
 /**
  * useDragConnect —— 拖拽建连交互层。
@@ -76,6 +77,7 @@ export function useDragConnect(config: UseDragConnectConfig): UseDragConnectRetu
   const isDragging = shallowRef(false);
   const lines = shallowRef<LeaderLine[]>([]);
   const size = shallowRef(0);
+  const defaults = injectLeaderLineDefaults();
   let drag: DragState | null = null;
   let autoKey = 0;
 
@@ -148,11 +150,10 @@ export function useDragConnect(config: UseDragConnectConfig): UseDragConnectRetu
     if (verdict === false) return;
 
     const key = config.key?.(current.from, target, current.data) ?? `dc-${++autoKey}`;
-    const line = new LeaderLine(
-      current.from,
-      target,
-      resolveOptions(config.lineOptions ?? {})
-    );
+    const line = new LeaderLine(current.from, target, {
+      ...resolveOptions(defaults),
+      ...resolveOptions(config.lineOptions ?? {})
+    });
     registry.set(key, line, {
       anchors: { start: current.from, end: target },
       userData: current.data

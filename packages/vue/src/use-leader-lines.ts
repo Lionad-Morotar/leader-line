@@ -4,6 +4,7 @@ import LeaderLine from '@lionad/leader-line';
 import { resolveAnchor, type AnchorValue, type MaybeAnchor } from './resolve-anchor';
 import { resolveOptions, type LeaderLineVueOptions } from './use-leader-line';
 import { createLineRegistry, type LineRegistry } from './registry';
+import { injectLeaderLineDefaults } from './defaults';
 
 /**
  * useLeaderLines —— 响应式数组驱动的批量连线。
@@ -88,6 +89,8 @@ export function useLeaderLines(
   const registry: LineRegistry<LeaderLine, EdgeState> = createLineRegistry();
   const lines = shallowRef<LeaderLine[]>([]);
   const size = shallowRef(0);
+  // 注入默认:每条边的 options 叠在其上(调用处优先)
+  const defaults = injectLeaderLineDefaults();
 
   const keyOf = (edge: EdgeInput, index: number): string =>
     config.key?.(edge, index) ?? edge.key ?? String(index);
@@ -117,7 +120,10 @@ export function useLeaderLines(
       // 锚点未就绪的边跳过(不创建也不移除已存在的同 key 线:等下次 diff)
       if (!start || !end) return;
 
-      const options = resolveOptions(edgeOptions(edge));
+      const options: LeaderLine.Options = {
+        ...resolveOptions(defaults),
+        ...resolveOptions(edgeOptions(edge))
+      };
 
       const existed = registry.get(key);
       if (existed) {

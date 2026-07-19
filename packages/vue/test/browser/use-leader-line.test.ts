@@ -2,6 +2,7 @@ import { describe, it, expect, afterEach } from 'vitest';
 import { nextTick, ref } from 'vue';
 import { useLeaderLine } from '../../src/use-leader-line';
 import { useAreaAnchor, useCaptionLabel } from '../../src/use-attachment';
+import { LEADER_LINE_DEFAULTS } from '../../src/defaults';
 import { cleanupEls, lineSvgs, makeEl, mountSetup } from './helpers';
 
 // 每个用例的挂载与元素统一登记,afterEach 兜底清理
@@ -129,6 +130,32 @@ describe('useLeaderLine', () => {
     unmount();
     expect(result.line.value).toBeNull();
     expect(lineSvgs()).toHaveLength(0);
+  });
+
+  it('provide 默认值:调用处 > 注入默认 > 库默认', async () => {
+    const a = makeEl();
+    const b = makeEl();
+    const c = makeEl();
+    track(() => cleanupEls(a, b, c));
+
+    const { result, unmount } = mountSetup(
+      () => {
+        const inherited = useLeaderLine(ref(a), ref(b));
+        const overridden = useLeaderLine(ref(a), ref(c), { color: 'coral' });
+        return { inherited, overridden };
+      },
+      // inject 读父级 provides:同组件内 provide 不可见,应用级提供(Nuxt 插件同层)
+      { provides: [[LEADER_LINE_DEFAULTS, { color: 'teal', size: 4 }]] }
+    );
+    track(unmount);
+    await nextTick();
+
+    // 注入默认生效
+    expect(result.inherited.line.value?.color).toBe('teal');
+    expect(result.inherited.line.value?.size).toBe(4);
+    // 调用处覆盖默认
+    expect(result.overridden.line.value?.color).toBe('coral');
+    expect(result.overridden.line.value?.size).toBe(4);
   });
 
   it('position/show/hide 代理到底层实例', async () => {

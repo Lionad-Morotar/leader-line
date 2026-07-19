@@ -2,6 +2,7 @@ import { computed, onScopeDispose, shallowRef, toValue, watch } from 'vue';
 import type { MaybeRefOrGetter, Ref } from 'vue';
 import LeaderLine from '@lionad/leader-line';
 import { resolveAnchor, type MaybeAnchor } from './resolve-anchor';
+import { injectLeaderLineDefaults } from './defaults';
 
 /**
  * useLeaderLine —— 单条连线的声明式封装。
@@ -74,6 +75,13 @@ export function useLeaderLine(
   const line = shallowRef<LeaderLine | null>(null);
   const isReady = computed(() => line.value !== null);
 
+  // 注入的默认值在 setup 同步读取;合并优先级:调用处 > 注入默认 > 库默认
+  const defaults = injectLeaderLineDefaults();
+  const buildOptions = (): LeaderLine.Options => ({
+    ...resolveOptions(defaults),
+    ...resolveOptions(options)
+  });
+
   const remove = () => {
     line.value?.remove();
     line.value = null;
@@ -87,7 +95,7 @@ export function useLeaderLine(
     // 锚点未就绪(v-if 延迟/selector 未命中)不报错,留给下次 watch 触发重试
     if (!s || !e) return;
     remove();
-    line.value = new LeaderLine(s, e, resolveOptions(options));
+    line.value = new LeaderLine(s, e, buildOptions());
   };
 
   // flush post:等模板渲染提交后再解析锚点;锚点换位(如 v-for 重排后 ref 换指)整体重建,
@@ -98,7 +106,7 @@ export function useLeaderLine(
     // 源是同一对象,靠 deep 遍历跟踪内部字段(含 ref 字段的 .value 变化)
     watch(
       () => options,
-      () => line.value?.setOptions(resolveOptions(options)),
+      () => line.value?.setOptions(buildOptions()),
       { deep: true }
     );
   }

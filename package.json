@@ -49,7 +49,9 @@
     "clean": "rm -rf dist",
     "prepublishOnly": "pnpm build",
     "test:bench": "node test/perf/run-bench.mjs",
-    "typecheck": "tsgo --noEmit -p tsconfig.json && cd playground && node node_modules/nuxt/bin/nuxt.mjs typecheck",
+    "build:packages": "cd packages/vue && node node_modules/tsdown/dist/run.mjs && cd ../nuxt && node node_modules/@nuxt/module-builder/dist/cli.mjs build",
+    "typecheck:packages": "cd packages/vue && node node_modules/@typescript/native-preview/bin/tsgo --noEmit -p tsconfig.json && cd ../nuxt && node node_modules/@typescript/native-preview/bin/tsgo --noEmit -p tsconfig.json",
+    "typecheck": "tsgo --noEmit -p tsconfig.json && pnpm run typecheck:packages && cd playground && node node_modules/nuxt/bin/nuxt.mjs typecheck",
     "lint": "eslint .",
     "dev:playground": "cd playground && node node_modules/nuxt/bin/nuxt.mjs dev --host 0.0.0.0 --port $(npx -y @lionad/port-key playground)"
   },

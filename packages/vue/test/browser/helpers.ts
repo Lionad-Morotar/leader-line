@@ -32,7 +32,10 @@ export function lineSvgs(): SVGSVGElement[] {
   return [...document.querySelectorAll('svg.leader-line')] as SVGSVGElement[];
 }
 
-export function mountSetup<T>(fn: () => T): { result: T; unmount: () => void } {
+export function mountSetup<T>(
+  fn: () => T,
+  options?: { provides?: Array<[unknown, unknown]> }
+): { result: T; unmount: () => void } {
   let result!: T;
   let unmounted = false;
   const host = document.createElement('div');
@@ -43,6 +46,9 @@ export function mountSetup<T>(fn: () => T): { result: T; unmount: () => void } {
       return () => null;
     }
   });
+  // 应用级 provide:composable 的 inject 读父级链,app.provide 与 Nuxt 插件同层
+  const provide = app.provide as (k: unknown, v: unknown) => void;
+  options?.provides?.forEach(([k, v]) => provide(k, v));
   app.mount(host);
   return {
     result,

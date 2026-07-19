@@ -9,6 +9,7 @@
     "typecheck": "nuxi typecheck"
   },
   "devDependencies": {
+    "@lionad/leader-line-nuxt": "workspace:*",
     "@types/node": "^26.1.1",
     "anim-event": "^1.0.17",
     "cssprefix": "^2.0.17",

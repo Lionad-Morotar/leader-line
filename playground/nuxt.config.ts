@@ -12,6 +12,11 @@ const baseURL = process.env.NUXT_APP_BASE_URL ?? '/';
 export default defineNuxtConfig({
   // 开发测试站点,SPA 即可
   ssr: false,
+  modules: ['@lionad/leader-line-nuxt'],
+  // 模块级默认 options(dogfood vue-api 场景页)
+  leaderLine: {
+    defaults: { color: '#4a9eff', size: 2 }
+  },
   app: {
     baseURL,
     head: {

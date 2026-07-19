@@ -26,6 +26,7 @@ const scenes = [
   { path: '/demos/reflow', title: 'reflow', desc: 'forceReflow 场景' },
   { path: '/demos/grid-cases', title: 'grid-cases', desc: 'PATH_GRID 折线形态' },
   { path: '/demos/shape-gap', title: 'shape-gap', desc: 'plug 符号形态与几何参数' },
+  { path: '/vue-api', title: 'vue-api', desc: 'vue/nuxt 包:composable + 组件 + 数组 + 拖拽建连' },
   { path: '/bench', title: 'bench', desc: '渲染管线基准:sync vs defer 帧耗时' }
 ];
 </script>
