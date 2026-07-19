@@ -44,8 +44,9 @@ export default [
   },
   js.configs.recommended,
   {
-    files: ['src/update-scheduler.js', 'build/**/*.js', 'vite.config.js', 'test/setup-browser.js',
-      'test/exported-funcs.js', 'test/smoke/**/*.mjs', 'test/perf/**/*.mjs', 'test/unit/**/*.js'],
+    files: ['src/update-scheduler.js', 'build/**/*.js', 'vite.config.js', 'scripts/**/*.mjs',
+      'test/setup-browser.js', 'test/exported-funcs.js', 'test/smoke/**/*.mjs', 'test/perf/**/*.mjs',
+      'test/unit/**/*.js'],
     languageOptions: {
       ecmaVersion: 2022,
       sourceType: 'module',
