@@ -48,7 +48,7 @@
     "clean": "rm -rf dist",
     "prepublishOnly": "pnpm build",
     "test:bench": "node test/perf/run-bench.mjs",
-    "typecheck": "tsgo --noEmit -p tsconfig.json && cd playground && node node_modules/nuxt/bin/nuxi.mjs typecheck",
+    "typecheck": "tsgo --noEmit -p tsconfig.json && cd playground && node node_modules/nuxt/bin/nuxt.mjs typecheck",
     "lint": "eslint .",
     "dev:playground": "cd playground && node node_modules/nuxt/bin/nuxt.mjs dev --host 0.0.0.0 --port $(npx -y @lionad/port-key playground)"
   },
