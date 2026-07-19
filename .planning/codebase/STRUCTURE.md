@@ -5,8 +5,8 @@
 ## 目录布局（Directory Layout）
 
 ```
-leader-line/
-├── src/                          # 作者编辑的源码（带构建宏的 IIFE）
+leader-line/                        # @lionad/leader-line@1.0.0(scoped 包)
+├── src/                          # 作者编辑的源码(ESM 模块,IIFE 闭包主文件)
 │   ├── leader-line.js            #   主库 —— 5,200+ 行的单 IIFE 闭包(ESM 模块)
 │   ├── anim.js                   #   帧调度器（rAF + cubic-bezier）
 │   ├── update-scheduler.js       #   渲染调度内核(dirty set + rAF 两阶段 flush)
@@ -20,6 +20,12 @@ leader-line/
 ├── build/
 │   ├── vite-plugin-defs.js       # symbols.html+css → 虚拟 defs 模块
 │   └── vite-plugin-debug-strip.js # [DEBUG] 区域生产剥除(pre-proc)
+├── playground/                   # Nuxt 4 开发测试子包(pnpm workspace)
+│   ├── nuxt.config.ts            #   vite alias 直引 ../src + 复用构建插件
+│   ├── app/
+│   │   ├── app.vue               #   根组件(NuxtPage)
+│   │   └── pages/                #   index 索引 + demos/(7 场景)+ bench
+│   └── public/traceLog.js        #   [DEBUG] 依赖的全局 traceLog
 ├── dist/                         # 构建产物(gitignore):leader-line.{mjs,cjs,min.js}+map
 ├── test/                         # vitest 测试(unit node + browser playwright)
 │   ├── setup-browser.js          #   browser 适配层(jasmine shim/loadPage/matcher)

@@ -72,6 +72,8 @@
 
 ## 包入口（Package Entry Points）
 
+包身份：`@lionad/leader-line@1.0.0`（scoped 新包，旧 fork `leader-line@1.1.0` 的继续），`publishConfig.access: public`。
+
 在 `package.json` 中定义：
 - `"main": "./dist/leader-line.cjs"` —— 传统解析器入口（CommonJS）
 - `"module": "./dist/leader-line.mjs"` —— 传统 ESM 解析器入口

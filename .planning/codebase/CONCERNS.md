@@ -4,6 +4,29 @@
 
 本文档梳理 `leader-line` fork 中的技术债（Tech Debt）、已知 Bug、安全/性能风险和可维护性陷阱。每个部分按严重程度（Severity）排序。
 
+## 解决状态（2026-07-19，工具链迁移后）
+
+以下条目已在 Vite 8 工具链迁移（`feat/modern-toolchain-render-perf`）与 playground 迁移中**解决**，正文保留作历史记录：
+
+| 条目 | 解决方式 |
+|---|---|
+| P0 分发产物加载损坏（`process.env` 残留 / 顶层 `export default`） | isDev 死代码删除 + Vite 构建（define 静态替换、IIFE 无 export），冒烟测试固化 |
+| P0 banner 版本漂移 | banner 从 package.json 版本动态生成 + prepublishOnly 构建 |
+| P1 `files` 漏 ESM 入口 | `files: ["dist", "index.d.ts"]`，三产物全部入包 |
+| P1 Bower 元数据遗弃 | bower.json 删除 |
+| P1 双构建链、双 lockfile | Grunt/Gulp 全退役，pnpm 唯一，package-lock.json 删除 |
+| P2 lint 配置指向仓库外 | eslint 9 flat config 仓库内自包含 |
+| P2 调试产物 symbols.json 提交 | 已删除，defs 由虚拟模块生成 |
+| 无自动化 test runner / CI | vitest 双 project + GitHub Actions CI |
+| 无 TypeScript 类型 | 手写 index.d.ts 随包发布 |
+| 无 sourcemap | 三产物均带 sourcemap |
+| 无 dist 冒烟测试 | test/smoke/dist-smoke.mjs（IIFE 直载 + ESM import + exports 目标 + process.env 检查） |
+| svgContainer 零覆盖（含 fork 的 ReferenceError/未消费 needs） | test/spec/svg-container.js（挂载/重挂载/remove）+ fork 缺陷修复 |
+| ESM 产物正确性无测试 | 冒烟含 ESM import 通道 |
+| 渲染管线 N 次 reflow（性能瓶颈首项） | 读写分离调度内核，CDP LayoutCount 50→1/帧 |
+
+**仍开放**:IS_TRIDENT/IS_EDGE 死代码、forceReflow 现代化、`anim-event` 非 vendored 引用风险（已 vendored 缓解）、`getAlpha()` 新色值语法、单 SVG 大重构、micro-app 全局嗅探改显式选项、path-data-polyfill 移除评估、引擎嗅探改特性检测、README 性能阈值量化。
+
 ## 技术债（Tech Debt）
 
 ### P0 —— 分发产物在加载时损坏

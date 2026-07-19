@@ -13,6 +13,7 @@ leader-line 是 [anseki/leader-line](https://anseki.github.io/leader-line/) 的�
 | [vite.config.js](./vite.config.js)                      | Vite 8 library 构建(es/cjs/iife 三产物) |
 | [vite-plugin-defs.js](./build/vite-plugin-defs.js)      | symbols.html → 虚拟 defs 模块 |
 | [vite-plugin-debug-strip.js](./build/vite-plugin-debug-strip.js) | [DEBUG] 区域构建期剥除 |
+| [playground/](./playground)                             | Nuxt 4 开发测试子包（场景 demo + bench） |
 | [STACK.md](./.planning/codebase/STACK.md)               | 技术栈、开发命令、部署流程 |
 | [STRUCTURE.md](./.planning/codebase/STRUCTURE.md)       | 目录结构、命名规范         |
 | [ARCHITECTURE.md](./.planning/codebase/ARCHITECTURE.md) | 架构模式、术语表           |
