@@ -1,5 +1,5 @@
-import { toRaw, toValue } from 'vue';
-import type { MaybeRefOrGetter } from 'vue';
+import { isRef, toRaw, toValue } from 'vue';
+import type { Ref } from 'vue';
 import type LeaderLine from '@lionad/leader-line';
 
 /**
@@ -22,7 +22,11 @@ export type AnchorInput =
   | null
   | undefined;
 
-export type MaybeAnchor = MaybeRefOrGetter<AnchorInput>;
+/**
+ * 锚点输入:允许 ref/getter 任意嵌套(如 () => props.start 返回的仍是 MaybeAnchor)。
+ * 递归类型与 resolveAnchor 的循环解包一一对应。
+ */
+export type MaybeAnchor = AnchorInput | Ref<MaybeAnchor> | (() => MaybeAnchor);
 
 /** attachment 特征:库实例/锚点工厂产物都有数值 _id 与 isRemoved 标记 */
 export const isAttachment = (v: unknown): v is LeaderLine.LeaderLineAttachment =>
@@ -47,8 +51,12 @@ const isComponentInstance = (v: unknown): v is ComponentInstanceLike =>
  * attachment 先于 Element:attachment 是库自产对象,特征明确无歧义。
  */
 export function resolveAnchor(input: MaybeAnchor): AnchorValue | null {
+  // 逐层解包:getter 返回 ref、ref 套 getter 都合法(如 () => props.start);
   // toRaw:ref(reactive 对象)读出的是 reactive 代理,DOM 身份比较(如 preventSame 去重)会失效
-  const v = toRaw(toValue(input));
+  let v: unknown = input;
+  for (let i = 0; i < 10 && (isRef(v) || typeof v === 'function'); i++) {
+    v = toRaw(toValue(v));
+  }
   if (v == null) return null;
   if (isAttachment(v)) return v;
   if (isElement(v)) return v;
