@@ -1,6 +1,6 @@
 {
   "name": "@lionad/leader-line",
-  "version": "1.0.0",
+  "version": "1.0.0-alpha.0",
   "title": "LeaderLine",
   "description": "Draw a leader line in your web page.",
   "keywords": [
@@ -56,6 +56,9 @@
     "dev:playground": "cd playground && node node_modules/nuxt/bin/nuxt.mjs dev --host 0.0.0.0 --port $(npx -y @lionad/port-key playground)"
   },
   "homepage": "https://github.com/Lionad-Morotar/leader-line#readme",
+  "bugs": {
+    "url": "https://github.com/Lionad-Morotar/leader-line/issues"
+  },
   "repository": {
     "type": "git",
     "url": "git@github.com:Lionad-Morotar/leader-line.git"

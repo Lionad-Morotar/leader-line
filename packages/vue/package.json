@@ -1,6 +1,6 @@
 {
   "name": "@lionad/leader-line-vue",
-  "version": "0.1.0",
+  "version": "1.0.0-alpha.0",
   "description": "Vue 3 composables and component for @lionad/leader-line — declarative leader lines.",
   "keywords": [
     "leader-line",
@@ -34,7 +34,7 @@
     "typecheck": "tsgo --noEmit -p tsconfig.json"
   },
   "peerDependencies": {
-    "@lionad/leader-line": "^1.0.0",
+    "@lionad/leader-line": "^1.0.0-alpha.0",
     "vue": "^3.5.0"
   },
   "devDependencies": {
@@ -49,6 +49,9 @@
     "url": "https://github.com/Lionad-Morotar"
   },
   "homepage": "https://github.com/Lionad-Morotar/leader-line#readme",
+  "bugs": {
+    "url": "https://github.com/Lionad-Morotar/leader-line/issues"
+  },
   "repository": {
     "type": "git",
     "url": "git@github.com:Lionad-Morotar/leader-line.git",

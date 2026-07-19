@@ -1,6 +1,6 @@
 {
   "name": "@lionad/leader-line-nuxt",
-  "version": "0.1.0",
+  "version": "1.0.0-alpha.0",
   "description": "Nuxt module for @lionad/leader-line-vue — auto-imports, client-only plugin, global defaults.",
   "keywords": [
     "leader-line",
@@ -43,6 +43,9 @@
     "url": "https://github.com/Lionad-Morotar"
   },
   "homepage": "https://github.com/Lionad-Morotar/leader-line#readme",
+  "bugs": {
+    "url": "https://github.com/Lionad-Morotar/leader-line/issues"
+  },
   "repository": {
     "type": "git",
     "url": "git@github.com:Lionad-Morotar/leader-line.git",

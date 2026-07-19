@@ -172,7 +172,3 @@ pnpm typecheck       # tsgo(库)+ nuxi typecheck(playground)
 pnpm test:smoke      # 产物 <script> 直载冒烟
 pnpm test:bench      # 渲染管线基准(CDP LayoutCount,需 vite dev server)
 ```
-
----
-
-在稍微复杂的绘图中,LeaderLine 有着糟糕的性能,此时你应该选择 antd 或类似的(reactflow、vueflow、litegraph 等)专业绘图库
