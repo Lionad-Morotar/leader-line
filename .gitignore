@@ -2,5 +2,5 @@
 node_modules
 dist/
 .vitest-attachments/
-test/spec/__screenshots__/
+__screenshots__/
 .context/
