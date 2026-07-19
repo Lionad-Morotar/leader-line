@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite';
 import fs from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import { playwright } from '@vitest/browser-playwright';
 import { defsPlugin } from './build/vite-plugin-defs.js';
 import { debugStripPlugin } from './build/vite-plugin-debug-strip.js';
@@ -46,10 +47,16 @@ export default defineConfig(({ mode }) => ({
       },
       {
         plugins: [defsPlugin()],
+        resolve: {
+          alias: {
+            // packages/vue 测试直引库源码:与 playground 同策略,免构建、改 src 即时生效
+            '@lionad/leader-line': fileURLToPath(new URL('./src/leader-line.js', import.meta.url))
+          }
+        },
         test: {
           name: 'browser',
           globals: true,
-          include: ['test/spec/*.js'],
+          include: ['test/spec/*.js', 'packages/*/test/browser/**/*.test.ts'],
           setupFiles: ['test/setup-browser.js'],
           browser: {
             enabled: true,
