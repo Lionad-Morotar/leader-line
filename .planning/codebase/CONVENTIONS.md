@@ -40,43 +40,37 @@
 - 镜像配置表的数组/对象每行一组条目，按列对齐 (`src/leader-line.js:3437-3445`)
 
 **Linting：**
-- ESLint 配置：`.eslintrc.json`（根目录）—— 但只包含 `"extends": "../../_common/files/eslintrc.json"`，即真实规则集位于仓库外的兄弟 `_common` 目录，未提交。当该共享配置不可用时，应匹配现有风格而不是自创新的规则。
-- `src/.eslintrc.json` 和 `test/.eslintrc.json` 相同：`{"env": {"browser": true}, "rules": {"no-var": "off", "prefer-arrow-callback": "off"}}` —— 浏览器代码中保留 ES5 函数表达式和 `var` 是有意为之，不要“现代化”它们。
-- 构建脚本是 ES6 例外：`Gruntfile.js` 和 `test/httpd.js` 声明 `/* eslint-env node, es6 */`，使用 `const`、箭头函数、模板字面量；`gulpfile.ts`/`build/esm.ts` 是 TypeScript。
-- 全代码库使用的内联指令约定：
-  - 每个 spec 文件顶部使用 `/* eslint-env jasmine */` (`test/spec/options.js:1`)
+- ESLint 9 flat config：`eslint.config.js`（仓库内自包含）。策略：新代码（`src/update-scheduler.js`、`build/`、`vite.config.js`、测试基建）全量规则；遗留运行库（`src/leader-line.js`、`src/anim.js`、polyfill）与迁移 spec 只抓真实缺陷（`no-dupe-keys`/`no-unreachable`/`valid-typeof`），不管历史风格
+- 浏览器代码中保留 ES5 函数表达式和 `var` 是有意为之（与上游一致），不要“现代化”它们
+- 构建脚本与基建代码是现代风格：`build/*.js`、`vite.config.js`、`test/setup-browser.js` 使用 `const`/箭头函数/ESM
+- 内联指令约定：
   - `/* global loadPage:false, customMatchers:false */` 声明跨文件浏览器全局（`:false` = 只读）
-  - `/* exported anim */` 用于有意作为全局的顶层变量 (`src/anim.js:1`、`test/get-source.js:1`)
-  - `// eslint-disable-line <rule>` 用于一次性例外，不再加注释 (`src/leader-line.js:13`、`test/spec/func-PATH_GRID.js:33`)
-  - 配对使用 `/* eslint-disable <rule> */` / `/* eslint-enable <rule> */` 包裹有意违规的代码 (`src/leader-line.js:319-325`、spec 中的 `// ================ context` 块)
+  - `/* exported anim */` 用于有意作为全局的顶层变量（遗留注释，ESM 化后仅作文档含义保留）
+  - `// eslint-disable-line <rule>` 用于一次性例外，不再加注释
+  - 配对使用 `/* eslint-disable <rule> */` / `/* eslint-enable <rule> */` 包裹有意违规的代码（spec 中的 `// ================ context` 块）
 
 **样式表：**
-- Stylelint 配置：`.stylelintrc` —— 同样只 `"extends": "../../_common/files/stylelintrc.json"`（外部、未提交）
 - 所有运行时类都带 `leader-line-` 前缀：`.leader-line`、`.leader-line-line-path`、`.leader-line-caps-mask-anchor` (`src/leader-line.css`)
-- `src/leader-line.scss` 是人工编写的源码，使用 `$app-id` 插值（`.#{$app-id}`）；编译产物 `src/leader-line.css` 才是 Grunt 构建实际内联的内容（见 `Gruntfile.js:17` 的 `CSS_PATH`）—— 编辑 SCSS 并手动保持 CSS 同步
+- `src/leader-line.scss` 是人工编写的源码，使用 `$app-id` 插值（`.#{$app-id}`）；编译产物 `src/leader-line.css` 才是构建实际内联的内容 —— 编辑 SCSS 并手动保持 CSS 同步
 - `!important` 被有意用于对抗页面重置；当原因不明显时添加解释性注释 (`src/leader-line.scss:5`："Commonly used style `svg:not(:root)` is high scored.")
 
 ## 导入组织（Import Organization）
 
 **顺序：**
-- 在经典意义上不适用 —— `src/` 和 `test/` 不包含 ES 模块，浏览器代码中没有 `import`/`require`。
-- 相反，脚本加载顺序通过 HTML fixture 命令式声明。规范顺序（来自 `test/spec/common/page.html:6-12`）为：
+- 源码为 ESM：`src/leader-line.js` 顶部 import `anim`、`pathDataPolyfill`、`AnimEvent`、`update-scheduler` 以及虚拟模块 `virtual:leader-line-defs`；rolldown 依模块图打包，无手动顺序
+- Fixture 页面（`test/spec/**/*.html`）加载顺序：
   1. `window.requestAnimationFrame` shim（页面内联脚本）
-  2. `/src/defs.js`（生成的符号表）
-  3. `/src/anim.js`
-  4. `/src/path-data-polyfill/path-data-polyfill.js`
-  5. `/anim-event/anim-event.min.js`（别名自 node_modules 包）
-  6. `/traceLog.js`
-  7. `/src/leader-line.js`（必须最后加载；它读取上述 `window.*` 全局变量）
-- spec runner `test/index.html` 先加载 jasmine + `test-page-loader` + 辅助文件（`get-source.js`、`util.js`），然后按固定的手动顺序加载每个 spec 文件 —— 新增 spec 需要在那里新增一行 `<script src="spec/xxx.js">`。
+  2. `/test/traceLog.js`（classic script，挂全局）
+  3. `<script type="module">import LeaderLine from '/src/leader-line.js'; window.LeaderLine = LeaderLine;</script>`（deferred，最后执行）
+- demo 页面的交互脚本以 `<script defer src="test.js">` 加载，保证在 module script 之后执行
 
 **路径别名：**
-- 仅服务器级别别名，定义在 `test/httpd.js:31-46`：`/jasmine-core/*`、`/test-page-loader/*`、`/anim-event/*`、/plain-draggable/*` 映射到 `node_modules`；`/src/*` 映射到仓库根目录的 `src/`
+- vitest/vite dev server 以项目根为根：`/src/*`、`/test/*` 直接可访问；`virtual:leader-line-defs` 由 vite-plugin-defs 解析
 
 **构建时组合：**
-- `src/leader-line.js` 是构建时组装的单个 5238 行 IIFE，不通过 import：
-  - `@INCLUDE[code:<key>]@` 占位符由 Grunt 的 `packJs`/`packMinJs` 任务替换 (`Gruntfile.js:165-214`)
-  - `/* @EXPORT[file:../test/spec/func/PATH_GRID]@ */function() {...}` 标记让 Grunt 的 `funcs` 任务将纯函数提取到 `test/spec/func/` 中以便单元测试 (`src/leader-line.js:1684,1732`、`Gruntfile.js:149-163`)
+- `src/leader-line.js` 保持单文件主模块（约 5200 行 IIFE 闭包），依赖经 ESM import 由 rolldown 内联：
+  - `/* @EXPORT[file:../test/spec/func/PATH_GRID]@ */function() {...}` 标记仍保留，供 `test/exported-funcs.js` 以 `?raw` 提取纯函数用于单元测试（替代原 Grunt `funcs` 任务）
+  - `[DEBUG]` 区域（traceLog 打点、`window.*` 调试句柄）由 vite-plugin-debug-strip 在生产构建剥除；development/test 保留
 
 ## 错误处理（Error Handling）
 
@@ -141,7 +135,7 @@
 - 实例状态永远不会放在实例上；它位于以 `props._id` 为键的模块级注册表中：`insProps`、`insAttachProps` (`src/leader-line.js:193-196,3411`)。公共原型访问器通过声明式配置数组由 `Object.defineProperty(LeaderLine.prototype, propName, {get, set, enumerable: true})` 生成 (`src/leader-line.js:3427-3479`) —— 新增选项应扩展这些表，而不是手写访问器。
 
 **桶文件：**
-- 未识别到。聚合通过 HTML 脚本顺序列表和 Grunt `@INCLUDE` 构建完成，而不是通过 index/桶模块。
+- 聚合通过 ESM 模块图（`src/leader-line.js` 的顶部 import）与 rolldown 打包完成，而非 index/桶模块。
 
 **DEBUG/构建标记：**
 - `// [DEBUG]` ... `// [/DEBUG]` 行对和 `/* [DEBUG/] ... [DEBUG/] */` 块对标记开发专用代码，由生产构建中的 `preProc.removeTag('DEBUG', ...)` 剥离 (`Gruntfile.js:175,200`)

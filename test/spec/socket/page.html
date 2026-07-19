@@ -4,12 +4,8 @@
   <meta charset="utf-8">
   <!-- Use setTimeout instead of requestAnimationFrame for animation. -->
   <script>window.requestAnimationFrame = function(cb) { setTimeout(cb, 1000 / 60); };</script>
-  <script src="/src/defs.js"></script>
-  <script src="/src/anim.js"></script>
-  <script src="/src/path-data-polyfill/path-data-polyfill.js"></script>
-  <script src="/anim-event/anim-event.min.js"></script>
-  <script src="/traceLog.js"></script>
-  <script src="/src/leader-line.js"></script>
+  <script src="/test/traceLog.js"></script>
+  <script type="module">import LeaderLine from '/src/leader-line.js'; window.LeaderLine = LeaderLine;</script>
   <style>
     .view {
       position: relative;
@@ -38,8 +34,8 @@
     .view > div.left-0   { width: 0; height: 0; left: 25px; top: 101px; }
   </style>
 
-  <link rel="stylesheet" href="/guide-view.css">
-  <script src="/guide-view.js"></script>
+  <link rel="stylesheet" href="/test/guide-view.css">
+  <script src="/test/guide-view.js"></script>
 </head>
 <body>
   <div class="view">

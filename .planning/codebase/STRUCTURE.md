@@ -7,42 +7,47 @@
 ```
 leader-line/
 ├── src/                          # 作者编辑的源码（带构建宏的 IIFE）
-│   ├── leader-line.js            #   主库 —— 5,238 行的单 IIFE 模块
+│   ├── leader-line.js            #   主库 —— 5,200+ 行的单 IIFE 闭包(ESM 模块)
 │   ├── anim.js                   #   帧调度器（rAF + cubic-bezier）
-│   ├── defs.js                   #   由 Grunt 从 symbols.html 生成（请勿编辑）
+│   ├── update-scheduler.js       #   渲染调度内核(dirty set + rAF 两阶段 flush)
+│   ├── virtual-modules.d.ts      #   构建期虚拟模块的类型声明
 │   ├── symbols.html              #   plug 的 SVG <symbol> 库源文件
-│   ├── symbols.json              #   解析后的 symbol 调试产物
 │   ├── leader-line.scss          #   样式（SCSS 源文件）
 │   ├── leader-line.css           #   编译后的 CSS，构建时内联进 DEFS_HTML
-│   ├── .eslintrc.json            #   浏览器环境覆盖配置
+│   ├── anim-event/               #   vendored 的 anim-event(ESM 化)
 │   └── path-data-polyfill/       #   内置的 path.getPathData() polyfill
-│       └── path-data-polyfill.js #     1,147 行，由 @EXPORT@ 包裹
+│       └── path-data-polyfill.js #     1,147 行
 ├── build/
-│   └── esm.ts                    # ESM 重新打包的 Rollup 配置（由 gulp 调用）
-├── test/                         # 基于浏览器的 Jasmine 测试框架
-│   ├── index.html                #   Spec runner 入口
-│   ├── httpd.js                  #   node-static-alias 开发服务器（端口 8080）
+│   ├── vite-plugin-defs.js       # symbols.html+css → 虚拟 defs 模块
+│   └── vite-plugin-debug-strip.js # [DEBUG] 区域生产剥除(pre-proc)
+├── dist/                         # 构建产物(gitignore):leader-line.{mjs,cjs,min.js}+map
+├── test/                         # vitest 测试(unit node + browser playwright)
+│   ├── setup-browser.js          #   browser 适配层(jasmine shim/loadPage/matcher)
+│   ├── exported-funcs.js         #   @EXPORT 提取(vite ?raw)
 │   ├── util.js                   #   自定义匹配器（toContainAll、toNotContainAny）
-│   ├── get-source.js             #   夹具 XHR 辅助函数
 │   ├── guide-view.js/.css        #   手动检查的视觉辅助
 │   ├── traceLog.js               #   为 [DEBUG] 日志提供 window.traceLog
-│   ├── traceLog-test.html        #   traceLog 手动测试页
-│   ├── polygon2PathList.js + polygon2PathList-test.html
 │   ├── SHAPE_GAP.html            #   手动演示
 │   ├── grid.svg                  #   夹具
-│   ├── spec/                     #   Jasmine specs（每个关注点一个文件）
+│   ├── unit/                     #   node 环境单测(插件/调度内核)+ fixtures/
+│   ├── smoke/dist-smoke.mjs      #   产物 <script> 直载冒烟
+│   ├── perf/                     #   渲染管线基准(bench.html + run-bench.mjs)
+│   ├── spec/                     #   browser specs（每个关注点一个文件）
 │   │   ├── funcs.js, bbox.js, socket.js, options.js, stats.js,
 │   │   ├── win-resize.js, effect.js, effect-show.js, attachment.js
 │   │   ├── func-PATH_FLUID.js, func-PATH_GRID.js
+│   │   ├── svg-container.js, position-schedule.js
 │   │   └── common/, funcs/, bbox/, socket/, func/, win-resize/  （夹具 HTML）
-│   ├── attachment-label/, bindWindow/, effect-show/, func-PATH_GRID/,
-│   │   function-test/, mask/, reflow/      # 手动 / 集成演示页面
-│   └── .eslintrc.json
+│   └── attachment-label/, bindWindow/, effect-show/, func-PATH_GRID/,
+│       function-test/, mask/, reflow/      # 手动 / 集成演示页面
 ├── img/                          # README 截图（ex-*.png/gif）
+├── .github/workflows/ci.yml      # CI:lint → typecheck → build → test → smoke
 ├── .planning/codebase/           # 由 GSD 生成的代码库映射文档（本目录）
 ├── .vscode/
-├── Gruntfile.js                  # IIFE 构建流水线（基于 taskHelper）
-├── gulpfile.ts                   # ESM 构建入口（委托给 build/esm.ts）
+├── vite.config.js                # Vite 8 library 构建(es/cjs/iife 三产物)
+├── eslint.config.js              # ESLint 9 flat config
+├── tsconfig.json                 # tsgo(TS 7)typecheck 范围
+├── index.d.ts                    # 手写公开 API 类型定义
 ├── package.json                  # 脚本 + 依赖（pnpm）
 ├── pnpm-lock.yaml
 ├── package-lock.json             # 遗留的 npm lockfile（仅作参考）

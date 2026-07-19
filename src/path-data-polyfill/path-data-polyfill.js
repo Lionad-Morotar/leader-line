@@ -8,7 +8,7 @@
 
 /* exported pathDataPolyfill */
 
-function pathDataPolyfill(window) {
+export default function pathDataPolyfill(window) {
   'use strict';
 
 // @info

@@ -7,13 +7,17 @@
  */
 
 /* exported LeaderLine */
-/* eslint no-underscore-dangle: [2, {"allow": ["_id"]}] */
 /* global traceLog:false */
 
-;var LeaderLine = (function() { // eslint-disable-line no-extra-semi
-  'use strict';
+import anim from './anim.js';
+import pathDataPolyfill from './path-data-polyfill/path-data-polyfill.js';
+import AnimEvent from './anim-event/anim-event.js';
+import { createScheduler } from './update-scheduler.js';
+import { DEFS_HTML, SYMBOLS, PLUG_KEY_2_ID, PLUG_2_SYMBOL, DEFAULT_END_PLUG }
+  from 'virtual:leader-line-defs';
 
-  const isDev = process.env.NODE_ENV === 'development';
+;var LeaderLine = (function() {  
+  'use strict';
 
   /**
    * An object that simulates `DOMRect` to indicate a bounding-box.
@@ -69,20 +73,6 @@
 
     PLUG_BEHIND = 'behind',
     DEFS_ID = APP_ID + '-defs',
-    /* [DEBUG/]
-    DEFS_HTML = @INCLUDE[code:DEFS_HTML]@,
-    SYMBOLS = @INCLUDE[code:SYMBOLS]@,
-    PLUG_KEY_2_ID = @INCLUDE[code:PLUG_KEY_2_ID]@,
-    PLUG_2_SYMBOL = @INCLUDE[code:PLUG_2_SYMBOL]@,
-    DEFAULT_END_PLUG = @INCLUDE[code:DEFAULT_END_PLUG]@,
-    [DEBUG/] */
-    // [DEBUG]
-    DEFS_HTML = window.DEFS_HTML,
-    SYMBOLS = window.SYMBOLS,
-    PLUG_KEY_2_ID = window.PLUG_KEY_2_ID,
-    PLUG_2_SYMBOL = window.PLUG_2_SYMBOL,
-    DEFAULT_END_PLUG = window.DEFAULT_END_PLUG,
-    // [/DEBUG]
 
     SOCKET_IDS = [SOCKET_TOP, SOCKET_RIGHT, SOCKET_BOTTOM, SOCKET_LEFT],
     KEYWORD_AUTO = 'auto',
@@ -101,7 +91,8 @@
     IS_TRIDENT = !IS_EDGE && !!document.uniqueID, // Future Edge might support `document.uniqueID`.
     IS_GECKO = 'MozAppearance' in document.documentElement.style,
     IS_BLINK = !IS_EDGE && !IS_GECKO && // Edge has `window.chrome`, and future Gecko might have that.
-      !!window.chrome && !!window.CSS,
+      !!window.CSS && // `window.chrome` was removed from Chrome-for-Testing(headless); UA is the fallback.
+      (!!window.chrome || /Chrome\//.test(window.navigator.userAgent)),
     IS_WEBKIT = !IS_EDGE && !IS_TRIDENT &&
       !IS_GECKO && !IS_BLINK && // Some engines support `webkit-*` properties.
       !window.chrome && 'WebkitAppearance' in document.documentElement.style,
@@ -134,19 +125,6 @@
       };
     })(),
     isFinite = Number.isFinite || function(value) { return typeof value === 'number' && window.isFinite(value); },
-
-    /* [DEBUG/]
-    anim = @INCLUDE[code:anim]@,
-    [DEBUG/] */
-    anim = window.anim, // [DEBUG/]
-    /* [DEBUG/]
-    pathDataPolyfill = @INCLUDE[code:pathDataPolyfill]@,
-    [DEBUG/] */
-    pathDataPolyfill = window.pathDataPolyfill, // [DEBUG/]
-    /* [DEBUG/]
-    AnimEvent = @INCLUDE[code:AnimEvent]@,
-    [DEBUG/] */
-    AnimEvent = window.AnimEvent, // [DEBUG/]
 
     /** @typedef {{hasSE, hasProps, iniValue}} StatConf */
     /** @type {{statId: string, StatConf}} */
@@ -194,12 +172,30 @@
     insProps = {}, insId = 0,
     /** @type {Object.<_id: number, props>} */
     insAttachProps = {}, insAttachId = 0,
+    /**
+     * 位置更新调度内核:同帧多次请求合并为一次 rAF flush,
+     * measure(全实例读)→ apply(全实例写),reflow 由 N 次降为 ≤1 次。
+     */
+    positionScheduler = createScheduler({
+      raf: function(cb) { window.requestAnimationFrame(cb); },
+      measure: function(props) { props.measuredBBoxSE = measurePosition(props); },
+      apply: function(props) {
+        var measuredBBoxSE = props.measuredBBoxSE;
+        delete props.measuredBBoxSE;
+        update(props, {position: true}, measuredBBoxSE);
+      }
+    }),
     svg2SupportedReverse, svg2SupportedPaintOrder, svg2SupportedDropShadow; // Supported SVG 2 features
 
   // [DEBUG]
   window.insProps = insProps;
   window.insAttachProps = insAttachProps;
   window.isObject = isObject;
+  window.DEFS_HTML = DEFS_HTML;
+  window.SYMBOLS = SYMBOLS;
+  window.PLUG_KEY_2_ID = PLUG_KEY_2_ID;
+  window.PLUG_2_SYMBOL = PLUG_2_SYMBOL;
+  window.DEFAULT_END_PLUG = DEFAULT_END_PLUG;
   window.IS_TRIDENT = IS_TRIDENT;
   window.IS_BLINK = IS_BLINK;
   window.IS_GECKO = IS_GECKO;
@@ -316,23 +312,23 @@
     } else { // Unsupported
       console.warn('mouseenter and mouseleave events polyfill is enabled.');
       over = function(event) {
-        /* eslint-disable no-invalid-this */
+         
         if (!event.relatedTarget ||
             event.relatedTarget !== this &&
             !(this.compareDocumentPosition(event.relatedTarget) & Node.DOCUMENT_POSITION_CONTAINED_BY)) {
           enter.apply(this, arguments);
         }
-        /* eslint-enable no-invalid-this */
+         
       };
       element.addEventListener('mouseover', over);
       out = function(event) {
-        /* eslint-disable no-invalid-this */
+         
         if (!event.relatedTarget ||
             event.relatedTarget !== this &&
             !(this.compareDocumentPosition(event.relatedTarget) & Node.DOCUMENT_POSITION_CONTAINED_BY)) {
           leave.apply(this, arguments);
         }
-        /* eslint-enable no-invalid-this */
+         
       };
       element.addEventListener('mouseout', out);
       return function() {
@@ -371,7 +367,7 @@
     }
 
     rect = element.getBoundingClientRect();
-    for (prop in rect) { bBox[prop] = rect[prop]; } // eslint-disable-line guard-for-in
+    for (prop in rect) { bBox[prop] = rect[prop]; }  
 
     if (!relWindow) {
       if (!(win = doc.defaultView)) {
@@ -547,7 +543,7 @@
     angle += angle > 180 ? -180 : 180;
     // from:  new path of side to p0
     // to:    new path of side to p3
-    /* eslint-disable key-spacing */
+     
     return {x: x, y: y,
       fromP2: {x: mx, y: my},
       toP1:   {x: nx, y: ny},
@@ -555,7 +551,7 @@
       toP2:   {x: cx, y: cy},
       angle:  angle
     };
-    /* eslint-enable key-spacing */
+     
   }
   window.getPointOnCubic = getPointOnCubic; // [DEBUG/]
 
@@ -1501,10 +1497,43 @@
   }
 
   /**
+   * Measure anchor bBoxes(布局读阶段)。被 updatePosition 调用;
+   * 调度内核(update-scheduler)也会先对所有实例调用本函数,
+   * 再统一进入写阶段——读写分离,一帧至多一次强制同步 reflow。
+   * 注意:attachment anchor 的 getBBoxNest 内部可能附带自身形状更新(写),
+   * 属已知残留交替,仅影响 attach 混合场景。
    * @param {props} props - `props` of `LeaderLine` instance.
+   * @returns {BBox[]} anchorBBoxSE
+   */
+  function measurePosition(props) {
+    var options = props.options;
+    return [0, 1].map(function(i) {
+      var anchor = options.anchorSE[i], isAttach = props.optionIsAttach.anchorSE[i],
+        attachProps = isAttach !== false ? insAttachProps[anchor._id] : null;
+
+      // attachment 可能在调度后被移除(insAttachProps 延迟删除):安全降级为元素路径失败(null)
+      if (isAttach !== false && !attachProps) { return null; }
+
+      var strokeWidth = isAttach !== false && attachProps.conf.getStrokeWidth ?
+          attachProps.conf.getStrokeWidth(attachProps, props) : 0,
+        anchorBBox = isAttach !== false && attachProps.conf.getBBoxNest ?
+          attachProps.conf.getBBoxNest(attachProps, props, strokeWidth) :
+          getBBoxNest(anchor, props.baseWindow);
+
+      props.curStats.capsMaskAnchor_pathDataSE[i] = isAttach !== false && attachProps.conf.getPathData ?
+        attachProps.conf.getPathData(attachProps, props, strokeWidth) : bBox2PathData(anchorBBox);
+      props.curStats.capsMaskAnchor_strokeWidthSE[i] = strokeWidth;
+      return anchorBBox;
+    });
+  }
+
+  /**
+   * @param {props} props - `props` of `LeaderLine` instance.
+   * @param {BBox[]} [measuredBBoxSE] - 已由调度内核预先测量的 anchorBBoxSE;
+   *    缺省时同步调用 measurePosition(兼容同步路径)。
    * @returns {boolean} `true` if it was changed.
    */
-  function updatePosition(props) {
+  function updatePosition(props, measuredBBoxSE) {
     traceLog.add('<updatePosition>'); // [DEBUG/]
     var options = props.options, curStats = props.curStats, aplStats = props.aplStats,
       curSocketXYSE = curStats.position_socketXYSE,
@@ -1537,24 +1566,15 @@
     curStats.position_path = options.path;
     curStats.position_lineStrokeWidth = curStats.line_strokeWidth;
     curStats.position_socketGravitySE = curSocketGravitySE = copyTree(options.socketGravitySE);
-    aplStats.position_socketXYSE = copyTree(curSocketXYSE);
-    aplStats.position_plugOverheadSE = copyTree(curStats.position_plugOverheadSE);
 
-    anchorBBoxSE = [0, 1].map(function(i) {
-      var anchor = options.anchorSE[i], isAttach = props.optionIsAttach.anchorSE[i],
-        attachProps = isAttach !== false ? insAttachProps[anchor._id] : null,
+    anchorBBoxSE = measuredBBoxSE || measurePosition(props);
 
-        strokeWidth = isAttach !== false && attachProps.conf.getStrokeWidth ?
-          attachProps.conf.getStrokeWidth(attachProps, props) : 0,
-        anchorBBox = isAttach !== false && attachProps.conf.getBBoxNest ?
-          attachProps.conf.getBBoxNest(attachProps, props, strokeWidth) :
-          getBBoxNest(anchor, props.baseWindow);
-
-      curStats.capsMaskAnchor_pathDataSE[i] = isAttach !== false && attachProps.conf.getPathData ?
-        attachProps.conf.getPathData(attachProps, props, strokeWidth) : bBox2PathData(anchorBBox);
-      curStats.capsMaskAnchor_strokeWidthSE[i] = strokeWidth;
-      return anchorBBox;
-    });
+    // anchor 不可测量(元素 detach 或 attachment 已被移除):本次不更新,保持现状
+    if (!anchorBBoxSE[0] || !anchorBBoxSE[1]) {
+      traceLog.add('no-anchor-bBox'); // [DEBUG/]
+      traceLog.add('</updatePosition>'); // [DEBUG/]
+      return false;
+    }
 
     // Decide each socket
     (function() {
@@ -2000,6 +2020,8 @@
       })();
 
       // apply
+      aplStats.position_socketXYSE = copyTree(curSocketXYSE);
+      aplStats.position_plugOverheadSE = copyTree(curStats.position_plugOverheadSE);
       aplStats.position_path = curStats.position_path;
       aplStats.position_lineStrokeWidth = curStats.position_lineStrokeWidth;
       aplStats.position_socketGravitySE = copyTree(curSocketGravitySE);
@@ -2293,6 +2315,27 @@
   }
 
   /**
+   * Re-mount `props.svg` when `options.svgContainer` was changed via `setOptions`.
+   * @param {props} props - `props` of `LeaderLine` instance.
+   * @returns {boolean} `true` if the svg was moved to another container.
+   */
+  function updateSvgContainer(props) {
+    traceLog.add('<updateSvgContainer>'); // [DEBUG/]
+    var curContainer = props.svgContainer || props.baseWindow.document.body,
+      newContainer = props.options.svgContainer || props.baseWindow.document.body,
+      updated = false;
+    if (props.svg && newContainer !== curContainer) {
+      curContainer.removeChild(props.svg);
+      newContainer.appendChild(props.svg);
+      props.svgContainer = props.options.svgContainer || null;
+      updated = true;
+    }
+    if (!updated) { traceLog.add('not-updated'); } // [DEBUG/]
+    traceLog.add('</updateSvgContainer>'); // [DEBUG/]
+    return updated;
+  }
+
+  /**
    * @param {props} props - `props` of `LeaderLine` instance.
    * @param {(boolean|number)} on - true:show | false:hide | 1:show(in anim)
    * @returns {void}
@@ -2344,9 +2387,10 @@
    * Apply current `options`.
    * @param {props} props - `props` of `LeaderLine` instance.
    * @param {Object} needs - `group` of stats.
+   * @param {BBox[]} [measuredBBoxSE] - 调度内核预测量的 anchorBBoxSE(仅 position 路径)。
    * @returns {void}
    */
-  function update(props, needs) {
+  function update(props, needs, measuredBBoxSE) {
     // console.log('[debug] update options', props, needs)
 
     var updated = {};
@@ -2366,14 +2410,16 @@
       updated.faces = updateFaces(props);
     }
     if (needs.position || updated.line || updated.plug) {
-      updated.position = updatePosition(props);
+      updated.position = updatePosition(props, measuredBBoxSE);
     }
     if (needs.path || updated.position) {
       updated.path = updatePath(props);
     }
     updated.viewBox = updateViewBox(props);
     updated.mask = updateMask(props);
-    // updated.svgContainer = updated.svgContainer;
+    if (needs.svgContainer) {
+      updated.svgContainer = updateSvgContainer(props);
+    }
     if (needs.effect) {
       setEffect(props);
     }
@@ -3429,7 +3475,7 @@
       return function(value) {
         var options = {};
         options[propName] = value;
-        this.setOptions(options); // eslint-disable-line no-invalid-this
+        this.setOptions(options);  
       };
     }
 
@@ -3538,12 +3584,26 @@
   };
 
   LeaderLine.prototype.position = function() {
+    if (LeaderLine.deferPositionUpdate) { return this.requestPosition(); }
     update(insProps[this._id], {position: true});
+    return this;
+  };
+
+  /**
+   * 请求在下一次动画帧批量更新位置(读写分离调度)。
+   * 同帧重复调用自动去重;适合拖拽等高频多线更新场景。
+   * @returns {LeaderLine} this
+   */
+  LeaderLine.prototype.requestPosition = function() {
+    positionScheduler.schedule(insProps[this._id]);
     return this;
   };
 
   LeaderLine.prototype.remove = function() {
     var props = insProps[this._id], curStats = props.curStats;
+
+    // 清理调度残留:flush-after-remove 的无效写与 attachProps undefined 崩溃
+    positionScheduler.unschedule(props);
 
     Object.keys(EFFECTS).forEach(function(effectName) {
       var keyAnimId = effectName + '_animId';
@@ -3749,7 +3809,7 @@
       // attachOptions: element, color(A), fillColor, size(A), dash, shape, x, y, width, height, radius, points
       init: function(attachProps, attachOptions) {
         traceLog.add('<ATTACHMENTS.areaAnchor.init>'); // [DEBUG/]
-        var points = [], baseDocument, svg, window;
+        var points = [], baseDocument, svg, window, svgContainer;
         attachProps.element = ATTACHMENTS.pointAnchor.checkElement(attachOptions.element);
         if (typeof attachOptions.color === 'string') {
           attachProps.color = attachOptions.color.trim();
@@ -3812,10 +3872,9 @@
         svg.style.visibility = 'hidden';
 
         svgContainer = attachOptions.svgContainer || baseDocument.body;
-        // console.log('[debug] anchor props', props)
         svgContainer.appendChild(svg);
 
-        setupWindow(props, (window = baseDocument.defaultView));
+        setupWindow({svgContainer: attachOptions.svgContainer}, (window = baseDocument.defaultView));
         attachProps.bodyOffset = getBodyOffset(window); // Get `bodyOffset`
 
         // event handler for this instance
@@ -5211,6 +5270,12 @@
 
   // Update position automatically
   LeaderLine.positionByWindowResize = true;
+
+  /**
+   * 为 true 时,position() 等价于 requestPosition()(调度合帧)。
+   * 默认 false 保持同步语义(向后兼容)。
+   */
+  LeaderLine.deferPositionUpdate = false;
   window.addEventListener('resize', AnimEvent.add(function(/* event */) {
     traceLog.add('<positionByWindowResize>'); // [DEBUG/]
     // var eventWindow;
@@ -5226,7 +5291,7 @@
         }
         */
         traceLog.add('id=%s', id); // [DEBUG/]
-        update(insProps[id], {position: true});
+        positionScheduler.schedule(insProps[id]);
       });
     }
     traceLog.add('</positionByWindowResize>'); // [DEBUG/]

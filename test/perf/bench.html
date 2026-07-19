@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>leader-line render pipeline benchmark</title>
+  <style>
+    div { position: absolute; width: 40px; height: 20px; background: rgba(150, 255, 127, 0.5); }
+  </style>
+</head>
+<body>
+  <script src="/test/traceLog.js"></script>
+  <script type="module">
+    import LeaderLine from '/src/leader-line.js';
+
+    // 重型背景 DOM:模拟真实应用的布局复杂度,放大每次强制 reflow 的成本
+    const heavy = document.createElement('div');
+    heavy.id = 'heavy-bg';
+    let html = '';
+    for (let i = 0; i < 2000; i++) {
+      html += `<span style="display:inline-block;width:${8 + (i % 7)}px;height:6px;margin:1px;` +
+        `background:hsl(${i % 360},50%,60%);border-radius:2px;box-shadow:0 1px 2px rgba(0,0,0,.2)"></span>`;
+    }
+    heavy.innerHTML = html;
+    document.body.appendChild(heavy);
+
+    const N = 50;
+    const lines = [];
+    const anchors = [];
+    for (let i = 0; i < N; i++) {
+      const a = document.createElement('div');
+      const b = document.createElement('div');
+      a.style.left = (10 + (i % 10) * 55) + 'px';
+      a.style.top = (10 + Math.floor(i / 10) * 55) + 'px';
+      b.style.left = (60 + (i % 10) * 55) + 'px';
+      b.style.top = (260 + Math.floor(i / 10) * 55) + 'px';
+      document.body.append(a, b);
+      lines.push(new LeaderLine(a, b));
+      anchors.push([a, b]);
+    }
+
+    function moveAnchors(frame) {
+      anchors.forEach(([a, b], i) => {
+        a.style.top = (10 + Math.floor(i / 10) * 55 + Math.sin(frame / 5 + i) * 4) + 'px';
+        b.style.top = (260 + Math.floor(i / 10) * 55 + Math.cos(frame / 5 + i) * 4) + 'px';
+      });
+    }
+
+    window.bench = {
+      lineCount: N,
+
+      // 同步基线:一帧内 N 次 position() —— N 次强制同步 reflow
+      syncFrame(frame) {
+        moveAnchors(frame);
+        const t0 = performance.now();
+        lines.forEach(line => line.position());
+        return performance.now() - t0;
+      },
+
+      // 调度路径:一帧内 N 次 requestPosition() —— 合帧一次 flush,≤1 次 reflow。
+      // 调度器先注册 rAF(flush),本函数后注册 rAF(测量点),
+      // 因此 await 返回时 flush 已完成,耗时即 flush 成本。
+      async deferFrame(frame) {
+        moveAnchors(frame);
+        lines.forEach(line => line.requestPosition());
+        const t0 = performance.now();
+        await new Promise(r => requestAnimationFrame(r));
+        return performance.now() - t0;
+      }
+    };
+    window.benchReady = true;
+  </script>
+</body>
+</html>

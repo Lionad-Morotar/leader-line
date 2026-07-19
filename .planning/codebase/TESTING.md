@@ -4,55 +4,59 @@
 
 ## 测试框架（Test Framework）
 
-**Runner：**
-- Jasmine（浏览器 HTML reporter），`jasmine-core` ^3.7.1 —— `package.json:41` 中的 devDependency
-- 没有配置文件；runner 是一个普通 HTML 页面：`test/index.html`
-- 由手写的静态服务器提供服务：`test/httpd.js`（`node-static-alias` + `log4js`，端口 8080，文档根目录 `test/`，别名 `/jasmine-core/*`、`/test-page-loader/*`、`/anim-event/*`、`/plain-draggable/*` 映射到 `node_modules`，`/src/*` 映射到仓库根目录的 `src/`）
-- 仓库中**没有 `npm test` 脚本** —— `package.json:52-58` 只定义了 `dev`、`build`、`build:iife`、`build:esm`、`clean`。测试需要在浏览器中手动运行。
+**Runner:**
+- vitest 4.1，双 project（`vite.config.js` 的 `test.projects`）：
+  - `unit` —— node 环境，`test/unit/**/*.test.js`（构建插件、调度内核等纯逻辑）
+  - `browser` —— playwright chromium headless，`test/spec/*.js`（迁移的 jasmine spec，真实布局引擎）
+- 浏览器 project 启 `globals: true`（`describe`/`it`/`expect` 全局可用），spec 页面由 vitest 内置 vite server 服务（ESM 转换 + `virtual:leader-line-defs` 解析）
+- 适配层 `test/setup-browser.js`：jasmine done 回调 shim（vitest 4 移除了 `fn(done)` 风格）、`jasmine.addMatchers` shim、`loadPage`/`loadPageAsync`（替代 test-page-loader）、自定义 matcher `expect.extend`
 
 **断言库：**
-- Jasmine 内置断言（`toBe`、`toEqual`、`toContain`、`not.*`）加上 `test/util.js` 中定义的两个自定义 matcher：`toContainAll`（针对 `traceLog` 输出的有序子序列匹配）和 `toNotContainAny`
+- vitest expect（`toBe`、`toEqual`、`toContain`、`not.*`）加上自定义 matcher：`toContainAll`（针对 `traceLog` 输出的有序子序列匹配）和 `toNotContainAny`（jasmine compare 格式经 shim 转为 expect.extend，逻辑在 `test/util.js`）
 
 **运行命令：**
 ```bash
-node test/httpd.js              # 在 :8080 启动 fixture/spec 服务器
-# open http://localhost:8080/                    -> 完整 Jasmine spec runner (test/index.html)
-# open http://localhost:8080/traceLog-test.html  -> test/traceLog.js 的遗留独立 runner
-# open http://localhost:8080/polygon2PathList-test.html -> test/polygon2PathList.js 的遗留 runner
-npx grunt funcs                 # 根据 src/leader-line.js 中的 @EXPORT 标记重新生成 test/spec/func/*
+pnpm test                  # 全量:unit + browser 双 project
+pnpm exec vitest run --project browser test/spec/win-resize.js   # 单文件
+pnpm test:smoke            # 产物冒烟:headless chromium <script> 直载 dist/leader-line.min.js
+pnpm test:bench            # 渲染管线基准(CDP LayoutCount),需先起 vite dev server(:5199)
 ```
-注意：`test/httpd.js` 没有 npm 脚本包装；直接用 node 运行。没有无头/CI runner —— 没有 Karma、Playwright 或 puppeteer 配置。
+2.0 起旧 jasmine runner（`test/index.html` + `test/httpd.js`）与独立老页面（`polygon2PathList-test`、`traceLog-test`）已退役删除。
 
 ## 测试文件组织（Test File Organization）
 
 **位置：**
-- Spec：`test/spec/*.js`，每个功能区域一个文件 —— `funcs.js`、`bbox.js`、`socket.js`、`options.js`、`stats.js`、`win-resize.js`、`func-PATH_FLUID.js`、`func-PATH_GRID.js`、`effect.js`、`effect-show.js`、`attachment.js`
-- Fixture 页面位于 `test/spec/` 的同名子目录：`test/spec/common/page.html`（被 `options.js`、`stats.js`、`attachment.js` 等共享）、`test/spec/bbox/*.html`、`test/spec/socket/page.html`、`test/spec/win-resize/page.html`、`test/spec/funcs/funcs.html`
-- 提取出的纯函数被测对象：`test/spec/func/PATH_GRID`、`test/spec/func/PATH_FLUID`（生成产物 —— 不要手动编辑；它们来自 `src/leader-line.js:1684,1732` 的 `@EXPORT[file:...]@` 标记，通过 Grunt 的 `funcs` 任务生成，`Gruntfile.js:149-163`）
-- 数据驱动用例：`test/func-PATH_GRID/testCases.json.js`（暴露全局 `testCases` 数组，被 spec 和手动查看器 `test/func-PATH_GRID/cases.html` 共享）
-- `test/` 根目录的共享辅助文件：`util.js`（自定义 matcher）、`get-source.js`（源码文本 XHR 获取）、`traceLog.js`（库写入的插桩日志）、`guide-view.js` + `guide-view.css`（调试几何的视觉覆盖层）
-- 手动/视觉演示页面（非 Jasmine）：`test/attachment-label/`、`test/effect-show/`、`test/bindWindow/`、`test/reflow/`、`test/mask/`、`test/function-test/` —— 每个都包含 `index.html` + `test.js` + `view.css`，由 `plain-draggable` 驱动以进行交互检查
+- Browser spec：`test/spec/*.js`，每个功能区域一个文件 —— `funcs.js`、`bbox.js`、`socket.js`、`options.js`、`stats.js`、`win-resize.js`、`func-PATH_FLUID.js`、`func-PATH_GRID.js`、`effect.js`、`effect-show.js`、`attachment.js`、`svg-container.js`（fork 特性）、`position-schedule.js`（调度内核行为）
+- Unit 测试：`test/unit/*.test.js`（vite-plugin-defs、vite-plugin-debug-strip、update-scheduler）+ `test/unit/fixtures/legacy-defs.js`（Grunt 时代 defs.js 快照，作等价性锚点）
+- Fixture 页面位于 `test/spec/` 的同名子目录：`test/spec/common/page.html`（被 `options.js`、`stats.js`、`attachment.js` 等共享）、`test/spec/bbox/*.html`、`test/spec/socket/page.html`、`test/spec/win-resize/page.html`、`test/spec/funcs/funcs.html` —— 均为 `<script type="module">import LeaderLine from '/src/leader-line.js'</script>` 加载
+- `@EXPORT` 提取机制：`test/exported-funcs.js` 通过 vite `?raw` 读取源码文本并按 `@EXPORT[file:...]@` 标记提取函数源码，供 spec eval 注入 mock 上下文（替代原 Grunt `funcs` 任务 + `getSource` XHR；`test/spec/func/PATH_GRID`、`PATH_FLUID` 文本文件仅作历史保留）
+- 数据驱动用例：`test/func-PATH_GRID/testCases.json.js`（ESM 默认导出，被 spec import）
+- `test/` 根目录的共享辅助文件：`util.js`（自定义 matcher）、`traceLog.js`（库写入的插桩日志）、`setup-browser.js`（vitest 适配层）、`guide-view.js` + `guide-view.css`（调试几何的视觉覆盖层）
+- 冒烟与基准：`test/smoke/dist-smoke.mjs`、`test/perf/bench.html` + `run-bench.mjs`
+- 手动/视觉演示页面（非自动化）：`test/attachment-label/`、`test/effect-show/`、`test/bindWindow/`、`test/reflow/`、`test/mask/`、`test/SHAPE_GAP.html`、`test/function-test/` —— 已改为 module script 加载，由 vite dev server 服务
 
 **命名：**
 - Spec：`test/spec/<feature>.js`；fixture：`test/spec/<feature>/<page>.html`
 - 嵌套 iframe 子 fixture：`<page>-c1.html`、`<page>-c2.html` (`test/spec/common/page-c1.html`)
-- 每个 spec 文件都通过显式的 `<script>` 标签在 `test/index.html:16-30` 中注册 —— 新增 spec 必须加在那里。
+- 新 spec 直接放入 `test/spec/` 即被 `test.projects.browser.include` 拾取，无需注册
 
 **结构：**
 ```
 test/
-├── index.html                 # Jasmine runner：按固定顺序加载辅助文件 + 所有 specs
-├── httpd.js                   # 带 node_modules + /src 别名的静态服务器（端口 8080）
+├── setup-browser.js           # vitest 适配层(jasmine shim/loadPage/matcher)
+├── exported-funcs.js          # @EXPORT 提取(vite ?raw)
 ├── util.js                    # toContainAll / toNotContainAny 自定义 matcher
-├── get-source.js              # getSource(url, cb) XHR 辅助函数（window.getSource）
 ├── traceLog.js                # DEBUG 构建写入的全局 traceLog
 ├── guide-view.js/.css         # 手动调试的几何视觉覆盖层
+├── unit/                      # node 环境单测(插件/调度内核)
+│   └── fixtures/legacy-defs.js
+├── smoke/dist-smoke.mjs       # 产物 <script> 直载冒烟
+├── perf/                      # 渲染管线基准(bench.html + run-bench.mjs)
 ├── spec/
-│   ├── <feature>.js           # spec 文件
-│   ├── <feature>/page.html    # iframe fixture 页面
-│   ├── common/page.html       # 共享 fixture：4 个 div + svg + iframe
-│   └── func/PATH_GRID         # 提取的纯函数（由 grunt funcs 生成）
-└── <demo-feature>/            # 手动演示页面（attachment-label、mask、reflow 等）
+│   ├── <feature>.js           # browser spec 文件
+│   ├── <feature>/page.html    # iframe fixture 页面(module script)
+│   └── common/page.html       # 共享 fixture:4 个 div + svg + iframe
+└── <demo-feature>/            # 手动演示页面(attachment-label、mask、reflow 等)
 ```
 
 ## 测试结构（Test Structure）
@@ -98,22 +102,20 @@ describe('options', function() {
 （改编自 `test/spec/options.js:1-87`）
 
 **模式：**
-- Spec 中只用 ES5：`var`、`function()` 回调 —— 由 `test/.eslintrc.json` 强制（`no-var: off`、`prefer-arrow-callback: off`）
-- Spec 针对**真实的、未打包的源码**运行：fixture 页面按顺序加载 `/src/defs.js`、/src/anim.js`、`/src/path-data-polyfill/path-data-polyfill.js`、/anim-event/anim-event.min.js`、/traceLog.js`、`/src/leader-line.js` (`test/spec/common/page.html:6-12`)
-- 页面 fixture 由 `test-page-loader` 的全局 `loadPage(url, callback[, title])` 加载到 iframe 中；回调接收 `(frmWindow, frmDocument, body, done)`。Spec 必须保存 `pageDone = done` 并在每个 `it` 结束时调用它 —— 在 `afterAll`/`afterEach` 或每个 `it` 末尾 (`test/spec/funcs.js:67-79`、`test/spec/win-resize.js:37-41`)
-- Fixture 页面将 `requestAnimationFrame` shim 为 `setTimeout(cb, 1000/60)` 以获得确定性动画 (`test/spec/common/page.html:6`)
-- 设置：`beforeAll`/`beforeEach` 调用 `loadPage` 并通过注入的 `beforeDone` 发信号；拆卸调用 `pageDone()`
-- 断言是 DOM 无关的，主要是状态和日志：通过 `window.insProps[ll._id]` 读取内部（仅在 DEBUG 构建中暴露，`src/leader-line.js:200`），并通过 `traceLog.getTaggedLog('<tag>')` 断言插桩序列
-- 异步 `it` 使用 Jasmine 的 `done` 回调配合 `setTimeout` 等待 (`test/spec/win-resize.js:43-60`)
-- 数据驱动 spec 遍历全局 cases 数组：`testCases.forEach(function(testCase) { it(testCase.title, function() {...}); });` (`test/spec/func-PATH_GRID.js:38-44`)
+- 迁移的 spec 保持 ES5 风格：`var`、`function()` 回调（与上游一致，不做风格重写）
+- Spec 针对**真实 ESM 源码**运行：fixture 页面经 `<script type="module">import LeaderLine from '/src/leader-line.js'; window.LeaderLine = LeaderLine;</script>` 加载；vite server 转换时 development/test 模式保留 `[DEBUG]` 区域（`window.*` 调试句柄可用）
+- 页面 fixture 由适配层的 `loadPage(url, callback)`（或 async 风格的 `loadPageAsync(url)`）加载到 iframe；回调签名 `(frmWindow, frmDocument, body, done)` 与 test-page-loader 一致，spec 需保存 `pageDone = done` 并在用例结束时调用
+- Fixture 页面将 `requestAnimationFrame` shim 为 `setTimeout(cb, 1000/60)` 以获得确定性动画 (`test/spec/common/page.html`)
+- jasmine 的 `done` 回调风格由 `test/setup-browser.js` 的 shim 统一 Promise 化（vitest 4 已移除该风格）；新 spec 推荐直接 async/await（参见 `test/spec/position-schedule.js`）
+- 断言是 DOM 无关的，主要是状态和日志：通过 `window.insProps[ll._id]` 读取内部（仅在 `[DEBUG]` 保留时暴露），并通过 `traceLog.getTaggedLog('<tag>')` 断言插桩序列
+- 数据驱动 spec 遍历 cases 数组：`testCases.forEach(function(testCase) { it(testCase.title, function() {...}); });` (`test/spec/func-PATH_GRID.js`)
 - 大型 suite 按 API 区域通过嵌套 `describe` 分组，每个重新绑定 `beforeEach(loadBefore)`：`test/spec/attachment.js` 使用 `'functions'`、`'life cycle'`、`'ATTACHMENTS anchor'`、`'ATTACHMENTS.captionLabel'`、`'ATTACHMENTS.pathLabel'`
 
 **纯函数提取测试（本仓库特有）：**
-1. `src/leader-line.js` 内部的纯路径计算函数被包裹在 `@EXPORT[file:../test/spec/func/PATH_GRID]@ ... @/EXPORT@` 标记注释中 (`src/leader-line.js:1732`)
-2. `npx grunt funcs` 仅将该函数体重写进 `test/spec/func/PATH_GRID`
-3. Spec 使用 `getSource('./spec/func/PATH_GRID', cb)` 获取它，并 `eval('(' + source + ')')` (`test/spec/func-PATH_GRID.js:30-36`)
-4. Spec 通过复制 `// ================ context` 横幅之间的相关常量/状态来重建函数的闭包上下文（socket/path id、MIN_GRAVITY*`、`curSocketXYSE`、`pathList`、`socketXY2Point`）
-5. 每个 case 初始化上下文、运行 `func()`，并将生成的 `pathList` 与 `testCase.expected.pathList` 比较
+1. `src/leader-line.js` 内部的纯路径计算函数被包裹在 `@EXPORT[file:../test/spec/func/PATH_GRID]@ ... @/EXPORT@` 标记注释中
+2. Spec 通过 `test/exported-funcs.js` 的 `getExportedFuncSource(name)` 获取函数源码（vite `?raw` import + 正则提取，与构建同一份源码）并 `eval('(' + source + ')')`
+3. Spec 通过复制 `// ================ context` 横幅之间的相关常量/状态来重建函数的闭包上下文（socket/path id、MIN_GRAVITY*`、`curSocketXYSE`、`pathList`、`socketXY2Point`）
+4. 每个 case 初始化上下文、运行 `func()`，并将生成的 `pathList` 与 `testCase.expected.pathList` 比较
 
 ## Mocking
 
@@ -149,18 +151,17 @@ describe('options', function() {
 
 ## 测试覆盖率（Coverage）
 
-**要求：** 未识别到 —— 没有 nyc/istanbul/c8 依赖、没有 coverage 脚本、没有阈值配置，也没有 CI 流水线（仓库中没有 `.github/`、`.travis.yml` 等）。
+**要求：** 未配置覆盖率阈值；以"全量 spec 绿 + P0 冒烟 + 性能基准"为准入标准。
 
-**查看覆盖率：**
-```bash
-# 未识别到
-```
+**CI：**
+- GitHub Actions（`.github/workflows/ci.yml`）：`pnpm install --frozen-lockfile` → playwright chromium → `pnpm lint` → `pnpm typecheck` → `pnpm build` → `pnpm test` → `pnpm test:smoke`
+- 性能基准（`pnpm test:bench`）不在 CI 门槛内，按需本地运行（需先起 vite dev server）
 
 ## 测试类型（Test Types）
 
 **单元测试：**
-- 针对提取纯函数的 Jasmine spec（`test/spec/func-PATH_GRID.js`、`test/spec/func-PATH_FLUID.js`）以及针对通过 `window.*` DEBUG 导出暴露的内部工具函数的 spec（`test/spec/funcs.js` 覆盖 `copyTree`、`isObject` 等）
-- 独立辅助函数的遗留独立 Jasmine 页面：`test/polygon2PathList-test.html`（内嵌自己的 Jasmine 2.4.1 和内联 spec）、`test/traceLog-test.html`
+- `test/unit/`（node 环境）：vite-plugin-defs、vite-plugin-debug-strip、update-scheduler 的行为测试
+- 针对提取纯函数的 browser spec（`test/spec/func-PATH_GRID.js`、`test/spec/func-PATH_FLUID.js`）以及针对通过 `window.*` DEBUG 导出暴露的内部工具函数的 spec（`test/spec/funcs.js` 覆盖 `copyTree`、`isObject` 等）
 
 **集成测试：**
 - 测试套件的主体：spec 在 fixture 页面上构造真实 `LeaderLine` 实例，并断言内部状态 + trace 日志 —— `test/spec/options.js`、`stats.js`、`socket.js`、`effect.js`、`effect-show.js`、`attachment.js`（2613 行，最大的 suite）、`bbox.js`（跨窗口/iframe 几何）、`win-resize.js`（resize 事件驱动的重定位）
@@ -225,7 +226,7 @@ getSource('./spec/func/PATH_GRID', function(error, source) {
 ```javascript
 beforeEach(function() { jasmine.addMatchers(customMatchers); });
 ```
-`customMatchers` 是来自 `test/util.js` 的全局变量；使用 `toContainAll`/`toNotContainAny` 的 spec 声明 `/* global customMatchers:false */`，并在每个需要它们的 `beforeEach`/`beforeAll` 中注册。
+`customMatchers` 是来自 `test/util.js` 的全局变量；`jasmine.addMatchers` 由 `test/setup-browser.js` 的 shim 转为 `expect.extend`。新 spec 也可直接 `import { expect } from 'vitest'` 使用。
 
 **内部状态断言：**
 ```javascript

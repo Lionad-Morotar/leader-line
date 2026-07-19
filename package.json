@@ -1,6 +1,6 @@
 {
   "name": "leader-line",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "title": "LeaderLine",
   "description": "Draw a leader line in your web page.",
   "keywords": [
@@ -14,47 +14,42 @@
     "bubble",
     "svg"
   ],
-  "main": "leader-line.esm.js",
+  "main": "./dist/leader-line.cjs",
   "exports": {
     ".": {
-      "import": "./leader-line.esm.js",
-      "require": "./leader-line.min.js"
+      "types": "./index.d.ts",
+      "import": "./dist/leader-line.mjs",
+      "require": "./dist/leader-line.cjs",
+      "default": "./dist/leader-line.mjs"
     }
   },
   "files": [
-    "leader-line.min.js",
-    "bower.json"
+    "dist",
+    "index.d.ts"
   ],
   "devDependencies": {
-    "@esbuild-kit/cjs-loader": "^2.4.4",
-    "@rollup/plugin-commonjs": "^26.0.1",
-    "@rollup/plugin-node-resolve": "^15.2.3",
-    "anim-event": "^1.0.16",
-    "cheerio": "^1.0.0-rc.9",
+    "@eslint/js": "^9.39.5",
+    "@typescript/native-preview": "7.0.0-dev.20260707.2",
+    "@vitest/browser-playwright": "^4.1.10",
+    "cheerio": "^1.2.0",
     "clean-css": "^5.1.2",
-    "cross-env": "^7.0.3",
-    "fast-glob": "^3.3.2",
-    "grunt": "^1.4.1",
-    "grunt-rollup": "^12.0.0",
-    "grunt-task-helper": "^0.3.10",
+    "eslint": "^9.39.5",
     "htmlclean": "^3.0.8",
-    "jasmine-core": "^3.7.1",
-    "log4js": "^6.4.0",
-    "node-static-alias": "^1.1.2",
-    "plain-draggable": "^2.5.12",
+    "playwright": "^1.61.1",
     "pre-proc": "^1.0.2",
-    "rollup": "^4.9.6",
-    "rollup-plugin-esbuild": "^6.1.1",
-    "test-page-loader": "^1.0.8",
-    "uglify-js": "^3.13.7",
-    "gulp": "^4.0.2"
+    "vite": "^8.1.5",
+    "vitest": "^4.1.10"
   },
   "scripts": {
-    "dev": "pnpm clean && cross-env NODE_ENV=development grunt",
-    "build": "pnpm clean && pnpm build:iife && pnpm build:esm",
-    "build:iife": "cross-env NODE_ENV=production grunt",
-    "build:esm": "cross-env NODE_ENV=production gulp --require @esbuild-kit/cjs-loader -f gulpfile.ts",
-    "clean": "rm -f leader-line.min.js leader-line.esm.css"
+    "dev": "vite build --watch --mode development",
+    "build": "vite build",
+    "test": "vitest run",
+    "test:smoke": "node test/smoke/dist-smoke.mjs",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "pnpm build",
+    "test:bench": "node test/perf/run-bench.mjs",
+    "typecheck": "tsgo --noEmit -p tsconfig.json",
+    "lint": "eslint ."
   },
   "homepage": "https://github.com/Lionad-Morotar/leader-line",
   "repository": {
@@ -65,5 +60,14 @@
   "author": {
     "name": "Lionad-Morotar",
     "url": "https://github.com/Lionad-Morotar"
-  }
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "fsevents"
+    ]
+  },
+  "module": "./dist/leader-line.mjs",
+  "types": "./index.d.ts",
+  "sideEffects": true
 }
