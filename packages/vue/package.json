@@ -1,0 +1,61 @@
+{
+  "name": "@lionad/leader-line-vue",
+  "version": "0.1.0",
+  "description": "Vue 3 composables and component for @lionad/leader-line — declarative leader lines.",
+  "keywords": [
+    "leader-line",
+    "vue",
+    "composable",
+    "arrow",
+    "svg"
+  ],
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "typecheck": "tsgo --noEmit -p tsconfig.json"
+  },
+  "peerDependencies": {
+    "@lionad/leader-line": "^1.0.0",
+    "vue": "^3.5.0"
+  },
+  "devDependencies": {
+    "@lionad/leader-line": "workspace:*",
+    "@typescript/native-preview": "7.0.0-dev.20260707.2",
+    "tsdown": "^0.22.9",
+    "vue": "^3.5.40"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Lionad-Morotar",
+    "url": "https://github.com/Lionad-Morotar"
+  },
+  "homepage": "https://github.com/Lionad-Morotar/leader-line#readme",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Lionad-Morotar/leader-line.git",
+    "directory": "packages/vue"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "sideEffects": false
+}
